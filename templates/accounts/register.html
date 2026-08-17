@@ -1,0 +1,212 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+Create Account
+{% endblock %}
+
+
+{% block extra_css %}
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/auth.css' %}"
+>
+
+{% endblock %}
+
+
+{% block content %}
+
+<main class="auth-page">
+
+    <!-- ============================
+         LEFT VISUAL
+    ============================= -->
+
+    <section class="auth-visual">
+
+        <a
+            href="{% url 'home' %}"
+            class="auth-logo"
+        >
+            Lumi<span>Script</span>
+        </a>
+
+
+        <div class="auth-visual-content">
+
+            <span class="eyebrow">
+                A PLACE FOR IDEAS
+            </span>
+
+            <h2>
+                Write what
+                matters.
+            </h2>
+
+            <p>
+                Discover thoughtful stories, share your
+                perspective, and build your own space
+                on Inkora.
+            </p>
+
+        </div>
+
+
+        <div class="auth-visual-footer">
+            © 2026 Inkora
+        </div>
+
+    </section>
+
+
+    <!-- ============================
+         RIGHT FORM
+    ============================= -->
+
+    <section class="auth-form-area">
+
+        <div class="auth-container">
+
+            <header class="auth-header">
+
+                <span class="eyebrow">
+                    JOIN LUMISCRIPT
+                </span>
+
+                <h1>
+                    Create your account
+                </h1>
+
+                <p>
+                    Start reading, writing and sharing
+                    ideas with the Inkora community.
+                </p>
+
+            </header>
+
+
+            <form
+                method="POST"
+                class="auth-form"
+            >
+
+                {% csrf_token %}
+
+
+                {{ form.non_field_errors }}
+
+
+                <div class="form-row">
+
+                    <div class="form-group">
+
+                        <label
+                            for="{{ form.first_name.id_for_label }}"
+                        >
+                            First name
+                        </label>
+
+                        {{ form.first_name }}
+
+                        {{ form.first_name.errors }}
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label
+                            for="{{ form.last_name.id_for_label }}"
+                        >
+                            Last name
+                        </label>
+
+                        {{ form.last_name }}
+
+                        {{ form.last_name.errors }}
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label
+                        for="{{ form.email.id_for_label }}"
+                    >
+                        Email address
+                    </label>
+
+                    {{ form.email }}
+
+                    {{ form.email.errors }}
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label
+                        for="{{ form.password1.id_for_label }}"
+                    >
+                        Password
+                    </label>
+
+                    {{ form.password1 }}
+
+                    {{ form.password1.errors }}
+
+                    {% if form.password1.help_text %}
+                        <div class="helptext">
+                            {{ form.password1.help_text|safe }}
+                        </div>
+                    {% endif %}
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label
+                        for="{{ form.password2.id_for_label }}"
+                    >
+                        Confirm password
+                    </label>
+
+                    {{ form.password2 }}
+
+                    {{ form.password2.errors }}
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="auth-button"
+                >
+                    Create account
+                </button>
+
+            </form>
+
+
+            <p class="auth-footer">
+
+                Already have an account?
+
+                <a href="{% url 'login' %}">
+                    Sign in
+                </a>
+
+            </p>
+
+        </div>
+
+    </section>
+
+</main>
+
+{% endblock %}
