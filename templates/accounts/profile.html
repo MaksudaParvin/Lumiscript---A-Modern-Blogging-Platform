@@ -1,0 +1,155 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+
+{% endblock %}
+
+
+{% block extra_css %}
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/auth.css' %}"
+>
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/profile.css' %}"
+>
+
+{% endblock %}
+
+
+{% block content %}
+
+<main class="profile-page">
+
+    <div class="profile-container">
+
+        <section class="profile-header">
+
+            <div class="profile-image-wrapper">
+
+                {% if user.profile_image %}
+
+                    <img
+                        src="{{ user.profile_image.url }}"
+                        alt="{{ user.first_name }}"
+                        class="profile-image"
+                    >
+
+                {% else %}
+
+                    <div class="profile-placeholder">
+
+                        {{ user.first_name|first|upper }}
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+
+            <div class="profile-info">
+
+                <span class="eyebrow">
+                    {{ user.get_role_display }}
+                </span>
+
+                <h1>
+                    {{ user.first_name }}
+                    {{ user.last_name }}
+                </h1>
+
+                <p class="profile-email">
+                    {{ user.email }}
+                </p>
+
+                {% if user.bio %}
+
+                    <p class="profile-bio">
+                        {{ user.bio }}
+                    </p>
+
+                {% else %}
+
+                    <p class="profile-bio muted">
+                        No bio added yet.
+                    </p>
+
+                {% endif %}
+
+
+                {% if user.website %}
+
+                    <a
+                        href="{{ user.website }}"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="profile-website"
+                    >
+                        Visit website ↗
+                    </a>
+
+                {% endif %}
+
+            </div>
+
+
+            <div class="profile-actions">
+
+                <a
+                    href="{% url 'edit_profile' %}"
+                    class="secondary-button"
+                >
+                    Edit profile
+                </a>
+
+            </div>
+
+        </section>
+
+
+        <section class="profile-content">
+
+            <div class="profile-section-heading">
+
+                <span class="eyebrow">
+                    YOUR SPACE
+                </span>
+
+                <h2>
+                    Your activity
+                </h2>
+
+            </div>
+
+
+            <div class="profile-stat-grid">
+
+                <div class="profile-stat">
+                    <strong>0</strong>
+                    <span>Articles</span>
+                </div>
+
+                <div class="profile-stat">
+                    <strong>0</strong>
+                    <span>Bookmarks</span>
+                </div>
+
+                <div class="profile-stat">
+                    <strong>0</strong>
+                    <span>Comments</span>
+                </div>
+
+            </div>
+
+        </section>
+
+    </div>
+
+</main>
+
+{% endblock %}

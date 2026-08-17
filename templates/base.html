@@ -17,11 +17,25 @@
     >
 
     <title>
-        {% block title %}Lumiscript — A Modern Blogging Platform{% endblock %}
+        {% block title %}
+            Lumiscript — A Modern Blogging Platform
+        {% endblock %}
     </title>
 
+
+    <!-- Boxicons -->
+    <link
+        href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+        rel="stylesheet"
+    >
+
+
     <!-- Global CSS -->
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link
+        rel="stylesheet"
+        href="{% static 'css/style.css' %}"
+    >
+
 
     <!-- Page Specific CSS -->
     {% block extra_css %}
@@ -29,21 +43,227 @@
 
 </head>
 
+
 <body>
 
+
     <!-- ==============================
-         MAIN CONTENT
+         NAVBAR
     =============================== -->
+
+    <header class="site-header">
+
+        <nav class="navbar">
+
+            <div class="navbar-container">
+
+
+                <!-- Logo -->
+
+                <a
+                    href="{% url 'home' %}"
+                    class="logo"
+                >
+                    Lumi<span>Script</span>
+                </a>
+
+
+                <!-- Navigation -->
+
+                <div class="nav-links">
+
+                    <a href="{% url 'home' %}">
+                        Home
+                    </a>
+
+                    <a href="#">
+                        Explore
+                    </a>
+
+                    <a href="#">
+                        Topics
+                    </a>
+
+                    <a href="#">
+                        About
+                    </a>
+
+                </div>
+
+
+                <!-- Right Side -->
+
+                <div class="nav-actions">
+
+                    {% if user.is_authenticated %}
+
+
+                        <!-- Profile Dropdown -->
+
+                        <div class="profile-dropdown">
+
+
+                            <!-- Avatar -->
+
+                            <button
+                                type="button"
+                                class="profile-trigger"
+                                id="profileTrigger"
+                                aria-label="Open profile menu"
+                                aria-expanded="false"
+                            >
+
+                                {% if user.profile_image %}
+
+                                    <img
+                                        src="{{ user.profile_image.url }}"
+                                        alt="{{ user.first_name }}"
+                                        class="nav-avatar-image"
+                                    >
+
+                                {% else %}
+
+                                    <span class="nav-avatar">
+                                        {{ user.first_name|first|upper }}
+                                    </span>
+
+                                {% endif %}
+
+
+                                <i class='bx bx-chevron-down profile-chevron'></i>
+
+                            </button>
+
+
+                            <!-- Dropdown -->
+
+                            <div
+                                class="profile-menu"
+                                id="profileMenu"
+                            >
+
+
+                                <!-- User Information -->
+
+                                <div class="profile-menu-header">
+
+                                    {% if user.profile_image %}
+
+                                        <img
+                                            src="{{ user.profile_image.url }}"
+                                            alt="{{ user.first_name }}"
+                                            class="menu-avatar"
+                                        >
+
+                                    {% else %}
+
+                                        <span class="menu-avatar-placeholder">
+                                            {{ user.first_name|first|upper }}
+                                        </span>
+
+                                    {% endif %}
+
+
+                                    <div class="profile-menu-user">
+
+                                        <strong>
+                                            {{ user.first_name }}
+                                            {{ user.last_name }}
+                                        </strong>
+
+                                        <span>
+                                            {{ user.email }}
+                                        </span>
+
+                                    </div>
+
+                                </div>
+
+
+                                <div class="profile-menu-divider"></div>
+
+
+                                <!-- Profile -->
+
+                                <a
+                                    href="{% url 'profile' %}"
+                                    class="profile-menu-item"
+                                >
+
+                                    <i class='bx bx-user'></i>
+
+                                    <span>
+                                        Profile
+                                    </span>
+
+                                </a>
+
+
+                                <!-- Logout -->
+
+                                <a
+                                    href="{% url 'logout' %}"
+                                    class="profile-menu-item logout-item"
+                                >
+
+                                    <i class='bx bx-log-out'></i>
+
+                                    <span>
+                                        Logout
+                                    </span>
+
+                                </a>
+
+                            </div>
+
+                        </div>
+
+
+                    {% else %}
+
+
+                        <!-- Logged Out -->
+
+                        <a
+                            href="{% url 'login' %}"
+                            class="nav-login"
+                        >
+                            Sign in
+                        </a>
+
+
+                        <a
+                            href="{% url 'register' %}"
+                            class="nav-button primary"
+                        >
+                            Get started
+                        </a>
+
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </nav>
+
+    </header>
+
+
+    <!-- Page Content -->
 
     {% block content %}
     {% endblock %}
 
 
-    <!-- Global JavaScript -->
-    <script src="{% static 'js/main.js' %}"> </script>
+    <!-- JavaScript -->
+
+    <script
+        src="{% static 'js/main.js' %}"
+    ></script>
 
 
-    <!-- Page Specific JavaScript -->
     {% block extra_js %}
     {% endblock %}
 

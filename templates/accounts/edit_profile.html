@@ -1,0 +1,187 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+{% endblock %}
+
+
+{% block extra_css %}
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/auth.css' %}"
+>
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/profile.css' %}"
+>
+
+{% endblock %}
+
+
+{% block content %}
+
+<main class="profile-edit-page">
+
+    <div class="profile-edit-container">
+
+        <header class="profile-edit-header">
+
+            <span class="eyebrow">
+                ACCOUNT
+            </span>
+
+            <h1>
+                Edit your profile
+            </h1>
+
+            <p>
+                Tell readers a little more about yourself.
+            </p>
+
+        </header>
+
+
+        <form
+            method="POST"
+            enctype="multipart/form-data"
+            class="profile-form"
+        >
+
+            {% csrf_token %}
+
+
+            {{ form.non_field_errors }}
+
+
+            <div class="profile-upload">
+
+                {% if user.profile_image %}
+
+                    <img
+                        src="{{ user.profile_image.url }}"
+                        alt="Current profile image"
+                        class="profile-edit-image"
+                    >
+
+                {% else %}
+
+                    <div class="profile-edit-placeholder">
+                        {{ user.first_name|first|upper }}
+                    </div>
+
+                {% endif %}
+
+
+                <div>
+
+                    <label
+                        for="{{ form.profile_image.id_for_label }}"
+                        class="upload-label"
+                    >
+                        Change profile image
+                    </label>
+
+                    {{ form.profile_image }}
+
+                    {{ form.profile_image.errors }}
+
+                    <small>
+                        JPG, PNG or WebP recommended.
+                    </small>
+
+                </div>
+
+            </div>
+
+
+            <div class="form-row">
+
+                <div class="form-group">
+
+                    <label
+                        for="{{ form.first_name.id_for_label }}"
+                    >
+                        First name
+                    </label>
+
+                    {{ form.first_name }}
+
+                    {{ form.first_name.errors }}
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label
+                        for="{{ form.last_name.id_for_label }}"
+                    >
+                        Last name
+                    </label>
+
+                    {{ form.last_name }}
+
+                    {{ form.last_name.errors }}
+
+                </div>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label
+                    for="{{ form.bio.id_for_label }}"
+                >
+                    Bio
+                </label>
+
+                {{ form.bio }}
+
+                {{ form.bio.errors }}
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label
+                    for="{{ form.website.id_for_label }}"
+                >
+                    Website
+                </label>
+
+                {{ form.website }}
+
+                {{ form.website.errors }}
+
+            </div>
+
+
+            <div class="profile-form-actions">
+
+                <a
+                    href="{% url 'profile' %}"
+                    class="secondary-button"
+                >
+                    Cancel
+                </a>
+
+                <button
+                    type="submit"
+                    class="auth-button save-button"
+                >
+                    Save changes
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</main>
+
+{% endblock %}

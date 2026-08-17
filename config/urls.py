@@ -17,9 +17,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from django.urls import path
+from accounts.views import (register_view, login_view, logout_view, home_view, profile_view, edit_profile_view)
 
-from accounts.views import (register_view, login_view, logout_view, home_view)
+from django.conf import settings
+from django.conf.urls.static import static
 
 
 urlpatterns = [
@@ -34,4 +35,15 @@ urlpatterns = [
 
     path("home/",home_view,name="home"),
 
+    path("profile/", profile_view, name="profile"),
+
+    path("profile/edit/", edit_profile_view, name="edit_profile"),
+
 ]
+
+
+if settings.DEBUG:
+    urlpatterns += static(
+        settings.MEDIA_URL,
+        document_root=settings.MEDIA_ROOT
+    )

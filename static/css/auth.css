@@ -192,6 +192,8 @@
 
     position: relative;
 
+    align-items: center;
+
     z-index: 2;
 
     color:

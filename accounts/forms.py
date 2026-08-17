@@ -13,3 +13,44 @@ class RegisterForm(UserCreationForm):
             "password1",
             "password2",
         )
+
+
+class ProfileForm(forms.ModelForm):
+
+    class Meta:
+        model = User
+
+        fields = (
+            "first_name",
+            "last_name",
+            "profile_image",
+            "bio",
+            "website",
+        )
+
+        widgets = {
+            "first_name": forms.TextInput(
+                attrs={
+                    "placeholder": "Your first name"
+                }
+            ),
+
+            "last_name": forms.TextInput(
+                attrs={
+                    "placeholder": "Your last name"
+                }
+            ),
+
+            "bio": forms.Textarea(
+                attrs={
+                    "placeholder": "Tell readers a little about yourself...",
+                    "rows": 5
+                }
+            ),
+
+            "website": forms.URLInput(
+                attrs={
+                    "placeholder": "https://yourwebsite.com"
+                }
+            ),
+        }
