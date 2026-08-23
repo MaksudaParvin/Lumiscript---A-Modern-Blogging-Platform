@@ -1,13 +1,16 @@
+from django.db.models import Q
+
 from rest_framework import viewsets
 from rest_framework.permissions import AllowAny
 
 from .models import Category, Tag, Post
-from .serializers import (CategorySerializer, TagSerializer, PostSerializer,)
+from .serializers import (
+    CategorySerializer,
+    TagSerializer,
+    PostSerializer,
+)
 from .permissions import IsAuthorOrReadOnly
-
 from .pagination import PostPagination
-
-from django.db.models import Q
 
 
 class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
@@ -63,13 +66,18 @@ class PostViewSet(viewsets.ModelViewSet):
         )
 
 
-        if self.action in ["list", "retrieve"]:
+        # Only published posts for public list/detail
+        if self.action in [
+            "list",
+            "retrieve"
+        ]:
 
             queryset = queryset.filter(
                 status=Post.Status.PUBLISHED
             )
 
 
+        # Search
         search_query = (
             self.request.query_params
             .get("search", "")
@@ -81,19 +89,58 @@ class PostViewSet(viewsets.ModelViewSet):
 
             queryset = queryset.filter(
 
-                Q(title__icontains=search_query)
-
-                | Q(excerpt__icontains=search_query)
-
-                | Q(content__icontains=search_query)
+                Q(
+                    title__icontains=search_query
+                )
+                |
+                Q(
+                    excerpt__icontains=search_query
+                )
+                |
+                Q(
+                    content__icontains=search_query
+                )
 
             )
 
 
-        return queryset
+        # Category filter
+        category = (
+            self.request.query_params
+            .get("category", "")
+            .strip()
+        )
 
 
-    def perform_create(self, serializer):
+        if category:
+
+            queryset = queryset.filter(
+                category__slug=category
+            )
+
+
+        # Tag filter
+        tag = (
+            self.request.query_params
+            .get("tag", "")
+            .strip()
+        )
+
+
+        if tag:
+
+            queryset = queryset.filter(
+                tags__slug=tag
+            )
+
+
+        return queryset.distinct()
+
+
+    def perform_create(
+        self,
+        serializer
+    ):
 
         serializer.save(
             author=self.request.user

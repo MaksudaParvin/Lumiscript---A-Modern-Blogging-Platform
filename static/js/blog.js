@@ -2,6 +2,10 @@ let currentPage = 1;
 
 let currentSearch = "";
 
+let currentCategory = "";
+
+let currentTag = "";
+
 
 document.addEventListener(
     "DOMContentLoaded",
@@ -41,9 +45,19 @@ document.addEventListener(
                 "clearSearch"
             );
 
+        const categoryFilters =
+            document.getElementById(
+                "categoryFilters"
+            );
+
+        const tagFilters =
+            document.getElementById(
+                "tagFilters"
+            );
+
 
         /* =========================================
-           INITIAL SEARCH FROM URL
+           READ FILTERS FROM URL
         ========================================= */
 
         const urlParams =
@@ -55,6 +69,18 @@ document.addEventListener(
         currentSearch =
             urlParams.get("search") || "";
 
+
+        currentCategory =
+            urlParams.get("category") || "";
+
+
+        currentTag =
+            urlParams.get("tag") || "";
+
+
+        /* =========================================
+           RESTORE SEARCH UI
+        ========================================= */
 
         if (currentSearch) {
 
@@ -85,7 +111,7 @@ document.addEventListener(
             try {
 
                 /* -------------------------------
-                   BUILD API QUERY
+                   BUILD QUERY PARAMETERS
                 -------------------------------- */
 
                 const params =
@@ -103,6 +129,26 @@ document.addEventListener(
                     params.set(
                         "search",
                         currentSearch
+                    );
+
+                }
+
+
+                if (currentCategory) {
+
+                    params.set(
+                        "category",
+                        currentCategory
+                    );
+
+                }
+
+
+                if (currentTag) {
+
+                    params.set(
+                        "tag",
+                        currentTag
                     );
 
                 }
@@ -132,7 +178,7 @@ document.addEventListener(
 
 
                 /* -------------------------------
-                   UPDATE CURRENT PAGE
+                   CURRENT PAGE
                 -------------------------------- */
 
                 currentPage =
@@ -158,7 +204,7 @@ document.addEventListener(
 
 
                 /* -------------------------------
-                   UPDATE BROWSER URL
+                   UPDATE URL
                 -------------------------------- */
 
                 updateBrowserURL();
@@ -185,7 +231,6 @@ document.addEventListener(
                     </div>
 
                 `;
-
 
             } finally {
 
@@ -252,10 +297,6 @@ document.addEventListener(
                 );
 
 
-            /* -------------------------------
-               Remove old pagination
-            -------------------------------- */
-
             if (
                 existingPagination
             ) {
@@ -264,10 +305,6 @@ document.addEventListener(
 
             }
 
-
-            /* -------------------------------
-               No pagination needed
-            -------------------------------- */
 
             if (
                 !data.next &&
@@ -278,10 +315,6 @@ document.addEventListener(
 
             }
 
-
-            /* -------------------------------
-               Create pagination
-            -------------------------------- */
 
             const pagination =
                 document.createElement(
@@ -296,10 +329,6 @@ document.addEventListener(
             pagination.className =
                 "blog-pagination";
 
-
-            /* -------------------------------
-               Total pages
-            -------------------------------- */
 
             const totalPages =
                 Math.ceil(
@@ -348,18 +377,10 @@ document.addEventListener(
             `;
 
 
-            /* -------------------------------
-               Insert pagination
-            -------------------------------- */
-
             postGrid.after(
                 pagination
             );
 
-
-            /* -------------------------------
-               Pagination events
-            -------------------------------- */
 
             pagination
                 .querySelectorAll(
@@ -462,10 +483,6 @@ document.addEventListener(
             post
         ) {
 
-            /* -------------------------------
-               Featured Image
-            -------------------------------- */
-
             const image =
                 post.featured_image
 
@@ -494,10 +511,6 @@ document.addEventListener(
                     `;
 
 
-            /* -------------------------------
-               Category
-            -------------------------------- */
-
             const category =
                 post.category_name
 
@@ -516,18 +529,10 @@ document.addEventListener(
                     : "";
 
 
-            /* -------------------------------
-               Author
-            -------------------------------- */
-
             const author =
                 post.author_name ||
                 "Anonymous";
 
-
-            /* -------------------------------
-               Date
-            -------------------------------- */
 
             const date =
                 post.published_at
@@ -539,18 +544,11 @@ document.addEventListener(
                     : "";
 
 
-            /* -------------------------------
-               Card
-            -------------------------------- */
-
             return `
 
                 <article
                     class="post-card"
                 >
-
-
-                    <!-- IMAGE -->
 
                     <a
                         href="/blog/${post.slug}/"
@@ -562,14 +560,9 @@ document.addEventListener(
                     </a>
 
 
-                    <!-- BODY -->
-
                     <div
                         class="post-card-body"
                     >
-
-
-                        <!-- META -->
 
                         <div
                             class="post-card-meta"
@@ -577,15 +570,12 @@ document.addEventListener(
 
                             ${category}
 
-
                             <span>
                                 ${date}
                             </span>
 
                         </div>
 
-
-                        <!-- TITLE -->
 
                         <h2
                             class="post-card-title"
@@ -602,8 +592,6 @@ document.addEventListener(
                         </h2>
 
 
-                        <!-- EXCERPT -->
-
                         <p
                             class="post-card-excerpt"
                         >
@@ -612,8 +600,6 @@ document.addEventListener(
 
                         </p>
 
-
-                        <!-- FOOTER -->
 
                         <div
                             class="post-card-footer"
@@ -642,9 +628,7 @@ document.addEventListener(
 
                         </div>
 
-
                     </div>
-
 
                 </article>
 
@@ -683,7 +667,7 @@ document.addEventListener(
 
 
         /* =========================================
-           SEARCH SUBMIT
+           SEARCH
         ========================================= */
 
         searchForm.addEventListener(
@@ -701,17 +685,10 @@ document.addEventListener(
                     1;
 
 
-                if (currentSearch) {
-
-                    clearSearch.style.display =
-                        "inline-flex";
-
-                } else {
-
-                    clearSearch.style.display =
-                        "none";
-
-                }
+                clearSearch.style.display =
+                    currentSearch
+                        ? "inline-flex"
+                        : "none";
 
 
                 loadPosts(
@@ -753,6 +730,320 @@ document.addEventListener(
 
 
         /* =========================================
+           LOAD CATEGORIES
+        ========================================= */
+
+        async function loadCategories() {
+
+            try {
+
+                const response =
+                    await fetch(
+                        "/api/categories/"
+                    );
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Failed to load categories."
+                    );
+
+                }
+
+
+                const data =
+                    await response.json();
+
+
+                renderCategories(
+                    data
+                );
+
+
+            } catch (error) {
+
+                console.error(
+                    "Category API Error:",
+                    error
+                );
+
+            }
+
+        }
+
+
+        /* =========================================
+           RENDER CATEGORIES
+        ========================================= */
+
+        function renderCategories(
+            categories
+        ) {
+
+            categoryFilters.innerHTML = `
+
+                <button
+                    type="button"
+                    class="
+                        filter-option
+                        ${
+                            !currentCategory
+                                ? "active"
+                                : ""
+                        }
+                    "
+                    data-category=""
+                >
+
+                    All
+
+                </button>
+
+            `;
+
+
+            categories.forEach(
+                category => {
+
+                    categoryFilters.innerHTML += `
+
+                        <button
+                            type="button"
+                            class="
+                                filter-option
+                                ${
+                                    currentCategory ===
+                                    category.slug
+                                        ? "active"
+                                        : ""
+                                }
+                            "
+                            data-category="${category.slug}"
+                        >
+
+                            ${category.name}
+
+                        </button>
+
+                    `;
+
+                }
+            );
+
+
+            categoryFilters
+                .querySelectorAll(
+                    "[data-category]"
+                )
+                .forEach(
+                    button => {
+
+                        button.addEventListener(
+                            "click",
+                            () => {
+
+                                currentCategory =
+                                    button.dataset.category;
+
+
+                                currentPage =
+                                    1;
+
+
+                                updateFilterButtons(
+                                    categoryFilters,
+                                    "category",
+                                    currentCategory
+                                );
+
+
+                                loadPosts(
+                                    1
+                                );
+
+                            }
+                        );
+
+                    }
+                );
+
+        }
+
+
+        /* =========================================
+           LOAD TAGS
+        ========================================= */
+
+        async function loadTags() {
+
+            try {
+
+                const response =
+                    await fetch(
+                        "/api/tags/"
+                    );
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Failed to load tags."
+                    );
+
+                }
+
+
+                const data =
+                    await response.json();
+
+
+                renderTags(
+                    data
+                );
+
+
+            } catch (error) {
+
+                console.error(
+                    "Tag API Error:",
+                    error
+                );
+
+            }
+
+        }
+
+
+        /* =========================================
+           RENDER TAGS
+        ========================================= */
+
+        function renderTags(
+            tags
+        ) {
+
+            tagFilters.innerHTML = `
+
+                <button
+                    type="button"
+                    class="
+                        filter-option
+                        ${
+                            !currentTag
+                                ? "active"
+                                : ""
+                        }
+                    "
+                    data-tag=""
+                >
+
+                    All
+
+                </button>
+
+            `;
+
+
+            tags.forEach(
+                tag => {
+
+                    tagFilters.innerHTML += `
+
+                        <button
+                            type="button"
+                            class="
+                                filter-option
+                                ${
+                                    currentTag ===
+                                    tag.slug
+                                        ? "active"
+                                        : ""
+                                }
+                            "
+                            data-tag="${tag.slug}"
+                        >
+
+                            #${tag.name}
+
+                        </button>
+
+                    `;
+
+                }
+            );
+
+
+            tagFilters
+                .querySelectorAll(
+                    "[data-tag]"
+                )
+                .forEach(
+                    button => {
+
+                        button.addEventListener(
+                            "click",
+                            () => {
+
+                                currentTag =
+                                    button.dataset.tag;
+
+
+                                currentPage =
+                                    1;
+
+
+                                updateFilterButtons(
+                                    tagFilters,
+                                    "tag",
+                                    currentTag
+                                );
+
+
+                                loadPosts(
+                                    1
+                                );
+
+                            }
+                        );
+
+                    }
+                );
+
+        }
+
+
+        /* =========================================
+           UPDATE ACTIVE FILTER BUTTONS
+        ========================================= */
+
+        function updateFilterButtons(
+            container,
+            attribute,
+            value
+        ) {
+
+            container
+                .querySelectorAll(
+                    `[data-${attribute}]`
+                )
+                .forEach(
+                    button => {
+
+                        button.classList.toggle(
+                            "active",
+                            button.dataset[
+                                attribute
+                            ] === value
+                        );
+
+                    }
+                );
+
+        }
+
+
+        /* =========================================
            UPDATE BROWSER URL
         ========================================= */
 
@@ -780,11 +1071,37 @@ document.addEventListener(
             }
 
 
-            /*
-             * Page URL will keep search,
-             * but page number is handled
-             * through API state.
-             */
+            if (currentCategory) {
+
+                url.searchParams.set(
+                    "category",
+                    currentCategory
+                );
+
+            } else {
+
+                url.searchParams.delete(
+                    "category"
+                );
+
+            }
+
+
+            if (currentTag) {
+
+                url.searchParams.set(
+                    "tag",
+                    currentTag
+                );
+
+            } else {
+
+                url.searchParams.delete(
+                    "tag"
+                );
+
+            }
+
 
             window.history.replaceState(
                 {},
@@ -798,6 +1115,10 @@ document.addEventListener(
         /* =========================================
            INITIAL LOAD
         ========================================= */
+
+        loadCategories();
+
+        loadTags();
 
         loadPosts(
             1
