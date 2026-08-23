@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+
+{% block title %}
+    Explore — Lumiscript
+{% endblock %}
+
+
+{% block extra_css %}
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/blog.css' %}"
+>
+
+{% endblock %}
+
+
+{% block content %}
+
+<main class="blog-page">
+
+    <div class="blog-container">
+
+
+        <!-- =================================
+             BLOG HEADER
+        ================================== -->
+
+        <section class="blog-header">
+
+            <div>
+
+                <span class="eyebrow">
+                    Explore
+                </span>
+
+                <h1>
+                    Ideas worth<br>
+                    spending time with.
+                </h1>
+
+            </div>
+
+
+            <p class="blog-intro">
+                Discover thoughtful stories, practical
+                ideas and perspectives from the
+                Lumiscript community.
+            </p>
+
+        </section>
+
+
+        <!-- =================================
+             POST GRID
+        ================================== -->
+
+        <section
+            class="post-grid"
+            id="postGrid"
+        >
+
+            <!-- JavaScript will insert posts here -->
+
+        </section>
+
+
+        <!-- =================================
+             LOADING
+        ================================== -->
+
+        <div
+            class="blog-loading"
+            id="blogLoading"
+        >
+            Loading stories...
+        </div>
+
+
+        <!-- =================================
+             EMPTY STATE
+        ================================== -->
+
+        <div
+            class="blog-empty"
+            id="blogEmpty"
+        >
+
+            <i class='bx bx-book-open'></i>
+
+            <h2>
+                Nothing here yet.
+            </h2>
+
+            <p>
+                Published stories will appear here.
+            </p>
+
+        </div>
+
+
+    </div>
+
+</main>
+
+{% endblock %}
+
+
+{% block extra_js %}
+
+<script
+    src="{% static 'js/blog.js' %}"
+></script>
+
+{% endblock %}

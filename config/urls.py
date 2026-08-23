@@ -43,6 +43,8 @@ urlpatterns = [
 
     path("api/", include("blog.urls")),
 
+    path("", include("core.urls")),
+
 ]
 
 

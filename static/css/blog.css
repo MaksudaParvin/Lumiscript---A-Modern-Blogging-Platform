@@ -1,0 +1,569 @@
+/* =========================================
+   BLOG PAGE
+========================================= */
+
+.blog-page {
+
+    min-height: 100vh;
+
+    padding:
+        72px 24px 90px;
+}
+
+
+.blog-container {
+
+    width:
+        min(
+            1180px,
+            100%
+        );
+
+    margin:
+        0 auto;
+}
+
+
+/* =========================================
+   BLOG HEADER
+========================================= */
+
+.blog-header {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        1fr 360px;
+
+    align-items:
+        end;
+
+    gap:
+        60px;
+
+    padding-bottom:
+        58px;
+
+    border-bottom:
+        1px solid
+        var(--color-border);
+}
+
+
+.blog-header h1 {
+
+    margin:
+        0;
+
+    font-size:
+        clamp(
+            48px,
+            7vw,
+            76px
+        );
+
+    line-height:
+        0.95;
+
+    letter-spacing:
+        -0.065em;
+}
+
+
+.blog-intro {
+
+    margin:
+        0 0 4px;
+
+    color:
+        var(--color-muted);
+
+    font-size:
+        14px;
+
+    line-height:
+        1.8;
+}
+
+
+/* =========================================
+   POST GRID
+========================================= */
+
+.post-grid {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap:
+        28px;
+
+    padding-top:
+        48px;
+}
+
+
+/* =========================================
+   POST CARD
+========================================= */
+
+.post-card {
+
+    overflow:
+        hidden;
+
+    border:
+        1px solid
+        var(--color-border);
+
+    border-radius:
+        16px;
+
+    background:
+        var(--color-surface);
+
+    transition:
+        transform var(--transition),
+        box-shadow var(--transition);
+}
+
+
+.post-card:hover {
+
+    transform:
+        translateY(-4px);
+
+    box-shadow:
+        0 18px 45px
+        rgba(24, 24, 24, 0.07);
+}
+
+
+/* =========================================
+   CARD IMAGE
+========================================= */
+
+.post-card-image-link {
+
+    display:
+        block;
+
+    overflow:
+        hidden;
+}
+
+
+.post-card-image {
+
+    display:
+        block;
+
+    width:
+        100%;
+
+    aspect-ratio:
+        16 / 10;
+
+    object-fit:
+        cover;
+
+    transition:
+        transform 300ms ease;
+}
+
+
+.post-card:hover
+.post-card-image {
+
+    transform:
+        scale(1.035);
+}
+
+
+.post-card-placeholder {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    width:
+        100%;
+
+    aspect-ratio:
+        16 / 10;
+
+    background:
+        var(--color-surface-soft);
+
+    color:
+        var(--color-muted);
+
+    font-size:
+        34px;
+}
+
+
+/* =========================================
+   CARD BODY
+========================================= */
+
+.post-card-body {
+
+    padding:
+        22px 22px 20px;
+}
+
+
+/* =========================================
+   META
+========================================= */
+
+.post-card-meta {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        10px;
+
+    margin-bottom:
+        12px;
+
+    color:
+        var(--color-muted);
+
+    font-size:
+        11px;
+
+    font-weight:
+        600;
+}
+
+
+.post-category {
+
+    color:
+        var(--color-accent);
+
+    font-weight:
+        800;
+
+    text-transform:
+        uppercase;
+
+    letter-spacing:
+        0.08em;
+}
+
+
+.post-category::after {
+
+    content:
+        "•";
+
+    margin-left:
+        10px;
+
+    color:
+        var(--color-border);
+}
+
+
+/* =========================================
+   TITLE
+========================================= */
+
+.post-card-title {
+
+    margin:
+        0 0 10px;
+
+    font-size:
+        23px;
+
+    line-height:
+        1.15;
+
+    letter-spacing:
+        -0.035em;
+}
+
+
+.post-card-title a:hover {
+
+    color:
+        var(--color-text);
+}
+
+
+/* =========================================
+   EXCERPT
+========================================= */
+
+.post-card-excerpt {
+
+    display:
+        -webkit-box;
+
+    overflow:
+        hidden;
+
+    margin:
+        0 0 20px;
+
+    color:
+        var(--color-text-soft);
+
+    font-size:
+        13px;
+
+    line-height:
+        1.7;
+
+    -webkit-line-clamp:
+        3;
+
+    -webkit-box-orient:
+        vertical;
+}
+
+
+/* =========================================
+   CARD FOOTER
+========================================= */
+
+.post-card-footer {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        space-between;
+
+    padding-top:
+        14px;
+
+    border-top:
+        1px solid
+        var(--color-border);
+
+    color:
+        var(--color-muted);
+
+    font-size:
+        11px;
+
+    font-weight:
+        600;
+}
+
+
+.post-views {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        4px;
+}
+
+
+.post-views i {
+
+    font-size:
+        15px;
+}
+
+
+/* =========================================
+   LOADING
+========================================= */
+
+.blog-loading {
+
+    padding:
+        60px 0;
+
+    color:
+        var(--color-muted);
+
+    text-align:
+        center;
+
+    font-size:
+        13px;
+}
+
+
+/* =========================================
+   EMPTY
+========================================= */
+
+.blog-empty {
+
+    display:
+        none;
+
+    flex-direction:
+        column;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    min-height:
+        300px;
+
+    color:
+        var(--color-muted);
+
+    text-align:
+        center;
+}
+
+
+.blog-empty i {
+
+    margin-bottom:
+        10px;
+
+    font-size:
+        38px;
+}
+
+
+.blog-empty h2 {
+
+    margin:
+        0 0 4px;
+
+    font-size:
+        22px;
+}
+
+
+.blog-empty p {
+
+    margin:
+        0;
+
+    font-size:
+        13px;
+}
+
+
+/* =========================================
+   ERROR
+========================================= */
+
+.blog-error {
+
+    grid-column:
+        1 / -1;
+
+    padding:
+        60px;
+
+    color:
+        var(--color-muted);
+
+    text-align:
+        center;
+}
+
+
+.blog-error i {
+
+    font-size:
+        34px;
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 900px) {
+
+    .blog-header {
+
+        grid-template-columns:
+            1fr;
+
+        gap:
+            20px;
+    }
+
+
+    .blog-intro {
+
+        max-width:
+            560px;
+    }
+
+
+    .post-grid {
+
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .blog-page {
+
+        padding:
+            48px 18px 70px;
+    }
+
+
+    .blog-header {
+
+        padding-bottom:
+            40px;
+    }
+
+
+    .blog-header h1 {
+
+        font-size:
+            48px;
+    }
+
+
+    .post-grid {
+
+        grid-template-columns:
+            1fr;
+
+        gap:
+            20px;
+
+        padding-top:
+            32px;
+    }
+
+}

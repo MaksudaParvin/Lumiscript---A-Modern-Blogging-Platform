@@ -27,7 +27,7 @@ def register_view(request):
 def login_view(request):
 
     if request.user.is_authenticated:
-        return redirect("home")
+        return redirect("blog")
     
 
     if request.method == "POST":
@@ -45,7 +45,7 @@ def login_view(request):
 
             login(request, user)
 
-            return redirect("home")
+            return redirect("blog")
 
         return render(request,"accounts/login.html",
             {

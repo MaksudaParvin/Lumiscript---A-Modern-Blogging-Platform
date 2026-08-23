@@ -36,10 +36,12 @@ class PostViewSet(viewsets.ModelViewSet):
         IsAuthorOrReadOnly
     ]
 
+    lookup_field = "slug"
+
 
     def get_queryset(self):
 
-        return (
+        queryset = (
             Post.objects
             .select_related(
                 "author",
@@ -49,9 +51,18 @@ class PostViewSet(viewsets.ModelViewSet):
                 "tags"
             )
             .order_by(
+                "-published_at",
                 "-created_at"
             )
         )
+
+        if self.action in ["list", "retrieve"]:
+
+            queryset = queryset.filter(
+                status=Post.Status.PUBLISHED
+            )
+
+        return queryset
 
 
     def perform_create(self, serializer):
