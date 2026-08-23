@@ -1,30 +1,122 @@
 let currentPage = 1;
 
+let currentSearch = "";
+
+
 document.addEventListener(
     "DOMContentLoaded",
     () => {
 
+        /* =========================================
+           ELEMENTS
+        ========================================= */
+
         const postGrid =
-            document.getElementById("postGrid");
+            document.getElementById(
+                "postGrid"
+            );
 
         const loading =
-            document.getElementById("blogLoading");
+            document.getElementById(
+                "blogLoading"
+            );
 
         const empty =
-            document.getElementById("blogEmpty");
+            document.getElementById(
+                "blogEmpty"
+            );
+
+        const searchForm =
+            document.getElementById(
+                "searchForm"
+            );
+
+        const searchInput =
+            document.getElementById(
+                "searchInput"
+            );
+
+        const clearSearch =
+            document.getElementById(
+                "clearSearch"
+            );
 
 
-        async function loadPosts(page = 1) {
+        /* =========================================
+           INITIAL SEARCH FROM URL
+        ========================================= */
 
-            loading.style.display = "block";
+        const urlParams =
+            new URLSearchParams(
+                window.location.search
+            );
 
-            empty.style.display = "none";
+
+        currentSearch =
+            urlParams.get("search") || "";
+
+
+        if (currentSearch) {
+
+            searchInput.value =
+                currentSearch;
+
+            clearSearch.style.display =
+                "inline-flex";
+
+        }
+
+
+        /* =========================================
+           LOAD POSTS
+        ========================================= */
+
+        async function loadPosts(
+            page = 1
+        ) {
+
+            loading.style.display =
+                "block";
+
+            empty.style.display =
+                "none";
+
 
             try {
 
-                const response = await fetch(
-                    `/api/posts/?page=${page}`
+                /* -------------------------------
+                   BUILD API QUERY
+                -------------------------------- */
+
+                const params =
+                    new URLSearchParams();
+
+
+                params.set(
+                    "page",
+                    page
                 );
+
+
+                if (currentSearch) {
+
+                    params.set(
+                        "search",
+                        currentSearch
+                    );
+
+                }
+
+
+                /* -------------------------------
+                   API REQUEST
+                -------------------------------- */
+
+                const response =
+                    await fetch(
+                        `/api/posts/?${params.toString()}`
+                    );
+
 
                 if (!response.ok) {
 
@@ -34,19 +126,54 @@ document.addEventListener(
 
                 }
 
-                const data = await response.json();
 
-                currentPage = page;
+                const data =
+                    await response.json();
 
-                renderPosts(data.results);
 
-                renderPagination(data);
+                /* -------------------------------
+                   UPDATE CURRENT PAGE
+                -------------------------------- */
+
+                currentPage =
+                    page;
+
+
+                /* -------------------------------
+                   RENDER POSTS
+                -------------------------------- */
+
+                renderPosts(
+                    data.results
+                );
+
+
+                /* -------------------------------
+                   RENDER PAGINATION
+                -------------------------------- */
+
+                renderPagination(
+                    data
+                );
+
+
+                /* -------------------------------
+                   UPDATE BROWSER URL
+                -------------------------------- */
+
+                updateBrowserURL();
+
 
             } catch (error) {
 
-                console.error(error);
+                console.error(
+                    "Blog API Error:",
+                    error
+                );
+
 
                 postGrid.innerHTML = `
+
                     <div class="blog-error">
 
                         <i class='bx bx-error-circle'></i>
@@ -56,41 +183,68 @@ document.addEventListener(
                         </p>
 
                     </div>
+
                 `;
+
 
             } finally {
 
-                loading.style.display = "none";
+                loading.style.display =
+                    "none";
 
             }
 
         }
 
 
-        function renderPosts(posts) {
+        /* =========================================
+           RENDER POSTS
+        ========================================= */
 
-            if (!posts.length) {
+        function renderPosts(
+            posts
+        ) {
 
-                postGrid.innerHTML = "";
+            if (
+                !posts ||
+                !posts.length
+            ) {
 
-                empty.style.display = "flex";
+                postGrid.innerHTML =
+                    "";
+
+                empty.style.display =
+                    "flex";
 
                 return;
 
             }
 
-            empty.style.display = "none";
+
+            empty.style.display =
+                "none";
+
 
             postGrid.innerHTML =
                 posts
                     .map(
-                        post => createPostCard(post)
+                        post =>
+                            createPostCard(
+                                post
+                            )
                     )
                     .join("");
 
         }
 
-        function renderPagination(data) {
+
+        /* =========================================
+           RENDER PAGINATION
+        ========================================= */
+
+        function renderPagination(
+            data
+        ) {
 
             const existingPagination =
                 document.getElementById(
@@ -98,12 +252,22 @@ document.addEventListener(
                 );
 
 
-            if (existingPagination) {
+            /* -------------------------------
+               Remove old pagination
+            -------------------------------- */
+
+            if (
+                existingPagination
+            ) {
 
                 existingPagination.remove();
 
             }
 
+
+            /* -------------------------------
+               No pagination needed
+            -------------------------------- */
 
             if (
                 !data.next &&
@@ -115,16 +279,27 @@ document.addEventListener(
             }
 
 
+            /* -------------------------------
+               Create pagination
+            -------------------------------- */
+
             const pagination =
-                document.createElement("div");
+                document.createElement(
+                    "div"
+                );
 
 
             pagination.id =
                 "blogPagination";
 
+
             pagination.className =
                 "blog-pagination";
 
+
+            /* -------------------------------
+               Total pages
+            -------------------------------- */
 
             const totalPages =
                 Math.ceil(
@@ -135,12 +310,16 @@ document.addEventListener(
             pagination.innerHTML = `
 
                 <button
+                    type="button"
                     class="pagination-button"
                     data-page="${currentPage - 1}"
                     ${!data.previous ? "disabled" : ""}
                 >
+
                     <i class='bx bx-left-arrow-alt'></i>
+
                     Previous
+
                 </button>
 
 
@@ -154,55 +333,84 @@ document.addEventListener(
 
 
                 <button
+                    type="button"
                     class="pagination-button"
                     data-page="${currentPage + 1}"
                     ${!data.next ? "disabled" : ""}
                 >
+
                     Next
+
                     <i class='bx bx-right-arrow-alt'></i>
+
                 </button>
 
             `;
 
 
-            postGrid.after(pagination);
+            /* -------------------------------
+               Insert pagination
+            -------------------------------- */
 
+            postGrid.after(
+                pagination
+            );
+
+
+            /* -------------------------------
+               Pagination events
+            -------------------------------- */
 
             pagination
                 .querySelectorAll(
                     "[data-page]"
                 )
-                .forEach(button => {
+                .forEach(
+                    button => {
 
-                    button.addEventListener(
-                        "click",
-                        () => {
+                        button.addEventListener(
+                            "click",
+                            () => {
 
-                            const page =
-                                Number(
-                                    button.dataset.page
+                                const page =
+                                    Number(
+                                        button.dataset.page
+                                    );
+
+
+                                if (
+                                    page < 1
+                                ) {
+
+                                    return;
+
+                                }
+
+
+                                loadPosts(
+                                    page
                                 );
 
 
-                            if (page < 1) {
-                                return;
+                                window.scrollTo(
+                                    {
+                                        top: 0,
+                                        behavior: "smooth"
+                                    }
+                                );
+
                             }
+                        );
 
-
-                            loadPosts(page);
-
-
-                            window.scrollTo({
-                                top: 0,
-                                behavior: "smooth"
-                            });
-
-                        }
-                    );
-
-                });
+                    }
+                );
 
         }
+
+
+        /* =========================================
+           CREATE PAGE BUTTONS
+        ========================================= */
 
         function createPageButtons(
             totalPages
@@ -220,6 +428,7 @@ document.addEventListener(
                 html += `
 
                     <button
+                        type="button"
                         class="
                             pagination-page
                             ${
@@ -230,7 +439,9 @@ document.addEventListener(
                         "
                         data-page="${page}"
                     >
+
                         ${page}
+
                     </button>
 
                 `;
@@ -243,62 +454,129 @@ document.addEventListener(
         }
 
 
-        function createPostCard(post) {
+        /* =========================================
+           CREATE POST CARD
+        ========================================= */
 
-            const image = post.featured_image
-                ? `
-                    <img
-                        src="${post.featured_image}"
-                        alt="${post.title}"
-                        class="post-card-image"
-                    >
-                `
-                : `
-                    <div class="post-card-placeholder">
-                        <i class='bx bx-book-open'></i>
-                    </div>
-                `;
+        function createPostCard(
+            post
+        ) {
 
+            /* -------------------------------
+               Featured Image
+            -------------------------------- */
+
+            const image =
+                post.featured_image
+
+                    ? `
+
+                        <img
+                            src="${post.featured_image}"
+                            alt="${post.title}"
+                            class="post-card-image"
+                        >
+
+                    `
+
+                    : `
+
+                        <div
+                            class="post-card-placeholder"
+                        >
+
+                            <i
+                                class='bx bx-book-open'
+                            ></i>
+
+                        </div>
+
+                    `;
+
+
+            /* -------------------------------
+               Category
+            -------------------------------- */
 
             const category =
                 post.category_name
+
                     ? `
-                        <span class="post-category">
+
+                        <span
+                            class="post-category"
+                        >
+
                             ${post.category_name}
+
                         </span>
+
                     `
+
                     : "";
 
+
+            /* -------------------------------
+               Author
+            -------------------------------- */
 
             const author =
                 post.author_name ||
                 "Anonymous";
 
 
+            /* -------------------------------
+               Date
+            -------------------------------- */
+
             const date =
                 post.published_at
+
                     ? formatDate(
                         post.published_at
                     )
+
                     : "";
 
 
+            /* -------------------------------
+               Card
+            -------------------------------- */
+
             return `
-                <article class="post-card">
+
+                <article
+                    class="post-card"
+                >
+
+
+                    <!-- IMAGE -->
 
                     <a
                         href="/blog/${post.slug}/"
                         class="post-card-image-link"
                     >
+
                         ${image}
+
                     </a>
 
 
-                    <div class="post-card-body">
+                    <!-- BODY -->
 
-                        <div class="post-card-meta">
+                    <div
+                        class="post-card-body"
+                    >
+
+
+                        <!-- META -->
+
+                        <div
+                            class="post-card-meta"
+                        >
 
                             ${category}
+
 
                             <span>
                                 ${date}
@@ -307,52 +585,92 @@ document.addEventListener(
                         </div>
 
 
-                        <h2 class="post-card-title">
+                        <!-- TITLE -->
+
+                        <h2
+                            class="post-card-title"
+                        >
 
                             <a
                                 href="/blog/${post.slug}/"
                             >
+
                                 ${post.title}
+
                             </a>
 
                         </h2>
 
 
-                        <p class="post-card-excerpt">
+                        <!-- EXCERPT -->
+
+                        <p
+                            class="post-card-excerpt"
+                        >
+
                             ${post.excerpt || ""}
+
                         </p>
 
 
-                        <div class="post-card-footer">
+                        <!-- FOOTER -->
 
-                            <span class="post-author">
+                        <div
+                            class="post-card-footer"
+                        >
+
+                            <span
+                                class="post-author"
+                            >
+
                                 ${author}
+
                             </span>
 
-                            <span class="post-views">
 
-                                <i class='bx bx-show'></i>
+                            <span
+                                class="post-views"
+                            >
 
-                                ${post.views}
+                                <i
+                                    class='bx bx-show'
+                                ></i>
+
+                                ${post.views || 0}
 
                             </span>
 
                         </div>
 
+
                     </div>
 
+
                 </article>
+
             `;
+
         }
 
 
-        function formatDate(dateString) {
+        /* =========================================
+           FORMAT DATE
+        ========================================= */
 
-            const date =
-                new Date(dateString);
+        function formatDate(
+            dateString
+        ) {
+
+            if (!dateString) {
+
+                return "";
+
+            }
 
 
-            return date.toLocaleDateString(
+            return new Date(
+                dateString
+            ).toLocaleDateString(
                 "en-US",
                 {
                     month: "short",
@@ -364,7 +682,126 @@ document.addEventListener(
         }
 
 
-        loadPosts();
+        /* =========================================
+           SEARCH SUBMIT
+        ========================================= */
+
+        searchForm.addEventListener(
+            "submit",
+            event => {
+
+                event.preventDefault();
+
+
+                currentSearch =
+                    searchInput.value.trim();
+
+
+                currentPage =
+                    1;
+
+
+                if (currentSearch) {
+
+                    clearSearch.style.display =
+                        "inline-flex";
+
+                } else {
+
+                    clearSearch.style.display =
+                        "none";
+
+                }
+
+
+                loadPosts(
+                    1
+                );
+
+            }
+        );
+
+
+        /* =========================================
+           CLEAR SEARCH
+        ========================================= */
+
+        clearSearch.addEventListener(
+            "click",
+            () => {
+
+                searchInput.value =
+                    "";
+
+                currentSearch =
+                    "";
+
+                currentPage =
+                    1;
+
+
+                clearSearch.style.display =
+                    "none";
+
+
+                loadPosts(
+                    1
+                );
+
+            }
+        );
+
+
+        /* =========================================
+           UPDATE BROWSER URL
+        ========================================= */
+
+        function updateBrowserURL() {
+
+            const url =
+                new URL(
+                    window.location.href
+                );
+
+
+            if (currentSearch) {
+
+                url.searchParams.set(
+                    "search",
+                    currentSearch
+                );
+
+            } else {
+
+                url.searchParams.delete(
+                    "search"
+                );
+
+            }
+
+
+            /*
+             * Page URL will keep search,
+             * but page number is handled
+             * through API state.
+             */
+
+            window.history.replaceState(
+                {},
+                "",
+                url
+            );
+
+        }
+
+
+        /* =========================================
+           INITIAL LOAD
+        ========================================= */
+
+        loadPosts(
+            1
+        );
 
     }
 );

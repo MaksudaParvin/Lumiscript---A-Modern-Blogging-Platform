@@ -24,7 +24,7 @@ document.addEventListener(
 
                 const response =
                     await fetch(
-                        "/api/posts/"
+                        "/api/posts/?page=1"
                     );
 
 
@@ -37,13 +37,29 @@ document.addEventListener(
                 }
 
 
-                const posts =
+                const data =
                     await response.json();
+
+
+                /*
+                 * DRF pagination response:
+                 *
+                 * {
+                 *     count: ...,
+                 *     next: ...,
+                 *     previous: ...,
+                 *     results: [...]
+                 * }
+                 */
+
+                const posts =
+                    data.results;
 
 
                 renderFeatured(
                     posts
                 );
+
 
                 renderLatest(
                     posts
@@ -52,7 +68,11 @@ document.addEventListener(
 
             } catch (error) {
 
-                console.error(error);
+                console.error(
+                    "Home API Error:",
+                    error
+                );
+
 
                 featuredPost.innerHTML = `
                     <p class="home-error">
@@ -77,13 +97,12 @@ document.addEventListener(
         }
 
 
-        /* =================================
-           FEATURED
-        ================================= */
-
         function renderFeatured(posts) {
 
-            if (!posts.length) {
+            if (
+                !posts ||
+                !posts.length
+            ) {
 
                 featuredPost.innerHTML = `
                     <div class="home-empty">
@@ -110,7 +129,9 @@ document.addEventListener(
                     `
                     : `
                         <div class="featured-placeholder">
+
                             <i class='bx bx-book-open'></i>
+
                         </div>
                     `;
 
@@ -123,7 +144,9 @@ document.addEventListener(
                         href="/blog/${post.slug}/"
                         class="featured-image"
                     >
+
                         ${image}
+
                     </a>
 
 
@@ -169,12 +192,15 @@ document.addEventListener(
                         <div class="featured-footer">
 
                             <span>
-                                ${post.author_name}
+                                ${post.author_name || "Anonymous"}
                             </span>
 
                             <span>
+
                                 <i class='bx bx-show'></i>
-                                ${post.views}
+
+                                ${post.views || 0}
+
                             </span>
 
                         </div>
@@ -182,14 +208,11 @@ document.addEventListener(
                     </div>
 
                 </article>
+
             `;
 
         }
 
-
-        /* =================================
-           LATEST
-        ================================= */
 
         function renderLatest(posts) {
 
@@ -221,10 +244,6 @@ document.addEventListener(
         }
 
 
-        /* =================================
-           POST CARD
-        ================================= */
-
         function createPostCard(post) {
 
             const image =
@@ -237,7 +256,9 @@ document.addEventListener(
                     `
                     : `
                         <div class="home-card-placeholder">
+
                             <i class='bx bx-book-open'></i>
+
                         </div>
                     `;
 
@@ -298,12 +319,15 @@ document.addEventListener(
                         <div class="home-post-footer">
 
                             <span>
-                                ${post.author_name}
+                                ${post.author_name || "Anonymous"}
                             </span>
 
                             <span>
+
                                 <i class='bx bx-show'></i>
-                                ${post.views}
+
+                                ${post.views || 0}
+
                             </span>
 
                         </div>
@@ -316,10 +340,6 @@ document.addEventListener(
 
         }
 
-
-        /* =================================
-           DATE
-        ================================= */
 
         function formatDate(
             dateString

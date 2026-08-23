@@ -704,3 +704,231 @@
     font-size:
         16px;
 }
+
+/* =========================================
+   SEARCH
+========================================= */
+
+.blog-search {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        10px;
+
+    padding-top:
+        32px;
+}
+
+
+.search-form {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    flex:
+        1;
+
+    max-width:
+        620px;
+
+    min-height:
+        48px;
+
+    padding:
+        0 6px 0 16px;
+
+    border:
+        1px solid
+        var(--color-border);
+
+    border-radius:
+        10px;
+
+    background:
+        var(--color-surface);
+
+    transition:
+        border-color var(--transition),
+        box-shadow var(--transition);
+}
+
+
+.search-form:focus-within {
+
+    border-color:
+        var(--color-accent);
+
+    box-shadow:
+        0 0 0 4px
+        var(--color-accent-soft);
+}
+
+
+.search-form > i {
+
+    flex-shrink:
+        0;
+
+    color:
+        var(--color-muted);
+
+    font-size:
+        20px;
+}
+
+
+.search-form input {
+
+    flex:
+        1;
+
+    min-width:
+        0;
+
+    height:
+        44px;
+
+    padding:
+        0 12px;
+
+    border:
+        none;
+
+    outline:
+        none;
+
+    background:
+        transparent;
+
+    color:
+        var(--color-text);
+
+    font-family:
+        inherit;
+
+    font-size:
+        13px;
+}
+
+
+.search-form input::placeholder {
+
+    color:
+        var(--color-muted);
+}
+
+
+.search-form button {
+
+    min-height:
+        36px;
+
+    padding:
+        0 16px;
+
+    border:
+        none;
+
+    border-radius:
+        7px;
+
+    background:
+        var(--color-text);
+
+    color:
+        white;
+
+    font-size:
+        11px;
+
+    font-weight:
+        700;
+
+    transition:
+        background var(--transition);
+}
+
+
+.search-form button:hover {
+
+    background:
+        var(--color-accent);
+}
+
+
+.clear-search {
+
+    display:
+        none;
+
+    min-height:
+        40px;
+
+    padding:
+        0 13px;
+
+    border:
+        1px solid
+        var(--color-border);
+
+    border-radius:
+        8px;
+
+    background:
+        transparent;
+
+    color:
+        var(--color-muted);
+
+    font-size:
+        11px;
+
+    font-weight:
+        700;
+}
+
+
+.clear-search:hover {
+
+    border-color:
+        var(--color-text);
+
+    color:
+        var(--color-text);
+}
+
+
+@media (max-width: 600px) {
+
+    .blog-search {
+
+        align-items:
+            stretch;
+
+        flex-direction:
+            column;
+    }
+
+
+    .search-form {
+
+        width:
+            100%;
+    }
+
+
+    .clear-search {
+
+        align-self:
+            flex-start;
+    }
+
+}

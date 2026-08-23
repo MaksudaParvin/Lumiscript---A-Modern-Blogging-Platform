@@ -7,6 +7,8 @@ from .permissions import IsAuthorOrReadOnly
 
 from .pagination import PostPagination
 
+from django.db.models import Q
+
 
 class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
 
@@ -60,11 +62,33 @@ class PostViewSet(viewsets.ModelViewSet):
             )
         )
 
+
         if self.action in ["list", "retrieve"]:
 
             queryset = queryset.filter(
                 status=Post.Status.PUBLISHED
             )
+
+
+        search_query = (
+            self.request.query_params
+            .get("search", "")
+            .strip()
+        )
+
+
+        if search_query:
+
+            queryset = queryset.filter(
+
+                Q(title__icontains=search_query)
+
+                | Q(excerpt__icontains=search_query)
+
+                | Q(content__icontains=search_query)
+
+            )
+
 
         return queryset
 
