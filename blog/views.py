@@ -5,6 +5,8 @@ from .models import Category, Tag, Post
 from .serializers import (CategorySerializer, TagSerializer, PostSerializer,)
 from .permissions import IsAuthorOrReadOnly
 
+from .pagination import PostPagination
+
 
 class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
 
@@ -35,6 +37,8 @@ class PostViewSet(viewsets.ModelViewSet):
     permission_classes = [
         IsAuthorOrReadOnly
     ]
+
+    pagination_class = PostPagination
 
     lookup_field = "slug"
 

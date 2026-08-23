@@ -1,3 +1,5 @@
+let currentPage = 1;
+
 document.addEventListener(
     "DOMContentLoaded",
     () => {
@@ -12,13 +14,17 @@ document.addEventListener(
             document.getElementById("blogEmpty");
 
 
-        async function loadPosts() {
+        async function loadPosts(page = 1) {
+
+            loading.style.display = "block";
+
+            empty.style.display = "none";
 
             try {
 
-                const response =
-                    await fetch("/api/posts/");
-
+                const response = await fetch(
+                    `/api/posts/?page=${page}`
+                );
 
                 if (!response.ok) {
 
@@ -28,13 +34,13 @@ document.addEventListener(
 
                 }
 
+                const data = await response.json();
 
-                const data =
-                    await response.json();
+                currentPage = page;
 
+                renderPosts(data.results);
 
-                renderPosts(data);
-
+                renderPagination(data);
 
             } catch (error) {
 
@@ -42,18 +48,19 @@ document.addEventListener(
 
                 postGrid.innerHTML = `
                     <div class="blog-error">
+
                         <i class='bx bx-error-circle'></i>
 
                         <p>
                             Unable to load stories.
                         </p>
+
                     </div>
                 `;
 
             } finally {
 
-                loading.style.display =
-                    "none";
+                loading.style.display = "none";
 
             }
 
@@ -64,13 +71,15 @@ document.addEventListener(
 
             if (!posts.length) {
 
-                empty.style.display =
-                    "flex";
+                postGrid.innerHTML = "";
+
+                empty.style.display = "flex";
 
                 return;
 
             }
 
+            empty.style.display = "none";
 
             postGrid.innerHTML =
                 posts
@@ -78,6 +87,158 @@ document.addEventListener(
                         post => createPostCard(post)
                     )
                     .join("");
+
+        }
+
+        function renderPagination(data) {
+
+            const existingPagination =
+                document.getElementById(
+                    "blogPagination"
+                );
+
+
+            if (existingPagination) {
+
+                existingPagination.remove();
+
+            }
+
+
+            if (
+                !data.next &&
+                !data.previous
+            ) {
+
+                return;
+
+            }
+
+
+            const pagination =
+                document.createElement("div");
+
+
+            pagination.id =
+                "blogPagination";
+
+            pagination.className =
+                "blog-pagination";
+
+
+            const totalPages =
+                Math.ceil(
+                    data.count / 6
+                );
+
+
+            pagination.innerHTML = `
+
+                <button
+                    class="pagination-button"
+                    data-page="${currentPage - 1}"
+                    ${!data.previous ? "disabled" : ""}
+                >
+                    <i class='bx bx-left-arrow-alt'></i>
+                    Previous
+                </button>
+
+
+                <div class="pagination-pages">
+
+                    ${createPageButtons(
+                        totalPages
+                    )}
+
+                </div>
+
+
+                <button
+                    class="pagination-button"
+                    data-page="${currentPage + 1}"
+                    ${!data.next ? "disabled" : ""}
+                >
+                    Next
+                    <i class='bx bx-right-arrow-alt'></i>
+                </button>
+
+            `;
+
+
+            postGrid.after(pagination);
+
+
+            pagination
+                .querySelectorAll(
+                    "[data-page]"
+                )
+                .forEach(button => {
+
+                    button.addEventListener(
+                        "click",
+                        () => {
+
+                            const page =
+                                Number(
+                                    button.dataset.page
+                                );
+
+
+                            if (page < 1) {
+                                return;
+                            }
+
+
+                            loadPosts(page);
+
+
+                            window.scrollTo({
+                                top: 0,
+                                behavior: "smooth"
+                            });
+
+                        }
+                    );
+
+                });
+
+        }
+
+        function createPageButtons(
+            totalPages
+        ) {
+
+            let html = "";
+
+
+            for (
+                let page = 1;
+                page <= totalPages;
+                page++
+            ) {
+
+                html += `
+
+                    <button
+                        class="
+                            pagination-page
+                            ${
+                                page === currentPage
+                                    ? "active"
+                                    : ""
+                            }
+                        "
+                        data-page="${page}"
+                    >
+                        ${page}
+                    </button>
+
+                `;
+
+            }
+
+
+            return html;
 
         }
 

@@ -1,0 +1,175 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+
+{% block title %}
+    Lumiscript — Ideas Worth Sharing
+{% endblock %}
+
+
+{% block extra_css %}
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/home.css' %}"
+>
+
+{% endblock %}
+
+
+{% block content %}
+
+<main class="home-page">
+
+
+    <!-- =================================
+         HERO
+    ================================== -->
+
+    <section class="home-hero">
+
+        <div class="home-container">
+
+            <div class="hero-content">
+
+                <span class="eyebrow">
+                    A space for ideas
+                </span>
+
+                <h1>
+                    Stories that make
+                    <em>you think.</em>
+                </h1>
+
+                <p>
+                    Discover thoughtful writing,
+                    practical ideas, and perspectives
+                    from curious people.
+                </p>
+
+                <a
+                    href="{% url 'blog' %}"
+                    class="hero-button"
+                >
+                    Explore stories
+
+                    <i class='bx bx-right-arrow-alt'></i>
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =================================
+         FEATURED STORY
+    ================================== -->
+
+    <section class="featured-section">
+
+        <div class="home-container">
+
+            <div class="section-heading">
+
+                <div>
+
+                    <span class="eyebrow">
+                        Featured
+                    </span>
+
+                    <h2>
+                        Worth your time.
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <div
+                class="featured-post"
+                id="featuredPost"
+            >
+
+                <!-- Loaded by JavaScript -->
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =================================
+         LATEST STORIES
+    ================================== -->
+
+    <section class="latest-section">
+
+        <div class="home-container">
+
+            <div class="section-heading">
+
+                <div>
+
+                    <span class="eyebrow">
+                        Latest
+                    </span>
+
+                    <h2>
+                        Fresh from the community.
+                    </h2>
+
+                </div>
+
+                <a
+                    href="{% url 'blog' %}"
+                    class="section-link"
+                >
+                    View all
+
+                    <i class='bx bx-right-arrow-alt'></i>
+
+                </a>
+
+            </div>
+
+
+            <div
+                class="latest-grid"
+                id="latestPosts"
+            >
+
+                <!-- Loaded by JavaScript -->
+
+            </div>
+
+
+            <div
+                class="home-loading"
+                id="homeLoading"
+            >
+                Loading stories...
+            </div>
+
+        </div>
+
+    </section>
+
+
+</main>
+
+{% endblock %}
+
+
+{% block extra_js %}
+
+<script
+    src="{% static 'js/home.js' %}"
+></script>
+
+{% endblock %}

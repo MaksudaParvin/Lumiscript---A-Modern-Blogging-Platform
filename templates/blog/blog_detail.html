@@ -1,0 +1,200 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+
+{% block title %}
+    Article — Lumiscript
+{% endblock %}
+
+
+{% block extra_css %}
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/blog.css' %}"
+>
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/post_detail.css' %}"
+>
+
+{% endblock %}
+
+
+{% block content %}
+
+<main
+    class="post-detail-page"
+    data-post-slug="{{ slug }}"
+>
+
+    <article
+        class="post-detail"
+        id="postDetail"
+    >
+
+        <!-- Loading -->
+
+        <div
+            class="post-detail-loading"
+            id="postLoading"
+        >
+            Loading article...
+        </div>
+
+
+        <!-- Error -->
+
+        <div
+            class="post-detail-error"
+            id="postError"
+        >
+
+            <i class='bx bx-error-circle'></i>
+
+            <h2>
+                Article not found
+            </h2>
+
+            <p>
+                This story may have been removed
+                or is no longer available.
+            </p>
+
+            <a
+                href="{% url 'blog' %}"
+                class="secondary-button"
+            >
+                Back to Explore
+            </a>
+
+        </div>
+
+
+        <!-- Article Content -->
+
+        <div
+            class="post-content-wrapper"
+            id="postContent"
+        >
+
+            <header class="post-detail-header">
+
+                <div class="post-detail-meta">
+
+                    <span
+                        class="post-detail-category"
+                        id="postCategory"
+                    ></span>
+
+                    <span
+                        id="postDate"
+                    ></span>
+
+                </div>
+
+
+                <h1
+                    class="post-detail-title"
+                    id="postTitle"
+                ></h1>
+
+
+                <p
+                    class="post-detail-excerpt"
+                    id="postExcerpt"
+                ></p>
+
+
+                <div class="post-author">
+
+                    <div
+                        class="post-author-avatar"
+                        id="postAuthorAvatar"
+                    >
+                    </div>
+
+
+                    <div class="post-author-info">
+
+                        <strong
+                            id="postAuthor"
+                        ></strong>
+
+                        <span>
+                            Author
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </header>
+
+
+            <!-- Featured Image -->
+
+            <div
+                class="post-featured-image-wrapper"
+                id="postImageWrapper"
+            >
+
+                <img
+                    id="postImage"
+                    class="post-featured-image"
+                    alt=""
+                >
+
+            </div>
+
+
+            <!-- Article Body -->
+
+            <div
+                class="post-article-content"
+                id="postBody"
+            ></div>
+
+
+            <!-- Footer -->
+
+            <footer class="post-detail-footer">
+
+                <div
+                    class="post-tags"
+                    id="postTags"
+                ></div>
+
+
+                <div class="post-stat">
+
+                    <i class='bx bx-show'></i>
+
+                    <span id="postViews">
+                        0
+                    </span>
+
+                    views
+
+                </div>
+
+            </footer>
+
+        </div>
+
+    </article>
+
+</main>
+
+{% endblock %}
+
+
+{% block extra_js %}
+
+<script
+    src="{% static 'js/post_detail.js' %}"
+></script>
+
+{% endblock %}
