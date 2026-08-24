@@ -78,12 +78,6 @@ document.addEventListener(
             );
 
 
-        const bookmarkText =
-            document.getElementById(
-                "bookmarkText"
-            );
-
-
         const imageWrapper =
             document.getElementById(
                 "articleImageWrapper"
@@ -100,6 +94,59 @@ document.addEventListener(
             document.getElementById(
                 "articleTags"
             );
+
+
+        /* =========================================
+           COMMENT ELEMENTS
+        ========================================= */
+
+        const commentCount =
+            document.getElementById(
+                "commentCount"
+            );
+
+
+        const commentForm =
+            document.getElementById(
+                "commentForm"
+            );
+
+
+        const commentInput =
+            document.getElementById(
+                "commentInput"
+            );
+
+
+        const commentSubmitButton =
+            document.getElementById(
+                "commentSubmitButton"
+            );
+
+
+        const commentsLoading =
+            document.getElementById(
+                "commentsLoading"
+            );
+
+
+        const commentsList =
+            document.getElementById(
+                "commentsList"
+            );
+
+
+        const commentsEmpty =
+            document.getElementById(
+                "commentsEmpty"
+            );
+
+
+        /* =========================================
+           POST DATA
+        ========================================= */
+
+        let postId = null;
 
 
         /* =========================================
@@ -170,6 +217,14 @@ document.addEventListener(
                     "Post:",
                     post
                 );
+
+
+                /*
+                Save post ID for comments.
+                */
+
+                postId =
+                    post.id;
 
 
                 renderPost(
@@ -290,7 +345,9 @@ document.addEventListener(
                 imageWrapper.innerHTML = `
 
                     <img
-                        src="${post.featured_image}"
+                        src="${escapeHTML(
+                            post.featured_image
+                        )}"
                         alt="${escapeHTML(
                             post.title
                         )}"
@@ -350,6 +407,13 @@ document.addEventListener(
             article.style.display =
                 "block";
 
+
+            /* =========================================
+               LOAD COMMENTS
+            ========================================= */
+
+            loadComments();
+
         }
 
 
@@ -376,12 +440,16 @@ document.addEventListener(
 
             tags.innerHTML = `
 
-                <span class="tags-label">
+                <span
+                    class="tags-label"
+                >
                     Tags
                 </span>
 
 
-                <div class="tag-list">
+                <div
+                    class="tag-list"
+                >
 
                     ${tagData
                         .map(
@@ -481,11 +549,19 @@ document.addEventListener(
                         class='bx bxs-bookmark'
                     ></i>
 
-                    <span id="bookmarkText">
-                        Saved
-                    </span>
-
                 `;
+
+
+                bookmarkButton.setAttribute(
+                    "aria-label",
+                    "Remove bookmark"
+                );
+
+
+                bookmarkButton.setAttribute(
+                    "title",
+                    "Remove bookmark"
+                );
 
             } else {
 
@@ -500,11 +576,19 @@ document.addEventListener(
                         class='bx bx-bookmark'
                     ></i>
 
-                    <span id="bookmarkText">
-                        Save
-                    </span>
-
                 `;
+
+
+                bookmarkButton.setAttribute(
+                    "aria-label",
+                    "Save post"
+                );
+
+
+                bookmarkButton.setAttribute(
+                    "title",
+                    "Save post"
+                );
 
             }
 
@@ -567,10 +651,6 @@ document.addEventListener(
                         );
 
 
-                    /* ---------------------------------
-                       AUTHENTICATION
-                    --------------------------------- */
-
                     if (
                         response.status === 401 ||
                         response.status === 403
@@ -596,17 +676,9 @@ document.addEventListener(
                         await response.json();
 
 
-                    /* ---------------------------------
-                       UPDATE LIKE COUNT
-                    --------------------------------- */
-
                     likeCount.textContent =
                         data.like_count || 0;
 
-
-                    /* ---------------------------------
-                       UPDATE LIKE STATE
-                    --------------------------------- */
 
                     updateLikeButton(
                         data.liked
@@ -687,10 +759,6 @@ document.addEventListener(
                         );
 
 
-                    /* ---------------------------------
-                       AUTHENTICATION
-                    --------------------------------- */
-
                     if (
                         response.status === 401 ||
                         response.status === 403
@@ -716,10 +784,6 @@ document.addEventListener(
                         await response.json();
 
 
-                    /* ---------------------------------
-                       UPDATE BOOKMARK STATE
-                    --------------------------------- */
-
                     updateBookmarkButton(
                         data.bookmarked
                     );
@@ -741,6 +805,457 @@ document.addEventListener(
 
             }
         );
+
+
+        /* =========================================
+           LOAD COMMENTS
+        ========================================= */
+
+        async function loadComments() {
+
+            if (!postId) {
+
+                return;
+
+            }
+
+
+            try {
+
+                commentsLoading.style.display =
+                    "flex";
+
+
+                commentsEmpty.style.display =
+                    "none";
+
+
+                commentsList.innerHTML =
+                    "";
+
+
+                const response =
+                    await fetch(
+                        `/api/comments/?post=${encodeURIComponent(
+                            slug
+                        )}`
+                    );
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        `Comments API Error: ${response.status}`
+                    );
+
+                }
+
+
+                const data =
+                    await response.json();
+
+
+                /*
+                Pagination নেই।
+                তাই normally array আসবে।
+
+                তবুও safety-এর জন্য
+                results support করছি।
+                */
+
+                const comments =
+                    Array.isArray(data)
+                        ? data
+                        : (
+                            data.results ||
+                            []
+                        );
+
+
+                commentCount.textContent =
+                    comments.length;
+
+
+                renderComments(
+                    comments
+                );
+
+
+            } catch (error) {
+
+                console.error(
+                    "Comments Error:",
+                    error
+                );
+
+
+                commentsList.innerHTML = `
+
+                    <div
+                        class="comments-error"
+                    >
+
+                        <i
+                            class='bx bx-error-circle'
+                        ></i>
+
+                        <p>
+                            Unable to load comments.
+                        </p>
+
+                    </div>
+
+                `;
+
+            } finally {
+
+                commentsLoading.style.display =
+                    "none";
+
+            }
+
+        }
+
+
+        /* =========================================
+           RENDER COMMENTS
+        ========================================= */
+
+        function renderComments(
+            comments
+        ) {
+
+            if (
+                !comments ||
+                !comments.length
+            ) {
+
+                commentsList.innerHTML =
+                    "";
+
+
+                commentsEmpty.style.display =
+                    "flex";
+
+
+                return;
+
+            }
+
+
+            commentsEmpty.style.display =
+                "none";
+
+
+            commentsList.innerHTML =
+                comments
+                    .map(
+                        comment =>
+                            createComment(
+                                comment
+                            )
+                    )
+                    .join("");
+
+        }
+
+
+        /* =========================================
+           CREATE COMMENT CARD
+        ========================================= */
+
+        function createComment(
+            comment
+        ) {
+
+            const author =
+                comment.author_name ||
+                "Anonymous";
+
+
+            const initial =
+                author
+                    .charAt(0)
+                    .toUpperCase();
+
+
+            const commentDate =
+                comment.created_at
+                    ? formatCommentDate(
+                        comment.created_at
+                    )
+                    : "";
+
+
+            return `
+
+                <article
+                    class="comment-card"
+                    data-comment-id="${comment.id}"
+                >
+
+                    <div
+                        class="comment-avatar"
+                    >
+
+                        ${escapeHTML(
+                            initial
+                        )}
+
+                    </div>
+
+
+                    <div
+                        class="comment-body"
+                    >
+
+                        <div
+                            class="comment-top"
+                        >
+
+                            <div>
+
+                                <strong
+                                    class="comment-author"
+                                >
+
+                                    ${escapeHTML(
+                                        author
+                                    )}
+
+                                </strong>
+
+
+                                <span
+                                    class="comment-date"
+                                >
+
+                                    ${commentDate}
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <p
+                            class="comment-content"
+                        >
+
+                            ${escapeHTML(
+                                comment.content
+                            )}
+
+                        </p>
+
+                    </div>
+
+                </article>
+
+            `;
+
+        }
+
+
+        /* =========================================
+           SUBMIT COMMENT
+        ========================================= */
+
+        if (commentForm) {
+
+            commentForm.addEventListener(
+                "submit",
+                async event => {
+
+                    event.preventDefault();
+
+
+                    const commentContent =
+                        commentInput.value.trim();
+
+
+                    if (!commentContent) {
+
+                        return;
+
+                    }
+
+
+                    commentSubmitButton.disabled =
+                        true;
+
+
+                    commentSubmitButton.innerHTML = `
+
+                        <i
+                            class='bx bx-loader-alt bx-spin'
+                        ></i>
+
+                        Posting...
+
+                    `;
+
+
+                    try {
+
+                        const response =
+                            await fetch(
+                                "/api/comments/",
+                                {
+                                    method:
+                                        "POST",
+
+                                    headers: {
+
+                                        "Content-Type":
+                                            "application/json",
+
+                                        "X-CSRFToken":
+                                            getCSRFToken()
+
+                                    },
+
+                                    credentials:
+                                        "same-origin",
+
+                                    body:
+                                        JSON.stringify({
+
+                                            post:
+                                                postId,
+
+                                            content:
+                                                commentContent
+
+                                        })
+
+                                }
+                            );
+
+
+                        /* ---------------------------------
+                           AUTHENTICATION
+                        --------------------------------- */
+
+                        if (
+                            response.status === 401 ||
+                            response.status === 403
+                        ) {
+
+                            redirectToLogin();
+
+                            return;
+
+                        }
+
+
+                        /* ---------------------------------
+                           VALIDATION ERROR
+                        --------------------------------- */
+
+                        if (!response.ok) {
+
+                            const errorData =
+                                await response.json()
+                                    .catch(
+                                        () => null
+                                    );
+
+
+                            console.error(
+                                "Comment validation error:",
+                                errorData
+                            );
+
+
+                            throw new Error(
+                                "Unable to post comment."
+                            );
+
+                        }
+
+
+                        const newComment =
+                            await response.json();
+
+
+                        /* ---------------------------------
+                           CLEAR INPUT
+                        --------------------------------- */
+
+                        commentInput.value =
+                            "";
+
+
+                        /* ---------------------------------
+                           HIDE EMPTY STATE
+                        --------------------------------- */
+
+                        commentsEmpty.style.display =
+                            "none";
+
+
+                        /* ---------------------------------
+                           ADD NEW COMMENT
+                        --------------------------------- */
+
+                        commentsList.insertAdjacentHTML(
+                            "afterbegin",
+                            createComment(
+                                newComment
+                            )
+                        );
+
+
+                        /* ---------------------------------
+                           UPDATE COUNT
+                        --------------------------------- */
+
+                        const currentCount =
+                            Number(
+                                commentCount.textContent
+                            ) || 0;
+
+
+                        commentCount.textContent =
+                            currentCount + 1;
+
+
+                    } catch (error) {
+
+                        console.error(
+                            "Comment Error:",
+                            error
+                        );
+
+
+                        alert(
+                            "Unable to post your comment. Please try again."
+                        );
+
+                    } finally {
+
+                        commentSubmitButton.disabled =
+                            false;
+
+
+                        commentSubmitButton.innerHTML = `
+
+                            <i
+                                class='bx bx-send'
+                            ></i>
+
+                            Post comment
+
+                        `;
+
+                    }
+
+                }
+            );
+
+        }
 
 
         /* =========================================
@@ -773,13 +1288,18 @@ document.addEventListener(
                 const cookie of cookies
             ) {
 
-                const [
-                    name,
-                    value
-                ] =
-                    cookie.trim().split(
-                        "="
-                    );
+                const parts =
+                    cookie
+                        .trim()
+                        .split("=");
+
+
+                const name =
+                    parts.shift();
+
+
+                const value =
+                    parts.join("=");
 
 
                 if (
@@ -821,7 +1341,7 @@ document.addEventListener(
 
 
         /* =========================================
-           DATE FORMAT
+           POST DATE FORMAT
         ========================================= */
 
         function formatDate(
@@ -842,6 +1362,40 @@ document.addEventListener(
                 {
                     month:
                         "long",
+
+                    day:
+                        "numeric",
+
+                    year:
+                        "numeric"
+                }
+            );
+
+        }
+
+
+        /* =========================================
+           COMMENT DATE FORMAT
+        ========================================= */
+
+        function formatCommentDate(
+            dateString
+        ) {
+
+            if (!dateString) {
+
+                return "";
+
+            }
+
+
+            return new Date(
+                dateString
+            ).toLocaleDateString(
+                "en-US",
+                {
+                    month:
+                        "short",
 
                     day:
                         "numeric",

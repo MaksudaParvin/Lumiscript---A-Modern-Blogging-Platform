@@ -244,6 +244,160 @@
             </div>
 
 
+            <!-- =========================================
+                COMMENTS
+            ========================================= -->
+
+            <section
+                class="comments-section"
+                id="commentsSection"
+            >
+
+                <div class="comments-header">
+
+                    <div>
+
+                        <span class="eyebrow">
+                            Discussion
+                        </span>
+
+                        <h2>
+                            Comments
+                        </h2>
+
+                    </div>
+
+                    <span
+                        id="commentCount"
+                        class="comment-count"
+                    >
+                        0
+                    </span>
+
+                </div>
+
+
+                <!-- =====================================
+                    COMMENT FORM
+                ====================================== -->
+
+                {% if user.is_authenticated %}
+
+                    <form
+                        id="commentForm"
+                        class="comment-form"
+                    >
+
+                        {% csrf_token %}
+
+                        <textarea
+                            id="commentInput"
+                            name="content"
+                            rows="4"
+                            maxlength="2000"
+                            placeholder="Share your thoughts..."
+                            required
+                        ></textarea>
+
+
+                        <div class="comment-form-footer">
+
+                            <span class="comment-hint">
+                                Be respectful and constructive.
+                            </span>
+
+
+                            <button
+                                type="submit"
+                                class="comment-submit-button"
+                                id="commentSubmitButton"
+                            >
+
+                                <i class='bx bx-send'></i>
+
+                                Post comment
+
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                {% else %}
+
+                    <div class="comment-login-box">
+
+                        <i class='bx bx-lock-alt'></i>
+
+                        <p>
+                            Sign in to join the discussion.
+                        </p>
+
+                        <a
+                            href="{% url 'login' %}?next={{ request.path }}"
+                            class="comment-login-button"
+                        >
+                            Sign in
+                        </a>
+
+                    </div>
+
+                {% endif %}
+
+
+                <!-- =====================================
+                    COMMENT LOADING
+                ====================================== -->
+
+                <div
+                    id="commentsLoading"
+                    class="comments-loading"
+                >
+
+                    <i class='bx bx-loader-alt bx-spin'></i>
+
+                    <span>
+                        Loading comments...
+                    </span>
+
+                </div>
+
+
+                <!-- =====================================
+                    COMMENTS LIST
+                ====================================== -->
+
+                <div
+                    id="commentsList"
+                    class="comments-list"
+                >
+                </div>
+
+
+                <!-- =====================================
+                    NO COMMENTS
+                ====================================== -->
+
+                <div
+                    id="commentsEmpty"
+                    class="comments-empty"
+                    style="display: none;"
+                >
+
+                    <i class='bx bx-message-rounded'></i>
+
+                    <h3>
+                        No comments yet
+                    </h3>
+
+                    <p>
+                        Be the first to share your thoughts.
+                    </p>
+
+                </div>
+
+            </section>
+
             <!-- =====================================
                  ARTICLE FOOTER
             ====================================== -->

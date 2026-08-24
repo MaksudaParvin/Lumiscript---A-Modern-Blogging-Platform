@@ -530,7 +530,7 @@ class CommentViewSet(
 
     def get_queryset(self):
 
-        return (
+        queryset = (
             Comment.objects
             .select_related(
                 "author",
@@ -543,6 +543,26 @@ class CommentViewSet(
                 "-created_at"
             )
         )
+
+
+        post_slug = (
+            self.request.query_params
+            .get(
+                "post",
+                ""
+            )
+            .strip()
+        )
+
+
+        if post_slug:
+
+            queryset = queryset.filter(
+                post__slug=post_slug
+            )
+
+
+        return queryset
 
 
     # =========================================
