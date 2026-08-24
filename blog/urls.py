@@ -1,6 +1,6 @@
 from rest_framework.routers import DefaultRouter
 
-from .views import (CategoryViewSet, TagViewSet, PostViewSet,)
+from .views import (CategoryViewSet, TagViewSet, PostViewSet,CommentViewSet)
 
 
 router = DefaultRouter()
@@ -21,6 +21,12 @@ router.register(
     "tags",
     TagViewSet,
     basename="tag"
+)
+
+router.register(
+    "comments",
+    CommentViewSet,
+    basename="comment"
 )
 
 

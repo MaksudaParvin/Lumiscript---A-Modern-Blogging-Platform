@@ -4,6 +4,7 @@ from .models import (
     Category,
     Tag,
     Post,
+    Comment
 )
 
 
@@ -44,6 +45,73 @@ class TagSerializer(
             "slug",
         ]
 
+
+
+# =========================================
+# COMMENT
+# =========================================
+
+class CommentSerializer(
+    serializers.ModelSerializer
+):
+
+    author_name = (
+        serializers.SerializerMethodField()
+    )
+
+
+    class Meta:
+
+        model = Comment
+
+        fields = [
+
+            "id",
+
+            "post",
+
+            "author",
+            "author_name",
+
+            "content",
+
+            "created_at",
+            "updated_at",
+
+        ]
+
+        read_only_fields = [
+
+            "id",
+
+            "author",
+            "author_name",
+
+            "created_at",
+            "updated_at",
+
+        ]
+
+
+    # =========================================
+    # AUTHOR NAME
+    # =========================================
+
+    def get_author_name(
+        self,
+        obj
+    ):
+
+        full_name = (
+            f"{obj.author.first_name} "
+            f"{obj.author.last_name}"
+        ).strip()
+
+
+        return (
+            full_name
+            or obj.author.email
+        )
 
 # =========================================
 # POST

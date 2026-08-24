@@ -14,13 +14,15 @@ from .models import (
     Post,
     PostView,
     PostLike,
-    Bookmark
+    Bookmark,
+    Comment
 )
 
 from .serializers import (
     CategorySerializer,
     TagSerializer,
     PostSerializer,
+    CommentSerializer,
 )
 
 from .permissions import IsAuthorOrReadOnly
@@ -505,4 +507,144 @@ class PostViewSet(
 
         serializer.save(
             author=self.request.user
+        )
+
+
+
+# =========================================
+# COMMENT
+# =========================================
+
+class CommentViewSet(
+    viewsets.ModelViewSet
+):
+
+    serializer_class = CommentSerializer
+
+    pagination_class = None
+
+
+    # =========================================
+    # QUERYSET
+    # =========================================
+
+    def get_queryset(self):
+
+        return (
+            Comment.objects
+            .select_related(
+                "author",
+                "post"
+            )
+            .filter(
+                post__status=Post.Status.PUBLISHED
+            )
+            .order_by(
+                "-created_at"
+            )
+        )
+
+
+    # =========================================
+    # PERMISSIONS
+    # =========================================
+
+    def get_permissions(self):
+
+        if self.action in [
+            "list",
+            "retrieve"
+        ]:
+
+            return [
+                AllowAny()
+            ]
+
+
+        return [
+            IsAuthenticated()
+        ]
+
+
+    # =========================================
+    # CREATE COMMENT
+    # =========================================
+
+    def perform_create(
+        self,
+        serializer
+    ):
+
+        serializer.save(
+            author=self.request.user
+        )
+
+
+    # =========================================
+    # UPDATE COMMENT
+    # =========================================
+
+    def update(
+        self,
+        request,
+        *args,
+        **kwargs
+    ):
+
+        comment = self.get_object()
+
+
+        if (
+            comment.author !=
+            request.user
+        ):
+
+            return Response(
+                {
+                    "detail":
+                        "You can only edit your own comments."
+                },
+                status=403
+            )
+
+
+        return super().update(
+            request,
+            *args,
+            **kwargs
+        )
+
+
+    # =========================================
+    # DELETE COMMENT
+    # =========================================
+
+    def destroy(
+        self,
+        request,
+        *args,
+        **kwargs
+    ):
+
+        comment = self.get_object()
+
+
+        if (
+            comment.author !=
+            request.user
+        ):
+
+            return Response(
+                {
+                    "detail":
+                        "You can only delete your own comments."
+                },
+                status=403
+            )
+
+
+        return super().destroy(
+            request,
+            *args,
+            **kwargs
         )
