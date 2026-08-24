@@ -2177,3 +2177,411 @@
     }
 
 }
+
+/* =========================================
+   REPLY BUTTON
+========================================= */
+
+.comment-reply-action {
+    margin-top: 10px;
+}
+
+
+.comment-reply-action .comment-action {
+    padding: 0;
+
+    color:
+        var(--color-muted);
+
+    font-size: 12px;
+}
+
+
+.comment-reply-action .comment-action:hover {
+    color:
+        var(--color-accent);
+}
+
+
+/* =========================================
+   REPLY FORM
+========================================= */
+
+.reply-form-container {
+    width: 100%;
+}
+
+
+.reply-form {
+    max-width: 650px;
+
+    margin-top: 14px;
+
+    padding: 16px;
+
+    border:
+        1px solid
+        var(--color-border);
+
+    border-radius: 10px;
+
+    background:
+        var(--color-surface);
+
+    box-sizing: border-box;
+}
+
+
+.reply-input {
+    display: block;
+
+    width: 100%;
+
+    min-height: 90px;
+
+    padding: 12px 13px;
+
+    box-sizing: border-box;
+
+    resize: vertical;
+
+    border:
+        1px solid
+        var(--color-border);
+
+    border-radius: 8px;
+
+    outline: none;
+
+    background:
+        var(--color-background);
+
+    color:
+        var(--color-text);
+
+    font-family: inherit;
+
+    font-size: 13px;
+
+    line-height: 1.6;
+
+    transition:
+        border-color var(--transition),
+        box-shadow var(--transition);
+}
+
+
+.reply-input:focus {
+    border-color:
+        var(--color-accent);
+
+    box-shadow:
+        0 0 0 3px
+        var(--color-accent-soft);
+}
+
+
+.reply-input::placeholder {
+    color:
+        var(--color-muted);
+}
+
+
+/* =========================================
+   REPLY FORM ACTIONS
+========================================= */
+
+.reply-form-actions {
+    display: flex;
+
+    align-items: center;
+    justify-content: flex-end;
+
+    gap: 10px;
+
+    margin-top: 10px;
+}
+
+
+.reply-cancel-button {
+    min-height: 34px;
+
+    padding:
+        0 12px;
+
+    border: none;
+
+    background: transparent;
+
+    color:
+        var(--color-muted);
+
+    cursor: pointer;
+}
+
+
+.reply-cancel-button:hover {
+    color:
+        var(--color-text);
+}
+
+
+.reply-submit-button {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 6px;
+
+    min-height: 36px;
+
+    padding:
+        0 15px;
+
+    border: none;
+
+    border-radius: 7px;
+
+    background:
+        var(--color-text);
+
+    color: white;
+
+    font-family: inherit;
+
+    font-size: 12px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        background var(--transition),
+        opacity var(--transition);
+}
+
+
+.reply-submit-button:hover {
+    background:
+        var(--color-accent);
+}
+
+
+.reply-submit-button:disabled {
+    opacity: 0.6;
+
+    cursor: not-allowed;
+}
+
+
+/* =========================================
+   NESTED REPLIES
+========================================= */
+
+.comment-replies {
+    position: relative;
+
+    margin-top: 4px;
+
+    margin-left: 26px;
+
+    padding-left: 24px;
+
+    border-left:
+        1px solid
+        var(--color-border);
+}
+
+
+/* Every nested level */
+
+.comment-replies .comment-card {
+    padding-top: 22px;
+    padding-bottom: 22px;
+}
+
+
+/* Smaller avatar for replies */
+
+.comment-replies .comment-avatar {
+    width: 40px;
+    height: 40px;
+
+    font-size: 13px;
+}
+
+
+/* Nested reply message */
+
+.comment-replies .comment-content {
+    margin-top: 14px;
+
+    font-size: 14px;
+}
+
+
+/* Nested reply form */
+
+.comment-replies .reply-form {
+    max-width: 600px;
+}
+
+
+/* =========================================
+   COMMENTS LOADING
+========================================= */
+
+.comments-loading {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+
+    padding: 35px 0;
+
+    color:
+        var(--color-muted);
+
+    font-size: 13px;
+}
+
+
+.comments-loading i {
+    font-size: 18px;
+}
+
+
+/* =========================================
+   EMPTY COMMENTS
+========================================= */
+
+.comments-empty {
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 50px 20px;
+
+    text-align: center;
+
+    color:
+        var(--color-muted);
+}
+
+
+.comments-empty i {
+    margin-bottom: 10px;
+
+    font-size: 30px;
+}
+
+
+.comments-empty p {
+    margin: 0;
+
+    font-size: 13px;
+}
+
+
+/* =========================================
+   COMMENTS ERROR
+========================================= */
+
+.comments-error {
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+
+    padding: 40px 20px;
+
+    color:
+        var(--color-muted);
+
+    text-align: center;
+}
+
+
+.comments-error i {
+    font-size: 26px;
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 700px) {
+
+    .comments-section {
+        margin-top: 50px;
+    }
+
+
+    .comment-card {
+        gap: 11px;
+
+        padding:
+            22px 0;
+    }
+
+
+    .comment-avatar {
+        width: 42px;
+        height: 42px;
+
+        font-size: 13px;
+    }
+
+
+    .comment-top {
+        flex-direction: column;
+
+        gap: 8px;
+    }
+
+
+    .comment-actions {
+        gap: 12px;
+    }
+
+
+    .comment-content {
+        margin-top: 14px;
+
+        font-size: 14px;
+    }
+
+
+    .comment-replies {
+        margin-left: 10px;
+
+        padding-left: 14px;
+    }
+
+
+    .comment-replies .comment-avatar {
+        width: 36px;
+        height: 36px;
+    }
+
+
+    .reply-form {
+        padding: 12px;
+    }
+
+
+    .reply-form-actions {
+        justify-content: flex-end;
+    }
+
+}

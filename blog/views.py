@@ -7,6 +7,7 @@ from rest_framework.permissions import (
     IsAuthenticated,
 )
 from rest_framework.response import Response
+from rest_framework import serializers
 
 from .models import (
     Category,
@@ -512,7 +513,7 @@ class PostViewSet(
 
 
 # =========================================
-# COMMENT
+# COMMENT VIEWSET
 # =========================================
 
 class CommentViewSet(
@@ -540,7 +541,7 @@ class CommentViewSet(
                 post__status=Post.Status.PUBLISHED
             )
             .order_by(
-                "-created_at"
+                "created_at"
             )
         )
 
@@ -587,13 +588,56 @@ class CommentViewSet(
 
 
     # =========================================
-    # CREATE
+    # CREATE COMMENT / REPLY
     # =========================================
 
     def perform_create(
         self,
         serializer
     ):
+
+        post = serializer.validated_data.get(
+            "post"
+        )
+
+        parent = serializer.validated_data.get(
+            "parent"
+        )
+
+
+        # -----------------------------------------
+        # Check Post
+        # -----------------------------------------
+
+        if (
+            not post
+            or
+            post.status != Post.Status.PUBLISHED
+        ):
+
+            raise serializers.ValidationError(
+                {
+                    "post":
+                        "This post is not available."
+                }
+            )
+
+
+        # -----------------------------------------
+        # Check Parent
+        # -----------------------------------------
+
+        if parent:
+
+            if parent.post_id != post.id:
+
+                raise serializers.ValidationError(
+                    {
+                        "parent":
+                            "Reply must belong to the same post."
+                    }
+                )
+
 
         serializer.save(
             author=self.request.user
@@ -611,11 +655,12 @@ class CommentViewSet(
         **kwargs
     ):
 
-        comment = self.get_object()
+        comment =self.get_object()
 
 
         if (
-            comment.author_id !=
+            comment.author_id
+            !=
             request.user.id
         ):
 
@@ -646,11 +691,12 @@ class CommentViewSet(
         **kwargs
     ):
 
-        comment = self.get_object()
+        comment =self.get_object()
 
 
         if (
-            comment.author_id !=
+            comment.author_id
+            !=
             request.user.id
         ):
 

@@ -48,7 +48,7 @@ class TagSerializer(
 
 
 # =========================================
-# COMMENT
+# COMMENT SERIALIZER
 # =========================================
 
 class CommentSerializer(
@@ -60,6 +60,10 @@ class CommentSerializer(
     )
 
     is_owner = (
+        serializers.SerializerMethodField()
+    )
+
+    replies = (
         serializers.SerializerMethodField()
     )
 
@@ -77,9 +81,13 @@ class CommentSerializer(
             "author",
             "author_name",
 
+            "parent",
+
             "content",
 
             "is_owner",
+
+            "replies",
 
             "created_at",
             "updated_at",
@@ -94,6 +102,8 @@ class CommentSerializer(
             "author_name",
 
             "is_owner",
+
+            "replies",
 
             "created_at",
             "updated_at",
@@ -152,6 +162,41 @@ class CommentSerializer(
             obj.author_id ==
             request.user.id
         )
+
+
+    # =========================================
+    # NESTED REPLIES
+    # =========================================
+
+    def get_replies(
+        self,
+        obj
+    ):
+
+        replies = (
+            obj.replies
+            .select_related(
+                "author"
+            )
+            .prefetch_related(
+                "replies"
+            )
+            .order_by(
+                "created_at"
+            )
+        )
+
+
+        serializer = (
+            CommentSerializer(
+                replies,
+                many=True,
+                context=self.context
+            )
+        )
+
+
+        return serializer.data
 
 # =========================================
 # POST

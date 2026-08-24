@@ -123,10 +123,12 @@ document.addEventListener(
 
 
         /* =========================================
-           POST DATA
+           POST STATE
         ========================================= */
 
         let postId = null;
+
+        let activeReplyParentId = null;
 
 
         /* =========================================
@@ -213,42 +215,22 @@ document.addEventListener(
             post
         ) {
 
-            /* -----------------------------------------
-               CATEGORY
-            ----------------------------------------- */
-
             category.textContent =
                 post.category_name || "";
 
-
-            /* -----------------------------------------
-               TITLE
-            ----------------------------------------- */
 
             title.textContent =
                 post.title || "";
 
 
-            /* -----------------------------------------
-               EXCERPT
-            ----------------------------------------- */
-
             excerpt.textContent =
                 post.excerpt || "";
 
-
-            /* -----------------------------------------
-               AUTHOR
-            ----------------------------------------- */
 
             author.textContent =
                 post.author_name ||
                 "Anonymous";
 
-
-            /* -----------------------------------------
-               DATE
-            ----------------------------------------- */
 
             date.textContent =
                 post.published_at
@@ -258,17 +240,13 @@ document.addEventListener(
                     : "";
 
 
-            /* -----------------------------------------
-               VIEWS
-            ----------------------------------------- */
-
             views.textContent =
                 post.views || 0;
 
 
-            /* -----------------------------------------
+            /* =====================================
                LIKE
-            ----------------------------------------- */
+            ===================================== */
 
             if (likeCount) {
 
@@ -287,9 +265,9 @@ document.addEventListener(
             }
 
 
-            /* -----------------------------------------
+            /* =====================================
                BOOKMARK
-            ----------------------------------------- */
+            ===================================== */
 
             if (bookmarkButton) {
 
@@ -300,9 +278,9 @@ document.addEventListener(
             }
 
 
-            /* =========================================
+            /* =====================================
                FEATURED IMAGE
-            ========================================= */
+            ===================================== */
 
             if (
                 post.featured_image
@@ -341,26 +319,26 @@ document.addEventListener(
             }
 
 
-            /* =========================================
+            /* =====================================
                CONTENT
-            ========================================= */
+            ===================================== */
 
             content.innerHTML =
                 post.content || "";
 
 
-            /* =========================================
+            /* =====================================
                TAGS
-            ========================================= */
+            ===================================== */
 
             renderTags(
                 post.tags_data
             );
 
 
-            /* =========================================
+            /* =====================================
                SHOW ARTICLE
-            ========================================= */
+            ===================================== */
 
             loading.style.display =
                 "none";
@@ -374,9 +352,9 @@ document.addEventListener(
                 "block";
 
 
-            /* =========================================
+            /* =====================================
                LOAD COMMENTS
-            ========================================= */
+            ===================================== */
 
             loadComments();
 
@@ -419,6 +397,7 @@ document.addEventListener(
                     ${tagData
                         .map(
                             tag => `
+
                                 <span
                                     class="article-tag"
                                 >
@@ -426,6 +405,7 @@ document.addEventListener(
                                         tag.name
                                     )}
                                 </span>
+
                             `
                         )
                         .join("")
@@ -439,7 +419,7 @@ document.addEventListener(
 
 
         /* =========================================
-           UPDATE LIKE BUTTON
+           LIKE BUTTON
         ========================================= */
 
         function updateLikeButton(
@@ -468,7 +448,9 @@ document.addEventListener(
 
                 likeButton.innerHTML = `
 
-                    <i class='bx bxs-heart'></i>
+                    <i
+                        class='bx bxs-heart'
+                    ></i>
 
                     <span id="likeCount">
                         ${count}
@@ -485,7 +467,9 @@ document.addEventListener(
 
                 likeButton.innerHTML = `
 
-                    <i class='bx bx-heart'></i>
+                    <i
+                        class='bx bx-heart'
+                    ></i>
 
                     <span id="likeCount">
                         ${count}
@@ -499,7 +483,7 @@ document.addEventListener(
 
 
         /* =========================================
-           UPDATE BOOKMARK BUTTON
+           BOOKMARK BUTTON
         ========================================= */
 
         function updateBookmarkButton(
@@ -522,21 +506,18 @@ document.addEventListener(
 
                 bookmarkButton.innerHTML = `
 
-                    <i class='bx bxs-bookmark'></i>
+                    <i
+                        class='bx bxs-bookmark'
+                    ></i>
 
                 `;
-
-
-                bookmarkButton.setAttribute(
-                    "aria-label",
-                    "Remove bookmark"
-                );
 
 
                 bookmarkButton.setAttribute(
                     "title",
                     "Remove bookmark"
                 );
+
 
             } else {
 
@@ -547,15 +528,11 @@ document.addEventListener(
 
                 bookmarkButton.innerHTML = `
 
-                    <i class='bx bx-bookmark'></i>
+                    <i
+                        class='bx bx-bookmark'
+                    ></i>
 
                 `;
-
-
-                bookmarkButton.setAttribute(
-                    "aria-label",
-                    "Save post"
-                );
 
 
                 bookmarkButton.setAttribute(
@@ -671,6 +648,7 @@ document.addEventListener(
                             error
                         );
 
+
                     } finally {
 
                         likeButton.disabled =
@@ -779,6 +757,7 @@ document.addEventListener(
                             error
                         );
 
+
                     } finally {
 
                         bookmarkButton.disabled =
@@ -790,7 +769,6 @@ document.addEventListener(
             );
 
         }
-
 
         /* =========================================
            LOAD COMMENTS
@@ -863,7 +841,9 @@ document.addEventListener(
                 if (commentCount) {
 
                     commentCount.textContent =
-                        comments.length;
+                        countAllComments(
+                            comments
+                        );
 
                 }
 
@@ -898,6 +878,7 @@ document.addEventListener(
                     </div>
 
                 `;
+
 
             } finally {
 
@@ -965,11 +946,13 @@ document.addEventListener(
 
 
         /* =========================================
-           CREATE COMMENT CARD
+           CREATE COMMENT
+           RECURSIVE / NESTED
         ========================================= */
 
         function createComment(
-            comment
+            comment,
+            depth = 0
         ) {
 
             const author =
@@ -991,60 +974,83 @@ document.addEventListener(
                     : "";
 
 
-            /*
-            Only owner gets
-            Edit + Delete buttons.
-            */
+            /* =====================================
+               EDIT / DELETE
+            ===================================== */
 
-            const actions =
+            const ownerActions =
                 comment.is_owner
                     ? `
 
-                        <div
-                            class="comment-actions"
+                        <button
+                            type="button"
+                            class="
+                                comment-action
+                                edit-comment
+                            "
+                            data-comment-id="${comment.id}"
+                            title="Edit comment"
                         >
 
-                            <button
-                                type="button"
-                                class="
-                                    comment-action
-                                    edit-comment
-                                "
-                                data-comment-id="${comment.id}"
-                                title="Edit comment"
-                            >
+                            <i
+                                class='bx bx-edit-alt'
+                            ></i>
 
-                                <i
-                                    class='bx bx-edit-alt'
-                                ></i>
+                            <span>
+                                Edit
+                            </span>
 
-                                <span>
-                                    Edit
-                                </span>
-
-                            </button>
+                        </button>
 
 
-                            <button
-                                type="button"
-                                class="
-                                    comment-action
-                                    delete-comment
-                                    danger
-                                "
-                                data-comment-id="${comment.id}"
-                                title="Delete comment"
-                            >
+                        <button
+                            type="button"
+                            class="
+                                comment-action
+                                delete-comment
+                                danger
+                            "
+                            data-comment-id="${comment.id}"
+                            title="Delete comment"
+                        >
 
-                                <i
-                                    class='bx bx-trash'
-                                ></i>
+                            <i
+                                class='bx bx-trash'
+                            ></i>
 
-                                <span>
-                                    Delete
-                                </span>
+                            <span>
+                                Delete
+                            </span>
 
-                            </button>
+                        </button>
+
+                    `
+                    : "";
+
+
+            /* =====================================
+               REPLIES
+            ===================================== */
+
+            const replies =
+                comment.replies &&
+                comment.replies.length
+                    ? `
+
+                        <div
+                            class="comment-replies"
+                        >
+
+                            ${comment.replies
+                                .map(
+                                    reply =>
+                                        createComment(
+                                            reply,
+                                            depth + 1
+                                        )
+                                )
+                                .join("")
+                            }
 
                         </div>
 
@@ -1055,8 +1061,16 @@ document.addEventListener(
             return `
 
                 <article
-                    class="comment-card"
+                    class="
+                        comment-card
+                        ${
+                            depth > 0
+                                ? "comment-reply-card"
+                                : ""
+                        }
+                    "
                     data-comment-id="${comment.id}"
+                    data-comment-depth="${depth}"
                 >
 
                     <div
@@ -1073,6 +1087,8 @@ document.addEventListener(
                     <div
                         class="comment-body"
                     >
+
+                        <!-- COMMENT HEADER -->
 
                         <div
                             class="comment-top"
@@ -1102,10 +1118,18 @@ document.addEventListener(
                             </div>
 
 
-                            ${actions}
+                            <div
+                                class="comment-actions"
+                            >
+
+                                ${ownerActions}
+
+                            </div>
 
                         </div>
 
+
+                        <!-- COMMENT MESSAGE -->
 
                         <p
                             class="comment-content"
@@ -1116,6 +1140,48 @@ document.addEventListener(
                             )}
 
                         </p>
+
+
+                        <!-- REPLY BUTTON -->
+
+                        <div
+                            class="comment-reply-action"
+                        >
+
+                            <button
+                                type="button"
+                                class="
+                                    comment-action
+                                    reply-comment
+                                "
+                                data-comment-id="${comment.id}"
+                                title="Reply"
+                            >
+
+                                <i
+                                    class='bx bx-reply'
+                                ></i>
+
+                                <span>
+                                    Reply
+                                </span>
+
+                            </button>
+
+                        </div>
+
+
+                        <!-- REPLY FORM -->
+
+                        <div
+                            class="reply-form-container"
+                            data-reply-parent="${comment.id}"
+                        ></div>
+
+
+                        <!-- NESTED REPLIES -->
+
+                        ${replies}
 
                     </div>
 
@@ -1136,6 +1202,12 @@ document.addEventListener(
                 "click",
                 event => {
 
+                    const replyButton =
+                        event.target.closest(
+                            ".reply-comment"
+                        );
+
+
                     const editButton =
                         event.target.closest(
                             ".edit-comment"
@@ -1146,6 +1218,17 @@ document.addEventListener(
                         event.target.closest(
                             ".delete-comment"
                         );
+
+
+                    if (replyButton) {
+
+                        toggleReplyForm(
+                            replyButton.dataset.commentId
+                        );
+
+                        return;
+
+                    }
 
 
                     if (editButton) {
@@ -1172,6 +1255,330 @@ document.addEventListener(
 
         }
 
+
+        /* =========================================
+           TOGGLE REPLY FORM
+        ========================================= */
+
+        function toggleReplyForm(
+            parentId
+        ) {
+
+            const container =
+                document.querySelector(
+                    `[data-reply-parent="${parentId}"]`
+                );
+
+
+            if (!container) {
+
+                return;
+
+            }
+
+
+            /* -------------------------------------
+               Close Current Reply Form
+            ------------------------------------- */
+
+            if (
+                container.innerHTML.trim()
+            ) {
+
+                container.innerHTML =
+                    "";
+
+                activeReplyParentId =
+                    null;
+
+                return;
+
+            }
+
+
+            /* -------------------------------------
+               Close Other Reply Forms
+            ------------------------------------- */
+
+            document
+                .querySelectorAll(
+                    ".reply-form-container"
+                )
+                .forEach(
+                    element => {
+
+                        element.innerHTML =
+                            "";
+
+                    }
+                );
+
+
+            activeReplyParentId =
+                parentId;
+
+
+            /* -------------------------------------
+               Reply Form
+            ------------------------------------- */
+
+            container.innerHTML = `
+
+                <form
+                    class="reply-form"
+                    data-parent-id="${parentId}"
+                >
+
+                    <textarea
+                        class="reply-input"
+                        rows="3"
+                        maxlength="5000"
+                        placeholder="Write a reply..."
+                        required
+                    ></textarea>
+
+
+                    <div
+                        class="reply-form-actions"
+                    >
+
+                        <button
+                            type="button"
+                            class="
+                                reply-cancel-button
+                                comment-action
+                            "
+                        >
+
+                            Cancel
+
+                        </button>
+
+
+                        <button
+                            type="submit"
+                            class="reply-submit-button"
+                        >
+
+                            <i
+                                class='bx bx-reply'
+                            ></i>
+
+                            Reply
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+            `;
+
+
+            const form =
+                container.querySelector(
+                    ".reply-form"
+                );
+
+
+            const input =
+                container.querySelector(
+                    ".reply-input"
+                );
+
+
+            const cancelButton =
+                container.querySelector(
+                    ".reply-cancel-button"
+                );
+
+
+            input.focus();
+
+
+            /* -------------------------------------
+               Cancel Reply
+            ------------------------------------- */
+
+            cancelButton.addEventListener(
+                "click",
+                () => {
+
+                    container.innerHTML =
+                        "";
+
+                    activeReplyParentId =
+                        null;
+
+                }
+            );
+
+
+            /* -------------------------------------
+               Submit Reply
+            ------------------------------------- */
+
+            form.addEventListener(
+                "submit",
+                async event => {
+
+                    event.preventDefault();
+
+
+                    const replyContent =
+                        input.value.trim();
+
+
+                    if (!replyContent) {
+
+                        input.focus();
+
+                        return;
+
+                    }
+
+
+                    const submitButton =
+                        form.querySelector(
+                            ".reply-submit-button"
+                        );
+
+
+                    submitButton.disabled =
+                        true;
+
+
+                    submitButton.innerHTML = `
+
+                        <i
+                            class='bx bx-loader-alt bx-spin'
+                        ></i>
+
+                        Replying...
+
+                    `;
+
+
+                    try {
+
+                        const response =
+                            await fetch(
+                                "/api/comments/",
+                                {
+                                    method:
+                                        "POST",
+
+                                    headers: {
+
+                                        "Content-Type":
+                                            "application/json",
+
+                                        "X-CSRFToken":
+                                            getCSRFToken()
+
+                                    },
+
+                                    credentials:
+                                        "same-origin",
+
+                                    body:
+                                        JSON.stringify({
+
+                                            post:
+                                                postId,
+
+                                            parent:
+                                                Number(
+                                                    parentId
+                                                ),
+
+                                            content:
+                                                replyContent
+
+                                        })
+
+                                }
+                            );
+
+
+                        if (
+                            response.status === 401 ||
+                            response.status === 403
+                        ) {
+
+                            redirectToLogin();
+
+                            return;
+
+                        }
+
+
+                        if (!response.ok) {
+
+                            const errorData =
+                                await response
+                                    .json()
+                                    .catch(
+                                        () => null
+                                    );
+
+
+                            console.error(
+                                "Reply validation error:",
+                                errorData
+                            );
+
+
+                            throw new Error(
+                                "Unable to post reply."
+                            );
+
+                        }
+
+
+                        container.innerHTML =
+                            "";
+
+
+                        activeReplyParentId =
+                            null;
+
+
+                        await loadComments();
+
+
+                    } catch (error) {
+
+                        console.error(
+                            "Reply Error:",
+                            error
+                        );
+
+
+                        alert(
+                            "Unable to post your reply. Please try again."
+                        );
+
+
+                    } finally {
+
+                        if (
+                            document.body.contains(
+                                submitButton
+                            )
+                        ) {
+
+                            submitButton.disabled =
+                                false;
+
+                        }
+
+                    }
+
+                }
+            );
+
+        }
 
         /* =========================================
            EDIT COMMENT
@@ -1227,11 +1634,11 @@ document.addEventListener(
             }
 
 
-            const content =
+            const contentValue =
                 newContent.trim();
 
 
-            if (!content) {
+            if (!contentValue) {
 
                 return;
 
@@ -1239,25 +1646,11 @@ document.addEventListener(
 
 
             if (
-                content ===
+                contentValue ===
                 currentContent
             ) {
 
                 return;
-
-            }
-
-
-            const editButton =
-                card.querySelector(
-                    ".edit-comment"
-                );
-
-
-            if (editButton) {
-
-                editButton.disabled =
-                    true;
 
             }
 
@@ -1286,8 +1679,10 @@ document.addEventListener(
 
                             body:
                                 JSON.stringify({
+
                                     content:
-                                        content
+                                        contentValue
+
                                 })
 
                         }
@@ -1317,12 +1712,7 @@ document.addEventListener(
                 }
 
 
-                const updatedComment =
-                    await response.json();
-
-
-                contentElement.textContent =
-                    updatedComment.content;
+                await loadComments();
 
 
             } catch (error) {
@@ -1336,15 +1726,6 @@ document.addEventListener(
                 alert(
                     "Unable to edit comment. Please try again."
                 );
-
-            } finally {
-
-                if (editButton) {
-
-                    editButton.disabled =
-                        false;
-
-                }
 
             }
 
@@ -1370,12 +1751,6 @@ document.addEventListener(
                 return;
 
             }
-
-
-            const card =
-                document.querySelector(
-                    `.comment-card[data-comment-id="${commentId}"]`
-                );
 
 
             try {
@@ -1424,45 +1799,7 @@ document.addEventListener(
                 }
 
 
-                if (card) {
-
-                    card.remove();
-
-                }
-
-
-                const currentCount =
-                    Number(
-                        commentCount
-                            ? commentCount.textContent
-                            : 0
-                    ) || 0;
-
-
-                const newCount =
-                    Math.max(
-                        0,
-                        currentCount - 1
-                    );
-
-
-                if (commentCount) {
-
-                    commentCount.textContent =
-                        newCount;
-
-                }
-
-
-                if (
-                    newCount === 0 &&
-                    commentsEmpty
-                ) {
-
-                    commentsEmpty.style.display =
-                        "flex";
-
-                }
+                await loadComments();
 
 
             } catch (error) {
@@ -1483,7 +1820,7 @@ document.addEventListener(
 
 
         /* =========================================
-           SUBMIT COMMENT
+           SUBMIT TOP-LEVEL COMMENT
         ========================================= */
 
         if (
@@ -1599,44 +1936,14 @@ document.addEventListener(
                         }
 
 
-                        const newComment =
-                            await response.json();
+                        await response.json();
 
 
                         commentInput.value =
                             "";
 
 
-                        if (commentsEmpty) {
-
-                            commentsEmpty.style.display =
-                                "none";
-
-                        }
-
-
-                        commentsList.insertAdjacentHTML(
-                            "afterbegin",
-                            createComment(
-                                newComment
-                            )
-                        );
-
-
-                        const currentCount =
-                            Number(
-                                commentCount
-                                    ? commentCount.textContent
-                                    : 0
-                            ) || 0;
-
-
-                        if (commentCount) {
-
-                            commentCount.textContent =
-                                currentCount + 1;
-
-                        }
+                        await loadComments();
 
 
                     } catch (error) {
@@ -1650,6 +1957,7 @@ document.addEventListener(
                         alert(
                             "Unable to post your comment. Please try again."
                         );
+
 
                     } finally {
 
@@ -1670,6 +1978,45 @@ document.addEventListener(
                     }
 
                 }
+            );
+
+        }
+
+
+        /* =========================================
+           COUNT ALL COMMENTS
+        ========================================= */
+
+        function countAllComments(
+            comments
+        ) {
+
+            if (
+                !comments ||
+                !comments.length
+            ) {
+
+                return 0;
+
+            }
+
+
+            return comments.reduce(
+                (
+                    total,
+                    comment
+                ) => {
+
+                    return (
+                        total +
+                        1 +
+                        countAllComments(
+                            comment.replies || []
+                        )
+                    );
+
+                },
+                0
             );
 
         }
@@ -1770,7 +2117,7 @@ document.addEventListener(
 
 
         /* =========================================
-           POST DATE FORMAT
+           POST DATE
         ========================================= */
 
         function formatDate(
@@ -1804,7 +2151,7 @@ document.addEventListener(
 
 
         /* =========================================
-           COMMENT DATE FORMAT
+           COMMENT DATE
         ========================================= */
 
         function formatCommentDate(
