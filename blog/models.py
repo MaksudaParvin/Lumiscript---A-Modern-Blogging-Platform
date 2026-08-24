@@ -1,6 +1,7 @@
 from django.db import models
 from accounts.models import User
 from django.utils.text import slugify
+from django.conf import settings
 
 
 class Category(models.Model):
@@ -187,3 +188,73 @@ class Post(models.Model):
     def __str__(self):
 
         return self.title
+
+
+
+class PostView(models.Model):
+
+    post = models.ForeignKey(
+        Post,
+        on_delete=models.CASCADE,
+        related_name="post_views"
+    )
+
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name="post_views"
+    )
+
+    session_key = models.CharField(
+        max_length=40,
+        null=True,
+        blank=True
+    )
+
+    created_at = models.DateTimeField(
+        auto_now_add=True
+    )
+
+
+    class Meta:
+
+        ordering = [
+            "-created_at"
+        ]
+
+        constraints = [
+
+            models.UniqueConstraint(
+                fields=[
+                    "post",
+                    "user"
+                ],
+                name="unique_post_user_view"
+            ),
+
+            models.UniqueConstraint(
+                fields=[
+                    "post",
+                    "session_key"
+                ],
+                name="unique_post_session_view"
+            ),
+
+        ]
+
+
+    def __str__(self):
+
+        if self.user:
+
+            return (
+                f"{self.user} viewed "
+                f"{self.post.title}"
+            )
+
+        return (
+            f"Anonymous viewed "
+            f"{self.post.title}"
+        )

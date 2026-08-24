@@ -1,19 +1,98 @@
-from django.db.models import Q
+from django.db.models import Q, F
 
 from rest_framework import viewsets
 from rest_framework.permissions import AllowAny
+from rest_framework.response import Response
 
-from .models import Category, Tag, Post
+from .models import (
+    Category,
+    Tag,
+    Post,
+    PostView,
+)
+
 from .serializers import (
     CategorySerializer,
     TagSerializer,
     PostSerializer,
 )
+
 from .permissions import IsAuthorOrReadOnly
+
 from .pagination import PostPagination
 
 
-class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
+# =========================================
+# POST VIEW TRACKING
+# =========================================
+
+def track_post_view(
+    request,
+    post
+):
+
+    # -----------------------------------------
+    # Authenticated User
+    # -----------------------------------------
+
+    if request.user.is_authenticated:
+
+        view, created = (
+            PostView.objects
+            .get_or_create(
+                post=post,
+                user=request.user
+            )
+        )
+
+    # -----------------------------------------
+    # Anonymous User
+    # -----------------------------------------
+
+    else:
+
+        if not request.session.session_key:
+
+            request.session.create()
+
+
+        session_key = (
+            request.session.session_key
+        )
+
+
+        view, created = (
+            PostView.objects
+            .get_or_create(
+                post=post,
+                session_key=session_key
+            )
+        )
+
+
+    # -----------------------------------------
+    # Increment View Count
+    # -----------------------------------------
+
+    if created:
+
+        Post.objects.filter(
+            pk=post.pk
+        ).update(
+            views=F("views") + 1
+        )
+
+
+    return created
+
+
+# =========================================
+# CATEGORY
+# =========================================
+
+class CategoryViewSet(
+    viewsets.ReadOnlyModelViewSet
+):
 
     queryset = Category.objects.all()
 
@@ -24,7 +103,13 @@ class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
     ]
 
 
-class TagViewSet(viewsets.ReadOnlyModelViewSet):
+# =========================================
+# TAG
+# =========================================
+
+class TagViewSet(
+    viewsets.ReadOnlyModelViewSet
+):
 
     queryset = Tag.objects.all()
 
@@ -35,7 +120,13 @@ class TagViewSet(viewsets.ReadOnlyModelViewSet):
     ]
 
 
-class PostViewSet(viewsets.ModelViewSet):
+# =========================================
+# POST
+# =========================================
+
+class PostViewSet(
+    viewsets.ModelViewSet
+):
 
     serializer_class = PostSerializer
 
@@ -47,6 +138,10 @@ class PostViewSet(viewsets.ModelViewSet):
 
     lookup_field = "slug"
 
+
+    # =========================================
+    # QUERYSET
+    # =========================================
 
     def get_queryset(self):
 
@@ -66,7 +161,10 @@ class PostViewSet(viewsets.ModelViewSet):
         )
 
 
-        # Only published posts for public list/detail
+        # -----------------------------------------
+        # Only Published Posts
+        # -----------------------------------------
+
         if self.action in [
             "list",
             "retrieve"
@@ -77,10 +175,16 @@ class PostViewSet(viewsets.ModelViewSet):
             )
 
 
+        # -----------------------------------------
         # Search
+        # -----------------------------------------
+
         search_query = (
             self.request.query_params
-            .get("search", "")
+            .get(
+                "search",
+                ""
+            )
             .strip()
         )
 
@@ -104,10 +208,16 @@ class PostViewSet(viewsets.ModelViewSet):
             )
 
 
-        # Category filter
+        # -----------------------------------------
+        # Category Filter
+        # -----------------------------------------
+
         category = (
             self.request.query_params
-            .get("category", "")
+            .get(
+                "category",
+                ""
+            )
             .strip()
         )
 
@@ -119,10 +229,16 @@ class PostViewSet(viewsets.ModelViewSet):
             )
 
 
-        # Tag filter
+        # -----------------------------------------
+        # Tag Filter
+        # -----------------------------------------
+
         tag = (
             self.request.query_params
-            .get("tag", "")
+            .get(
+                "tag",
+                ""
+            )
             .strip()
         )
 
@@ -136,6 +252,47 @@ class PostViewSet(viewsets.ModelViewSet):
 
         return queryset.distinct()
 
+
+    # =========================================
+    # RETRIEVE POST
+    # =========================================
+
+    def retrieve(
+        self,
+        request,
+        *args,
+        **kwargs
+    ):
+
+        instance = self.get_object()
+
+
+        # Track this visit
+
+        track_post_view(
+            request,
+            instance
+        )
+
+
+        # Get updated view count
+
+        instance.refresh_from_db()
+
+
+        serializer = self.get_serializer(
+            instance
+        )
+
+
+        return Response(
+            serializer.data
+        )
+
+
+    # =========================================
+    # CREATE POST
+    # =========================================
 
     def perform_create(
         self,

@@ -4,16 +4,11 @@
 
 
 {% block title %}
-    Article — Lumiscript
+    Story — Lumiscript
 {% endblock %}
 
 
 {% block extra_css %}
-
-<link
-    rel="stylesheet"
-    href="{% static 'css/blog.css' %}"
->
 
 <link
     rel="stylesheet"
@@ -25,166 +20,173 @@
 
 {% block content %}
 
-<main
-    class="post-detail-page"
-    data-post-slug="{{ slug }}"
->
+<main class="blog-detail-page">
 
-    <article
-        class="post-detail"
-        id="postDetail"
-    >
+    <div class="blog-detail-container">
 
         <!-- Loading -->
 
         <div
-            class="post-detail-loading"
-            id="postLoading"
+            id="detailLoading"
+            class="detail-loading"
         >
-            Loading article...
+
+            <i class='bx bx-loader-alt bx-spin'></i>
+
+            <p>
+                Loading story...
+            </p>
+
         </div>
 
 
         <!-- Error -->
 
         <div
-            class="post-detail-error"
-            id="postError"
+            id="detailError"
+            class="detail-error"
+            style="display: none;"
         >
 
             <i class='bx bx-error-circle'></i>
 
             <h2>
-                Article not found
+                Unable to load this story.
             </h2>
 
-            <p>
-                This story may have been removed
-                or is no longer available.
-            </p>
-
-            <a
-                href="{% url 'blog' %}"
-                class="secondary-button"
-            >
-                Back to Explore
+            <a href="{% url 'blog' %}">
+                Back to stories
             </a>
 
         </div>
 
 
-        <!-- Article Content -->
+        <!-- Article -->
 
-        <div
-            class="post-content-wrapper"
-            id="postContent"
+        <article
+            id="blogDetail"
+            class="blog-detail"
+            style="display: none;"
         >
 
-            <header class="post-detail-header">
+            <!-- HEADER -->
 
-                <div class="post-detail-meta">
+            <header class="article-header">
 
-                    <span
-                        class="post-detail-category"
-                        id="postCategory"
-                    ></span>
-
-                    <span
-                        id="postDate"
-                    ></span>
-
+                <div
+                    id="articleCategory"
+                    class="article-category"
+                >
                 </div>
 
 
                 <h1
-                    class="post-detail-title"
-                    id="postTitle"
-                ></h1>
+                    id="articleTitle"
+                    class="article-title"
+                >
+                </h1>
 
 
                 <p
-                    class="post-detail-excerpt"
-                    id="postExcerpt"
-                ></p>
+                    id="articleExcerpt"
+                    class="article-excerpt"
+                >
+                </p>
 
 
-                <div class="post-author">
+                <div
+                    class="article-meta"
+                >
 
-                    <div
-                        class="post-author-avatar"
-                        id="postAuthorAvatar"
+                    <span
+                        id="articleAuthor"
                     >
-                    </div>
+                    </span>
 
 
-                    <div class="post-author-info">
+                    <span class="meta-separator">
+                        ·
+                    </span>
 
-                        <strong
-                            id="postAuthor"
-                        ></strong>
 
-                        <span>
-                            Author
+                    <span
+                        id="articleDate"
+                    >
+                    </span>
+
+
+                    <span class="meta-separator">
+                        ·
+                    </span>
+
+
+                    <span>
+
+                        <i class='bx bx-show'></i>
+
+                        <span
+                            id="articleViews"
+                        >
+                            0
                         </span>
 
-                    </div>
+                        views
+
+                    </span>
 
                 </div>
 
             </header>
 
 
-            <!-- Featured Image -->
+            <!-- FEATURED IMAGE -->
 
             <div
-                class="post-featured-image-wrapper"
-                id="postImageWrapper"
+                id="articleImageWrapper"
+                class="article-image-wrapper"
             >
-
-                <img
-                    id="postImage"
-                    class="post-featured-image"
-                    alt=""
-                >
 
             </div>
 
 
-            <!-- Article Body -->
+            <!-- CONTENT -->
 
             <div
-                class="post-article-content"
-                id="postBody"
-            ></div>
+                id="articleContent"
+                class="article-content"
+            >
+            </div>
 
 
-            <!-- Footer -->
+            <!-- TAGS -->
 
-            <footer class="post-detail-footer">
+            <div
+                id="articleTags"
+                class="article-tags"
+            >
+            </div>
 
-                <div
-                    class="post-tags"
-                    id="postTags"
-                ></div>
 
+            <!-- BACK -->
 
-                <div class="post-stat">
+            <div class="article-footer">
 
-                    <i class='bx bx-show'></i>
+                <a
+                    href="{% url 'blog' %}"
+                    class="back-to-blog"
+                >
 
-                    <span id="postViews">
-                        0
-                    </span>
+                    <i class='bx bx-left-arrow-alt'></i>
 
-                    views
+                    Back to stories
 
-                </div>
+                </a>
 
-            </footer>
+            </div>
 
-        </div>
+        </article>
 
-    </article>
+    </div>
 
 </main>
 
