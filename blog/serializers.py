@@ -59,6 +59,10 @@ class CommentSerializer(
         serializers.SerializerMethodField()
     )
 
+    is_owner = (
+        serializers.SerializerMethodField()
+    )
+
 
     class Meta:
 
@@ -75,6 +79,8 @@ class CommentSerializer(
 
             "content",
 
+            "is_owner",
+
             "created_at",
             "updated_at",
 
@@ -86,6 +92,8 @@ class CommentSerializer(
 
             "author",
             "author_name",
+
+            "is_owner",
 
             "created_at",
             "updated_at",
@@ -111,6 +119,38 @@ class CommentSerializer(
         return (
             full_name
             or obj.author.email
+        )
+
+
+    # =========================================
+    # OWNER
+    # =========================================
+
+    def get_is_owner(
+        self,
+        obj
+    ):
+
+        request = (
+            self.context.get(
+                "request"
+            )
+        )
+
+
+        if not request:
+
+            return False
+
+
+        if not request.user.is_authenticated:
+
+            return False
+
+
+        return (
+            obj.author_id ==
+            request.user.id
         )
 
 # =========================================

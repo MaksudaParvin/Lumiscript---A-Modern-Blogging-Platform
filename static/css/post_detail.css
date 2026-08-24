@@ -2068,3 +2068,112 @@
     }
 
 }
+
+
+/* =========================================
+   ACTIONS
+========================================= */
+
+.comment-actions {
+    display: flex !important;
+
+    align-items: center !important;
+
+    gap: 12px !important;
+
+    width: auto !important;
+
+    height: auto !important;
+
+    margin: 0 !important;
+
+    padding: 0 !important;
+
+    flex-shrink: 0 !important;
+}
+
+
+.comment-action {
+    display: inline-flex !important;
+
+    align-items: center !important;
+
+    gap: 4px !important;
+
+    width: auto !important;
+
+    height: auto !important;
+
+    margin: 0 !important;
+
+    padding: 2px 0 !important;
+
+    border: none !important;
+
+    background: transparent !important;
+
+    color:
+        var(--color-muted) !important;
+
+    font-size: 12px !important;
+
+    line-height: 1.3 !important;
+
+    cursor: pointer !important;
+}
+
+
+.comment-action i {
+    font-size: 15px !important;
+}
+
+
+.comment-action:hover {
+    color:
+        var(--color-text) !important;
+}
+
+
+.comment-action.danger:hover {
+    color:
+        var(--color-accent) !important;
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 600px) {
+
+    .comment-card {
+        grid-template-columns:
+            40px minmax(0, 1fr) !important;
+
+        column-gap: 12px !important;
+
+        padding: 20px 0 !important;
+    }
+
+
+    .comment-avatar {
+        width: 40px !important;
+        height: 40px !important;
+
+        min-width: 40px !important;
+        min-height: 40px !important;
+    }
+
+
+    .comment-top {
+        flex-direction: column !important;
+
+        gap: 7px !important;
+    }
+
+
+    .comment-actions {
+        gap: 10px !important;
+    }
+
+}

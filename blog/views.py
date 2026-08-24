@@ -587,7 +587,7 @@ class CommentViewSet(
 
 
     # =========================================
-    # CREATE COMMENT
+    # CREATE
     # =========================================
 
     def perform_create(
@@ -601,7 +601,7 @@ class CommentViewSet(
 
 
     # =========================================
-    # UPDATE COMMENT
+    # UPDATE
     # =========================================
 
     def update(
@@ -615,8 +615,8 @@ class CommentViewSet(
 
 
         if (
-            comment.author !=
-            request.user
+            comment.author_id !=
+            request.user.id
         ):
 
             return Response(
@@ -636,7 +636,7 @@ class CommentViewSet(
 
 
     # =========================================
-    # DELETE COMMENT
+    # DELETE
     # =========================================
 
     def destroy(
@@ -650,8 +650,8 @@ class CommentViewSet(
 
 
         if (
-            comment.author !=
-            request.user
+            comment.author_id !=
+            request.user.id
         ):
 
             return Response(

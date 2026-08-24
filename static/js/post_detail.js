@@ -11,84 +11,70 @@ document.addEventListener(
                 "detailLoading"
             );
 
-
         const errorBox =
             document.getElementById(
                 "detailError"
             );
-
 
         const article =
             document.getElementById(
                 "blogDetail"
             );
 
-
         const category =
             document.getElementById(
                 "articleCategory"
             );
-
 
         const title =
             document.getElementById(
                 "articleTitle"
             );
 
-
         const excerpt =
             document.getElementById(
                 "articleExcerpt"
             );
-
 
         const author =
             document.getElementById(
                 "articleAuthor"
             );
 
-
         const date =
             document.getElementById(
                 "articleDate"
             );
-
 
         const views =
             document.getElementById(
                 "articleViews"
             );
 
-
         const likeButton =
             document.getElementById(
                 "likeButton"
             );
-
 
         const likeCount =
             document.getElementById(
                 "likeCount"
             );
 
-
         const bookmarkButton =
             document.getElementById(
                 "bookmarkButton"
             );
-
 
         const imageWrapper =
             document.getElementById(
                 "articleImageWrapper"
             );
 
-
         const content =
             document.getElementById(
                 "articleContent"
             );
-
 
         const tags =
             document.getElementById(
@@ -105,36 +91,30 @@ document.addEventListener(
                 "commentCount"
             );
 
-
         const commentForm =
             document.getElementById(
                 "commentForm"
             );
-
 
         const commentInput =
             document.getElementById(
                 "commentInput"
             );
 
-
         const commentSubmitButton =
             document.getElementById(
                 "commentSubmitButton"
             );
-
 
         const commentsLoading =
             document.getElementById(
                 "commentsLoading"
             );
 
-
         const commentsList =
             document.getElementById(
                 "commentsList"
             );
-
 
         const commentsEmpty =
             document.getElementById(
@@ -165,12 +145,6 @@ document.addEventListener(
             ];
 
 
-        console.log(
-            "Blog slug:",
-            slug
-        );
-
-
         if (!slug) {
 
             showError();
@@ -194,12 +168,6 @@ document.addEventListener(
                     );
 
 
-                console.log(
-                    "API status:",
-                    response.status
-                );
-
-
                 if (!response.ok) {
 
                     throw new Error(
@@ -212,16 +180,6 @@ document.addEventListener(
                 const post =
                     await response.json();
 
-
-                console.log(
-                    "Post:",
-                    post
-                );
-
-
-                /*
-                Save post ID for comments.
-                */
 
                 postId =
                     post.id;
@@ -309,29 +267,37 @@ document.addEventListener(
 
 
             /* -----------------------------------------
-               LIKE COUNT
+               LIKE
             ----------------------------------------- */
 
-            likeCount.textContent =
-                post.like_count || 0;
+            if (likeCount) {
+
+                likeCount.textContent =
+                    post.like_count || 0;
+
+            }
+
+
+            if (likeButton) {
+
+                updateLikeButton(
+                    post.is_liked
+                );
+
+            }
 
 
             /* -----------------------------------------
-               LIKE STATUS
+               BOOKMARK
             ----------------------------------------- */
 
-            updateLikeButton(
-                post.is_liked
-            );
+            if (bookmarkButton) {
 
+                updateBookmarkButton(
+                    post.is_bookmarked
+                );
 
-            /* -----------------------------------------
-               BOOKMARK STATUS
-            ----------------------------------------- */
-
-            updateBookmarkButton(
-                post.is_bookmarked
-            );
+            }
 
 
             /* =========================================
@@ -376,7 +342,7 @@ document.addEventListener(
 
 
             /* =========================================
-               ARTICLE CONTENT
+               CONTENT
             ========================================= */
 
             content.innerHTML =
@@ -446,7 +412,6 @@ document.addEventListener(
                     Tags
                 </span>
 
-
                 <div
                     class="tag-list"
                 >
@@ -454,17 +419,13 @@ document.addEventListener(
                     ${tagData
                         .map(
                             tag => `
-
                                 <span
                                     class="article-tag"
                                 >
-
                                     #${escapeHTML(
                                         tag.name
                                     )}
-
                                 </span>
-
                             `
                         )
                         .join("")
@@ -485,6 +446,19 @@ document.addEventListener(
             liked
         ) {
 
+            if (!likeButton) {
+
+                return;
+
+            }
+
+
+            const count =
+                likeCount
+                    ? likeCount.textContent
+                    : "0";
+
+
             if (liked) {
 
                 likeButton.classList.add(
@@ -494,12 +468,10 @@ document.addEventListener(
 
                 likeButton.innerHTML = `
 
-                    <i
-                        class='bx bxs-heart'
-                    ></i>
+                    <i class='bx bxs-heart'></i>
 
                     <span id="likeCount">
-                        ${likeCount.textContent}
+                        ${count}
                     </span>
 
                 `;
@@ -513,12 +485,10 @@ document.addEventListener(
 
                 likeButton.innerHTML = `
 
-                    <i
-                        class='bx bx-heart'
-                    ></i>
+                    <i class='bx bx-heart'></i>
 
                     <span id="likeCount">
-                        ${likeCount.textContent}
+                        ${count}
                     </span>
 
                 `;
@@ -536,6 +506,13 @@ document.addEventListener(
             bookmarked
         ) {
 
+            if (!bookmarkButton) {
+
+                return;
+
+            }
+
+
             if (bookmarked) {
 
                 bookmarkButton.classList.add(
@@ -545,9 +522,7 @@ document.addEventListener(
 
                 bookmarkButton.innerHTML = `
 
-                    <i
-                        class='bx bxs-bookmark'
-                    ></i>
+                    <i class='bx bxs-bookmark'></i>
 
                 `;
 
@@ -572,9 +547,7 @@ document.addEventListener(
 
                 bookmarkButton.innerHTML = `
 
-                    <i
-                        class='bx bx-bookmark'
-                    ></i>
+                    <i class='bx bx-bookmark'></i>
 
                 `;
 
@@ -599,212 +572,224 @@ document.addEventListener(
            LIKE / UNLIKE
         ========================================= */
 
-        likeButton.addEventListener(
-            "click",
-            async () => {
+        if (likeButton) {
 
-                const isLiked =
-                    likeButton.classList.contains(
-                        "liked"
-                    );
+            likeButton.addEventListener(
+                "click",
+                async () => {
 
-
-                const method =
-                    isLiked
-                        ? "DELETE"
-                        : "POST";
-
-
-                const endpoint =
-                    isLiked
-                        ? `/api/posts/${slug}/unlike/`
-                        : `/api/posts/${slug}/like/`;
-
-
-                likeButton.disabled =
-                    true;
-
-
-                try {
-
-                    const response =
-                        await fetch(
-                            endpoint,
-                            {
-                                method:
-                                    method,
-
-                                headers: {
-
-                                    "X-CSRFToken":
-                                        getCSRFToken(),
-
-                                    "Content-Type":
-                                        "application/json"
-
-                                },
-
-                                credentials:
-                                    "same-origin"
-
-                            }
+                    const isLiked =
+                        likeButton.classList.contains(
+                            "liked"
                         );
 
 
-                    if (
-                        response.status === 401 ||
-                        response.status === 403
-                    ) {
-
-                        redirectToLogin();
-
-                        return;
-
-                    }
+                    const method =
+                        isLiked
+                            ? "DELETE"
+                            : "POST";
 
 
-                    if (!response.ok) {
+                    const endpoint =
+                        isLiked
+                            ? `/api/posts/${slug}/unlike/`
+                            : `/api/posts/${slug}/like/`;
 
-                        throw new Error(
-                            `Like API Error: ${response.status}`
-                        );
-
-                    }
-
-
-                    const data =
-                        await response.json();
-
-
-                    likeCount.textContent =
-                        data.like_count || 0;
-
-
-                    updateLikeButton(
-                        data.liked
-                    );
-
-
-                } catch (error) {
-
-                    console.error(
-                        "Like Error:",
-                        error
-                    );
-
-                } finally {
 
                     likeButton.disabled =
-                        false;
+                        true;
+
+
+                    try {
+
+                        const response =
+                            await fetch(
+                                endpoint,
+                                {
+                                    method:
+                                        method,
+
+                                    headers: {
+
+                                        "X-CSRFToken":
+                                            getCSRFToken(),
+
+                                        "Content-Type":
+                                            "application/json"
+
+                                    },
+
+                                    credentials:
+                                        "same-origin"
+
+                                }
+                            );
+
+
+                        if (
+                            response.status === 401 ||
+                            response.status === 403
+                        ) {
+
+                            redirectToLogin();
+
+                            return;
+
+                        }
+
+
+                        if (!response.ok) {
+
+                            throw new Error(
+                                `Like API Error: ${response.status}`
+                            );
+
+                        }
+
+
+                        const data =
+                            await response.json();
+
+
+                        if (likeCount) {
+
+                            likeCount.textContent =
+                                data.like_count || 0;
+
+                        }
+
+
+                        updateLikeButton(
+                            data.liked
+                        );
+
+
+                    } catch (error) {
+
+                        console.error(
+                            "Like Error:",
+                            error
+                        );
+
+                    } finally {
+
+                        likeButton.disabled =
+                            false;
+
+                    }
 
                 }
+            );
 
-            }
-        );
+        }
 
 
         /* =========================================
            BOOKMARK / REMOVE BOOKMARK
         ========================================= */
 
-        bookmarkButton.addEventListener(
-            "click",
-            async () => {
+        if (bookmarkButton) {
 
-                const isBookmarked =
-                    bookmarkButton.classList.contains(
-                        "bookmarked"
-                    );
+            bookmarkButton.addEventListener(
+                "click",
+                async () => {
 
-
-                const method =
-                    isBookmarked
-                        ? "DELETE"
-                        : "POST";
-
-
-                const endpoint =
-                    isBookmarked
-                        ? `/api/posts/${slug}/remove_bookmark/`
-                        : `/api/posts/${slug}/bookmark/`;
-
-
-                bookmarkButton.disabled =
-                    true;
-
-
-                try {
-
-                    const response =
-                        await fetch(
-                            endpoint,
-                            {
-                                method:
-                                    method,
-
-                                headers: {
-
-                                    "X-CSRFToken":
-                                        getCSRFToken(),
-
-                                    "Content-Type":
-                                        "application/json"
-
-                                },
-
-                                credentials:
-                                    "same-origin"
-
-                            }
+                    const isBookmarked =
+                        bookmarkButton.classList.contains(
+                            "bookmarked"
                         );
 
 
-                    if (
-                        response.status === 401 ||
-                        response.status === 403
-                    ) {
-
-                        redirectToLogin();
-
-                        return;
-
-                    }
+                    const method =
+                        isBookmarked
+                            ? "DELETE"
+                            : "POST";
 
 
-                    if (!response.ok) {
+                    const endpoint =
+                        isBookmarked
+                            ? `/api/posts/${slug}/remove_bookmark/`
+                            : `/api/posts/${slug}/bookmark/`;
 
-                        throw new Error(
-                            `Bookmark API Error: ${response.status}`
-                        );
-
-                    }
-
-
-                    const data =
-                        await response.json();
-
-
-                    updateBookmarkButton(
-                        data.bookmarked
-                    );
-
-
-                } catch (error) {
-
-                    console.error(
-                        "Bookmark Error:",
-                        error
-                    );
-
-                } finally {
 
                     bookmarkButton.disabled =
-                        false;
+                        true;
+
+
+                    try {
+
+                        const response =
+                            await fetch(
+                                endpoint,
+                                {
+                                    method:
+                                        method,
+
+                                    headers: {
+
+                                        "X-CSRFToken":
+                                            getCSRFToken(),
+
+                                        "Content-Type":
+                                            "application/json"
+
+                                    },
+
+                                    credentials:
+                                        "same-origin"
+
+                                }
+                            );
+
+
+                        if (
+                            response.status === 401 ||
+                            response.status === 403
+                        ) {
+
+                            redirectToLogin();
+
+                            return;
+
+                        }
+
+
+                        if (!response.ok) {
+
+                            throw new Error(
+                                `Bookmark API Error: ${response.status}`
+                            );
+
+                        }
+
+
+                        const data =
+                            await response.json();
+
+
+                        updateBookmarkButton(
+                            data.bookmarked
+                        );
+
+
+                    } catch (error) {
+
+                        console.error(
+                            "Bookmark Error:",
+                            error
+                        );
+
+                    } finally {
+
+                        bookmarkButton.disabled =
+                            false;
+
+                    }
 
                 }
+            );
 
-            }
-        );
+        }
 
 
         /* =========================================
@@ -813,7 +798,10 @@ document.addEventListener(
 
         async function loadComments() {
 
-            if (!postId) {
+            if (
+                !postId ||
+                !commentsList
+            ) {
 
                 return;
 
@@ -822,12 +810,20 @@ document.addEventListener(
 
             try {
 
-                commentsLoading.style.display =
-                    "flex";
+                if (commentsLoading) {
+
+                    commentsLoading.style.display =
+                        "flex";
+
+                }
 
 
-                commentsEmpty.style.display =
-                    "none";
+                if (commentsEmpty) {
+
+                    commentsEmpty.style.display =
+                        "none";
+
+                }
 
 
                 commentsList.innerHTML =
@@ -855,14 +851,6 @@ document.addEventListener(
                     await response.json();
 
 
-                /*
-                Pagination নেই।
-                তাই normally array আসবে।
-
-                তবুও safety-এর জন্য
-                results support করছি।
-                */
-
                 const comments =
                     Array.isArray(data)
                         ? data
@@ -872,8 +860,12 @@ document.addEventListener(
                         );
 
 
-                commentCount.textContent =
-                    comments.length;
+                if (commentCount) {
+
+                    commentCount.textContent =
+                        comments.length;
+
+                }
 
 
                 renderComments(
@@ -909,8 +901,12 @@ document.addEventListener(
 
             } finally {
 
-                commentsLoading.style.display =
-                    "none";
+                if (commentsLoading) {
+
+                    commentsLoading.style.display =
+                        "none";
+
+                }
 
             }
 
@@ -934,8 +930,12 @@ document.addEventListener(
                     "";
 
 
-                commentsEmpty.style.display =
-                    "flex";
+                if (commentsEmpty) {
+
+                    commentsEmpty.style.display =
+                        "flex";
+
+                }
 
 
                 return;
@@ -943,8 +943,12 @@ document.addEventListener(
             }
 
 
-            commentsEmpty.style.display =
-                "none";
+            if (commentsEmpty) {
+
+                commentsEmpty.style.display =
+                    "none";
+
+            }
 
 
             commentsList.innerHTML =
@@ -984,6 +988,67 @@ document.addEventListener(
                     ? formatCommentDate(
                         comment.created_at
                     )
+                    : "";
+
+
+            /*
+            Only owner gets
+            Edit + Delete buttons.
+            */
+
+            const actions =
+                comment.is_owner
+                    ? `
+
+                        <div
+                            class="comment-actions"
+                        >
+
+                            <button
+                                type="button"
+                                class="
+                                    comment-action
+                                    edit-comment
+                                "
+                                data-comment-id="${comment.id}"
+                                title="Edit comment"
+                            >
+
+                                <i
+                                    class='bx bx-edit-alt'
+                                ></i>
+
+                                <span>
+                                    Edit
+                                </span>
+
+                            </button>
+
+
+                            <button
+                                type="button"
+                                class="
+                                    comment-action
+                                    delete-comment
+                                    danger
+                                "
+                                data-comment-id="${comment.id}"
+                                title="Delete comment"
+                            >
+
+                                <i
+                                    class='bx bx-trash'
+                                ></i>
+
+                                <span>
+                                    Delete
+                                </span>
+
+                            </button>
+
+                        </div>
+
+                    `
                     : "";
 
 
@@ -1036,6 +1101,9 @@ document.addEventListener(
 
                             </div>
 
+
+                            ${actions}
+
                         </div>
 
 
@@ -1059,10 +1127,370 @@ document.addEventListener(
 
 
         /* =========================================
+           COMMENT ACTIONS
+        ========================================= */
+
+        if (commentsList) {
+
+            commentsList.addEventListener(
+                "click",
+                event => {
+
+                    const editButton =
+                        event.target.closest(
+                            ".edit-comment"
+                        );
+
+
+                    const deleteButton =
+                        event.target.closest(
+                            ".delete-comment"
+                        );
+
+
+                    if (editButton) {
+
+                        editComment(
+                            editButton.dataset.commentId
+                        );
+
+                        return;
+
+                    }
+
+
+                    if (deleteButton) {
+
+                        deleteComment(
+                            deleteButton.dataset.commentId
+                        );
+
+                    }
+
+                }
+            );
+
+        }
+
+
+        /* =========================================
+           EDIT COMMENT
+        ========================================= */
+
+        async function editComment(
+            commentId
+        ) {
+
+            const card =
+                document.querySelector(
+                    `.comment-card[data-comment-id="${commentId}"]`
+                );
+
+
+            if (!card) {
+
+                return;
+
+            }
+
+
+            const contentElement =
+                card.querySelector(
+                    ".comment-content"
+                );
+
+
+            if (!contentElement) {
+
+                return;
+
+            }
+
+
+            const currentContent =
+                contentElement.textContent.trim();
+
+
+            const newContent =
+                window.prompt(
+                    "Edit your comment:",
+                    currentContent
+                );
+
+
+            if (
+                newContent === null
+            ) {
+
+                return;
+
+            }
+
+
+            const content =
+                newContent.trim();
+
+
+            if (!content) {
+
+                return;
+
+            }
+
+
+            if (
+                content ===
+                currentContent
+            ) {
+
+                return;
+
+            }
+
+
+            const editButton =
+                card.querySelector(
+                    ".edit-comment"
+                );
+
+
+            if (editButton) {
+
+                editButton.disabled =
+                    true;
+
+            }
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        `/api/comments/${commentId}/`,
+                        {
+                            method:
+                                "PATCH",
+
+                            headers: {
+
+                                "Content-Type":
+                                    "application/json",
+
+                                "X-CSRFToken":
+                                    getCSRFToken()
+
+                            },
+
+                            credentials:
+                                "same-origin",
+
+                            body:
+                                JSON.stringify({
+                                    content:
+                                        content
+                                })
+
+                        }
+                    );
+
+
+                if (
+                    response.status === 401 ||
+                    response.status === 403
+                ) {
+
+                    alert(
+                        "You can only edit your own comment."
+                    );
+
+                    return;
+
+                }
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        `Edit Error: ${response.status}`
+                    );
+
+                }
+
+
+                const updatedComment =
+                    await response.json();
+
+
+                contentElement.textContent =
+                    updatedComment.content;
+
+
+            } catch (error) {
+
+                console.error(
+                    "Edit Comment Error:",
+                    error
+                );
+
+
+                alert(
+                    "Unable to edit comment. Please try again."
+                );
+
+            } finally {
+
+                if (editButton) {
+
+                    editButton.disabled =
+                        false;
+
+                }
+
+            }
+
+        }
+
+
+        /* =========================================
+           DELETE COMMENT
+        ========================================= */
+
+        async function deleteComment(
+            commentId
+        ) {
+
+            const confirmed =
+                window.confirm(
+                    "Are you sure you want to delete this comment?"
+                );
+
+
+            if (!confirmed) {
+
+                return;
+
+            }
+
+
+            const card =
+                document.querySelector(
+                    `.comment-card[data-comment-id="${commentId}"]`
+                );
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        `/api/comments/${commentId}/`,
+                        {
+                            method:
+                                "DELETE",
+
+                            headers: {
+
+                                "X-CSRFToken":
+                                    getCSRFToken()
+
+                            },
+
+                            credentials:
+                                "same-origin"
+
+                        }
+                    );
+
+
+                if (
+                    response.status === 401 ||
+                    response.status === 403
+                ) {
+
+                    alert(
+                        "You can only delete your own comment."
+                    );
+
+                    return;
+
+                }
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        `Delete Error: ${response.status}`
+                    );
+
+                }
+
+
+                if (card) {
+
+                    card.remove();
+
+                }
+
+
+                const currentCount =
+                    Number(
+                        commentCount
+                            ? commentCount.textContent
+                            : 0
+                    ) || 0;
+
+
+                const newCount =
+                    Math.max(
+                        0,
+                        currentCount - 1
+                    );
+
+
+                if (commentCount) {
+
+                    commentCount.textContent =
+                        newCount;
+
+                }
+
+
+                if (
+                    newCount === 0 &&
+                    commentsEmpty
+                ) {
+
+                    commentsEmpty.style.display =
+                        "flex";
+
+                }
+
+
+            } catch (error) {
+
+                console.error(
+                    "Delete Comment Error:",
+                    error
+                );
+
+
+                alert(
+                    "Unable to delete comment. Please try again."
+                );
+
+            }
+
+        }
+
+
+        /* =========================================
            SUBMIT COMMENT
         ========================================= */
 
-        if (commentForm) {
+        if (
+            commentForm &&
+            commentInput &&
+            commentSubmitButton
+        ) {
 
             commentForm.addEventListener(
                 "submit",
@@ -1076,6 +1504,8 @@ document.addEventListener(
 
 
                     if (!commentContent) {
+
+                        commentInput.focus();
 
                         return;
 
@@ -1134,10 +1564,6 @@ document.addEventListener(
                             );
 
 
-                        /* ---------------------------------
-                           AUTHENTICATION
-                        --------------------------------- */
-
                         if (
                             response.status === 401 ||
                             response.status === 403
@@ -1150,14 +1576,11 @@ document.addEventListener(
                         }
 
 
-                        /* ---------------------------------
-                           VALIDATION ERROR
-                        --------------------------------- */
-
                         if (!response.ok) {
 
                             const errorData =
-                                await response.json()
+                                await response
+                                    .json()
                                     .catch(
                                         () => null
                                     );
@@ -1180,25 +1603,17 @@ document.addEventListener(
                             await response.json();
 
 
-                        /* ---------------------------------
-                           CLEAR INPUT
-                        --------------------------------- */
-
                         commentInput.value =
                             "";
 
 
-                        /* ---------------------------------
-                           HIDE EMPTY STATE
-                        --------------------------------- */
+                        if (commentsEmpty) {
 
-                        commentsEmpty.style.display =
-                            "none";
+                            commentsEmpty.style.display =
+                                "none";
 
+                        }
 
-                        /* ---------------------------------
-                           ADD NEW COMMENT
-                        --------------------------------- */
 
                         commentsList.insertAdjacentHTML(
                             "afterbegin",
@@ -1208,18 +1623,20 @@ document.addEventListener(
                         );
 
 
-                        /* ---------------------------------
-                           UPDATE COUNT
-                        --------------------------------- */
-
                         const currentCount =
                             Number(
-                                commentCount.textContent
+                                commentCount
+                                    ? commentCount.textContent
+                                    : 0
                             ) || 0;
 
 
-                        commentCount.textContent =
-                            currentCount + 1;
+                        if (commentCount) {
+
+                            commentCount.textContent =
+                                currentCount + 1;
+
+                        }
 
 
                     } catch (error) {
@@ -1321,21 +1738,33 @@ document.addEventListener(
 
 
         /* =========================================
-           ERROR
+           SHOW ERROR
         ========================================= */
 
         function showError() {
 
-            loading.style.display =
-                "none";
+            if (loading) {
+
+                loading.style.display =
+                    "none";
+
+            }
 
 
-            article.style.display =
-                "none";
+            if (article) {
+
+                article.style.display =
+                    "none";
+
+            }
 
 
-            errorBox.style.display =
-                "flex";
+            if (errorBox) {
+
+                errorBox.style.display =
+                    "flex";
+
+            }
 
         }
 
