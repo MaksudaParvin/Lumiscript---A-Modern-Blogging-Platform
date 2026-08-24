@@ -51,6 +51,16 @@ document.addEventListener(
                 "articleViews"
             );
 
+        const likeButton =
+            document.getElementById(
+                "likeButton"
+            );
+
+        const likeCount =
+            document.getElementById(
+                "likeCount"
+            );
+
         const imageWrapper =
             document.getElementById(
                 "articleImageWrapper"
@@ -140,11 +150,11 @@ document.addEventListener(
                 );
 
 
-            } catch (err) {
+            } catch (error) {
 
                 console.error(
                     "Blog Detail Error:",
-                    err
+                    error
                 );
 
 
@@ -163,22 +173,42 @@ document.addEventListener(
             post
         ) {
 
+            /* -------------------------------------
+               CATEGORY
+            ------------------------------------- */
+
             category.textContent =
                 post.category_name || "";
 
+
+            /* -------------------------------------
+               TITLE
+            ------------------------------------- */
 
             title.textContent =
                 post.title || "";
 
 
+            /* -------------------------------------
+               EXCERPT
+            ------------------------------------- */
+
             excerpt.textContent =
                 post.excerpt || "";
 
+
+            /* -------------------------------------
+               AUTHOR
+            ------------------------------------- */
 
             author.textContent =
                 post.author_name ||
                 "Anonymous";
 
+
+            /* -------------------------------------
+               DATE
+            ------------------------------------- */
 
             date.textContent =
                 post.published_at
@@ -188,8 +218,29 @@ document.addEventListener(
                     : "";
 
 
+            /* -------------------------------------
+               VIEWS
+            ------------------------------------- */
+
             views.textContent =
                 post.views || 0;
+
+
+            /* -------------------------------------
+               LIKE COUNT
+            ------------------------------------- */
+
+            likeCount.textContent =
+                post.like_count || 0;
+
+
+            /* -------------------------------------
+               LIKE STATUS
+            ------------------------------------- */
+
+            updateLikeButton(
+                post.is_liked
+            );
 
 
             /* =====================================
@@ -204,7 +255,9 @@ document.addEventListener(
 
                     <img
                         src="${post.featured_image}"
-                        alt="${escapeHTML(post.title)}"
+                        alt="${escapeHTML(
+                            post.title
+                        )}"
                         class="article-image"
                     >
 
@@ -218,7 +271,9 @@ document.addEventListener(
                         class="article-image-placeholder"
                     >
 
-                        <i class='bx bx-book-open'></i>
+                        <i
+                            class='bx bx-book-open'
+                        ></i>
 
                     </div>
 
@@ -228,7 +283,7 @@ document.addEventListener(
 
 
             /* =====================================
-               CONTENT
+               ARTICLE CONTENT
             ===================================== */
 
             content.innerHTML =
@@ -239,44 +294,9 @@ document.addEventListener(
                TAGS
             ===================================== */
 
-            if (
-                post.tags &&
-                post.tags.length
-            ) {
-
-                tags.innerHTML = `
-
-                    <span class="tags-label">
-                        Tags
-                    </span>
-
-                    <div class="tag-list">
-
-                        ${post.tags
-                            .map(
-                                tag => `
-                                    <span
-                                        class="article-tag"
-                                    >
-                                        #${escapeHTML(
-                                            tag.name
-                                        )}
-                                    </span>
-                                `
-                            )
-                            .join("")
-                        }
-
-                    </div>
-
-                `;
-
-            } else {
-
-                tags.innerHTML =
-                    "";
-
-            }
+            renderTags(
+                post.tags_data
+            );
 
 
             /* =====================================
@@ -293,6 +313,277 @@ document.addEventListener(
 
             article.style.display =
                 "block";
+
+        }
+
+
+        /* =========================================
+           RENDER TAGS
+        ========================================= */
+
+        function renderTags(
+            tagData
+        ) {
+
+            if (
+                !tagData ||
+                !tagData.length
+            ) {
+
+                tags.innerHTML =
+                    "";
+
+                return;
+
+            }
+
+
+            tags.innerHTML = `
+
+                <span class="tags-label">
+                    Tags
+                </span>
+
+                <div class="tag-list">
+
+                    ${tagData
+                        .map(
+                            tag => `
+
+                                <span
+                                    class="article-tag"
+                                >
+
+                                    #${escapeHTML(
+                                        tag.name
+                                    )}
+
+                                </span>
+
+                            `
+                        )
+                        .join("")
+                    }
+
+                </div>
+
+            `;
+
+        }
+
+
+        /* =========================================
+           UPDATE LIKE BUTTON
+        ========================================= */
+
+        function updateLikeButton(
+            liked
+        ) {
+
+            if (liked) {
+
+                likeButton.classList.add(
+                    "liked"
+                );
+
+
+                likeButton.innerHTML = `
+
+                    <i class='bx bxs-heart'></i>
+
+                    <span id="likeCount">
+                        ${likeCount.textContent}
+                    </span>
+
+                `;
+
+            } else {
+
+                likeButton.classList.remove(
+                    "liked"
+                );
+
+
+                likeButton.innerHTML = `
+
+                    <i class='bx bx-heart'></i>
+
+                    <span id="likeCount">
+                        ${likeCount.textContent}
+                    </span>
+
+                `;
+
+            }
+
+        }
+
+
+        /* =========================================
+           LIKE / UNLIKE
+        ========================================= */
+
+        likeButton.addEventListener(
+            "click",
+            async () => {
+
+                const isLiked =
+                    likeButton.classList.contains(
+                        "liked"
+                    );
+
+
+                const method =
+                    isLiked
+                        ? "DELETE"
+                        : "POST";
+
+
+                const endpoint =
+                    isLiked
+                        ? `/api/posts/${slug}/unlike/`
+                        : `/api/posts/${slug}/like/`;
+
+
+                /* -------------------------------
+                   Disable button
+                -------------------------------- */
+
+                likeButton.disabled =
+                    true;
+
+
+                try {
+
+                    const response =
+                        await fetch(
+                            endpoint,
+                            {
+                                method: method,
+
+                                headers: {
+
+                                    "X-CSRFToken":
+                                        getCSRFToken(),
+
+                                    "Content-Type":
+                                        "application/json"
+
+                                },
+
+                                credentials:
+                                    "same-origin"
+
+                            }
+                        );
+
+
+                    /* -------------------------------
+                       Authentication
+                    -------------------------------- */
+
+                    if (
+                        response.status === 401 ||
+                        response.status === 403
+                    ) {
+
+                        window.location.href =
+                            `/login/?next=${encodeURIComponent(
+                                window.location.pathname
+                            )}`;
+
+                        return;
+
+                    }
+
+
+                    if (!response.ok) {
+
+                        throw new Error(
+                            `Like API Error: ${response.status}`
+                        );
+
+                    }
+
+
+                    const data =
+                        await response.json();
+
+
+                    /* -------------------------------
+                       Update count
+                    -------------------------------- */
+
+                    likeCount.textContent =
+                        data.like_count || 0;
+
+
+                    /* -------------------------------
+                       Update button
+                    -------------------------------- */
+
+                    updateLikeButton(
+                        data.liked
+                    );
+
+
+                } catch (error) {
+
+                    console.error(
+                        "Like Error:",
+                        error
+                    );
+
+                } finally {
+
+                    likeButton.disabled =
+                        false;
+
+                }
+
+            }
+        );
+
+
+        /* =========================================
+           CSRF TOKEN
+        ========================================= */
+
+        function getCSRFToken() {
+
+            const cookies =
+                document.cookie.split(
+                    ";"
+                );
+
+
+            for (
+                const cookie of cookies
+            ) {
+
+                const [
+                    name,
+                    value
+                ] =
+                    cookie.trim().split(
+                        "="
+                    );
+
+
+                if (
+                    name === "csrftoken"
+                ) {
+
+                    return decodeURIComponent(
+                        value
+                    );
+
+                }
+
+            }
+
+
+            return "";
 
         }
 
@@ -324,6 +615,13 @@ document.addEventListener(
         function formatDate(
             dateString
         ) {
+
+            if (!dateString) {
+
+                return "";
+
+            }
+
 
             return new Date(
                 dateString

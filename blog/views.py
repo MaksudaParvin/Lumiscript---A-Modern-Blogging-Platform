@@ -1,7 +1,11 @@
 from django.db.models import Q, F
 
 from rest_framework import viewsets
-from rest_framework.permissions import AllowAny
+from rest_framework.decorators import action
+from rest_framework.permissions import (
+    AllowAny,
+    IsAuthenticated,
+)
 from rest_framework.response import Response
 
 from .models import (
@@ -9,6 +13,7 @@ from .models import (
     Tag,
     Post,
     PostView,
+    PostLike,
 )
 
 from .serializers import (
@@ -18,7 +23,6 @@ from .serializers import (
 )
 
 from .permissions import IsAuthorOrReadOnly
-
 from .pagination import PostPagination
 
 
@@ -37,7 +41,7 @@ def track_post_view(
 
     if request.user.is_authenticated:
 
-        view, created = (
+        _, created = (
             PostView.objects
             .get_or_create(
                 post=post,
@@ -55,20 +59,17 @@ def track_post_view(
 
             request.session.create()
 
-
         session_key = (
             request.session.session_key
         )
 
-
-        view, created = (
+        _, created = (
             PostView.objects
             .get_or_create(
                 post=post,
                 session_key=session_key
             )
         )
-
 
     # -----------------------------------------
     # Increment View Count
@@ -81,7 +82,6 @@ def track_post_view(
         ).update(
             views=F("views") + 1
         )
-
 
     return created
 
@@ -162,7 +162,7 @@ class PostViewSet(
 
 
         # -----------------------------------------
-        # Only Published Posts
+        # Public users only see published posts
         # -----------------------------------------
 
         if self.action in [
@@ -267,7 +267,7 @@ class PostViewSet(
         instance = self.get_object()
 
 
-        # Track this visit
+        # Track unique visit
 
         track_post_view(
             request,
@@ -275,7 +275,7 @@ class PostViewSet(
         )
 
 
-        # Get updated view count
+        # Refresh updated view count
 
         instance.refresh_from_db()
 
@@ -288,6 +288,107 @@ class PostViewSet(
         return Response(
             serializer.data
         )
+
+
+    # =========================================
+    # LIKE
+    # =========================================
+
+    @action(
+        detail=True,
+        methods=["post"],
+        permission_classes=[
+            IsAuthenticated
+        ]
+    )
+    def like(
+        self,
+        request,
+        *args,
+        **kwargs
+    ):
+
+        post = self.get_object()
+
+
+        like, created = (
+            PostLike.objects
+            .get_or_create(
+                post=post,
+                user=request.user
+            )
+        )
+
+
+        like_count = (
+            PostLike.objects
+            .filter(
+                post=post
+            )
+            .count()
+        )
+
+
+        return Response({
+
+            "liked": True,
+
+            "created": created,
+
+            "like_count": like_count,
+
+        })
+
+
+    # =========================================
+    # UNLIKE
+    # =========================================
+
+    @action(
+        detail=True,
+        methods=["delete"],
+        permission_classes=[
+            IsAuthenticated
+        ]
+    )
+    def unlike(
+        self,
+        request,
+        *args,
+        **kwargs
+    ):
+
+        post = self.get_object()
+
+
+        deleted, _ = (
+            PostLike.objects
+            .filter(
+                post=post,
+                user=request.user
+            )
+            .delete()
+        )
+
+
+        like_count = (
+            PostLike.objects
+            .filter(
+                post=post
+            )
+            .count()
+        )
+
+
+        return Response({
+
+            "liked": False,
+
+            "deleted": bool(deleted),
+
+            "like_count": like_count,
+
+        })
 
 
     # =========================================

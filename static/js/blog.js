@@ -601,30 +601,46 @@ document.addEventListener(
                         </p>
 
 
-                        <div
-                            class="post-card-footer"
-                        >
+                        <div class="post-card-footer">
 
-                            <span
-                                class="post-author"
-                            >
-
+                            <span class="post-author">
                                 ${author}
-
                             </span>
 
 
-                            <span
-                                class="post-views"
-                            >
+                            <div class="post-card-stats">
 
-                                <i
-                                    class='bx bx-show'
-                                ></i>
+                                <span class="post-stat">
 
-                                ${post.views || 0}
+                                    <i class='bx bx-show'></i>
 
-                            </span>
+                                    ${post.views || 0}
+
+                                </span>
+
+
+                                <span
+                                    class="
+                                        post-stat
+                                        ${post.is_liked ? "liked" : ""}
+                                    "
+                                >
+
+                                    <i
+                                        class='
+                                            ${
+                                                post.is_liked
+                                                    ? "bx bxs-heart"
+                                                    : "bx bx-heart"
+                                            }
+                                        '
+                                    ></i>
+
+                                    ${post.like_count || 0}
+
+                                </span>
+
+                            </div>
 
                         </div>
 

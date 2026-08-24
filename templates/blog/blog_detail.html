@@ -24,7 +24,10 @@
 
     <div class="blog-detail-container">
 
-        <!-- Loading -->
+
+        <!-- =========================================
+             LOADING
+        ========================================== -->
 
         <div
             id="detailLoading"
@@ -40,7 +43,9 @@
         </div>
 
 
-        <!-- Error -->
+        <!-- =========================================
+             ERROR
+        ========================================== -->
 
         <div
             id="detailError"
@@ -54,14 +59,18 @@
                 Unable to load this story.
             </h2>
 
-            <a href="{% url 'blog' %}">
+            <a
+                href="{% url 'blog' %}"
+            >
                 Back to stories
             </a>
 
         </div>
 
 
-        <!-- Article -->
+        <!-- =========================================
+             ARTICLE
+        ========================================== -->
 
         <article
             id="blogDetail"
@@ -69,9 +78,15 @@
             style="display: none;"
         >
 
-            <!-- HEADER -->
+
+            <!-- =====================================
+                 ARTICLE HEADER
+            ====================================== -->
 
             <header class="article-header">
+
+
+                <!-- CATEGORY -->
 
                 <div
                     id="articleCategory"
@@ -80,12 +95,16 @@
                 </div>
 
 
+                <!-- TITLE -->
+
                 <h1
                     id="articleTitle"
                     class="article-title"
                 >
                 </h1>
 
+
+                <!-- EXCERPT -->
 
                 <p
                     id="articleExcerpt"
@@ -94,9 +113,14 @@
                 </p>
 
 
+                <!-- META -->
+
                 <div
                     class="article-meta"
                 >
+
+
+                    <!-- AUTHOR -->
 
                     <span
                         id="articleAuthor"
@@ -104,10 +128,14 @@
                     </span>
 
 
-                    <span class="meta-separator">
+                    <span
+                        class="meta-separator"
+                    >
                         ·
                     </span>
 
+
+                    <!-- DATE -->
 
                     <span
                         id="articleDate"
@@ -115,14 +143,22 @@
                     </span>
 
 
-                    <span class="meta-separator">
+                    <span
+                        class="meta-separator"
+                    >
                         ·
                     </span>
 
 
-                    <span>
+                    <!-- VIEWS -->
 
-                        <i class='bx bx-show'></i>
+                    <span
+                        class="article-views"
+                    >
+
+                        <i
+                            class='bx bx-show'
+                        ></i>
 
                         <span
                             id="articleViews"
@@ -134,22 +170,47 @@
 
                     </span>
 
+
+                    <!-- LIKE -->
+
+                    <button
+                        type="button"
+                        id="likeButton"
+                        class="article-like-button"
+                    >
+
+                        <i
+                            class='bx bx-heart'
+                        ></i>
+
+                        <span
+                            id="likeCount"
+                        >
+                            0
+                        </span>
+
+                    </button>
+
+
                 </div>
 
             </header>
 
 
-            <!-- FEATURED IMAGE -->
+            <!-- =====================================
+                 FEATURED IMAGE
+            ====================================== -->
 
             <div
                 id="articleImageWrapper"
                 class="article-image-wrapper"
             >
-
             </div>
 
 
-            <!-- CONTENT -->
+            <!-- =====================================
+                 ARTICLE CONTENT
+            ====================================== -->
 
             <div
                 id="articleContent"
@@ -158,7 +219,9 @@
             </div>
 
 
-            <!-- TAGS -->
+            <!-- =====================================
+                 TAGS
+            ====================================== -->
 
             <div
                 id="articleTags"
@@ -167,22 +230,29 @@
             </div>
 
 
-            <!-- BACK -->
+            <!-- =====================================
+                 ARTICLE FOOTER
+            ====================================== -->
 
-            <div class="article-footer">
+            <footer
+                class="article-footer"
+            >
 
                 <a
                     href="{% url 'blog' %}"
                     class="back-to-blog"
                 >
 
-                    <i class='bx bx-left-arrow-alt'></i>
+                    <i
+                        class='bx bx-left-arrow-alt'
+                    ></i>
 
                     Back to stories
 
                 </a>
 
-            </div>
+            </footer>
+
 
         </article>
 

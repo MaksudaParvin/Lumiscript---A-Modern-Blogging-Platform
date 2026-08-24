@@ -258,3 +258,51 @@ class PostView(models.Model):
             f"Anonymous viewed "
             f"{self.post.title}"
         )
+
+
+
+
+class PostLike(models.Model):
+
+    post = models.ForeignKey(
+        Post,
+        on_delete=models.CASCADE,
+        related_name="likes"
+    )
+
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="post_likes"
+    )
+
+    created_at = models.DateTimeField(
+        auto_now_add=True
+    )
+
+
+    class Meta:
+
+        ordering = [
+            "-created_at"
+        ]
+
+        constraints = [
+
+            models.UniqueConstraint(
+                fields=[
+                    "post",
+                    "user"
+                ],
+                name="unique_post_user_like"
+            )
+
+        ]
+
+
+    def __str__(self):
+
+        return (
+            f"{self.user} liked "
+            f"{self.post.title}"
+        )

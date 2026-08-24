@@ -1,9 +1,19 @@
 from rest_framework import serializers
 
-from .models import Category, Tag, Post
+from .models import (
+    Category,
+    Tag,
+    Post,
+)
 
 
-class CategorySerializer(serializers.ModelSerializer):
+# =========================================
+# CATEGORY
+# =========================================
+
+class CategorySerializer(
+    serializers.ModelSerializer
+):
 
     class Meta:
 
@@ -13,11 +23,16 @@ class CategorySerializer(serializers.ModelSerializer):
             "id",
             "name",
             "slug",
-            "description",
         ]
 
 
-class TagSerializer(serializers.ModelSerializer):
+# =========================================
+# TAG
+# =========================================
+
+class TagSerializer(
+    serializers.ModelSerializer
+):
 
     class Meta:
 
@@ -30,9 +45,17 @@ class TagSerializer(serializers.ModelSerializer):
         ]
 
 
-class PostSerializer(serializers.ModelSerializer):
+# =========================================
+# POST
+# =========================================
 
-    author_name = serializers.SerializerMethodField()
+class PostSerializer(
+    serializers.ModelSerializer
+):
+
+    author_name = (
+        serializers.SerializerMethodField()
+    )
 
     category_name = serializers.CharField(
         source="category.name",
@@ -45,12 +68,23 @@ class PostSerializer(serializers.ModelSerializer):
         read_only=True
     )
 
+    like_count = (
+        serializers.SerializerMethodField()
+    )
+
+    is_liked = (
+        serializers.SerializerMethodField()
+    )
+
+
     class Meta:
 
         model = Post
 
         fields = [
+
             "id",
+
             "title",
             "slug",
 
@@ -69,29 +103,100 @@ class PostSerializer(serializers.ModelSerializer):
             "featured_image",
 
             "status",
+
             "views",
+
+            "like_count",
+            "is_liked",
+
             "published_at",
 
             "created_at",
             "updated_at",
+
         ]
 
         read_only_fields = [
+
             "author",
+
             "author_name",
+
             "views",
+
+            "like_count",
+
+            "is_liked",
+
             "published_at",
+
             "created_at",
             "updated_at",
+
             "slug",
+
         ]
 
 
-    def get_author_name(self, obj):
+    # =========================================
+    # AUTHOR NAME
+    # =========================================
+
+    def get_author_name(
+        self,
+        obj
+    ):
 
         full_name = (
             f"{obj.author.first_name} "
             f"{obj.author.last_name}"
         ).strip()
 
-        return full_name or obj.author.email
+
+        return (
+            full_name
+            or obj.author.email
+        )
+
+
+    # =========================================
+    # LIKE COUNT
+    # =========================================
+
+    def get_like_count(
+        self,
+        obj
+    ):
+
+        return obj.likes.count()
+
+
+    # =========================================
+    # CURRENT USER LIKE STATUS
+    # =========================================
+
+    def get_is_liked(
+        self,
+        obj
+    ):
+
+        request = (
+            self.context.get(
+                "request"
+            )
+        )
+
+
+        if not request:
+
+            return False
+
+
+        if not request.user.is_authenticated:
+
+            return False
+
+
+        return obj.likes.filter(
+            user=request.user
+        ).exists()
