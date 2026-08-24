@@ -14,6 +14,7 @@ from .models import (
     Post,
     PostView,
     PostLike,
+    Bookmark
 )
 
 from .serializers import (
@@ -387,6 +388,108 @@ class PostViewSet(
             "deleted": bool(deleted),
 
             "like_count": like_count,
+
+        })
+
+    # =========================================
+    # BOOKMARK
+    # =========================================
+
+    @action(
+        detail=True,
+        methods=["post"],
+        permission_classes=[
+            IsAuthenticated
+        ]
+    )
+    def bookmark(
+        self,
+        request,
+        *args,
+        **kwargs
+    ):
+
+        post = self.get_object()
+
+
+        bookmark, created = (
+            Bookmark.objects
+            .get_or_create(
+                post=post,
+                user=request.user
+            )
+        )
+
+
+        bookmark_count = (
+            Bookmark.objects
+            .filter(
+                post=post
+            )
+            .count()
+        )
+
+
+        return Response({
+
+            "bookmarked": True,
+
+            "created": created,
+
+            "bookmark_count":
+                bookmark_count,
+
+        })
+
+
+    # =========================================
+    # REMOVE BOOKMARK
+    # =========================================
+
+    @action(
+        detail=True,
+        methods=["delete"],
+        permission_classes=[
+            IsAuthenticated
+        ]
+    )
+    def remove_bookmark(
+        self,
+        request,
+        *args,
+        **kwargs
+    ):
+
+        post = self.get_object()
+
+
+        deleted, _ = (
+            Bookmark.objects
+            .filter(
+                post=post,
+                user=request.user
+            )
+            .delete()
+        )
+
+
+        bookmark_count = (
+            Bookmark.objects
+            .filter(
+                post=post
+            )
+            .count()
+        )
+
+
+        return Response({
+
+            "bookmarked": False,
+
+            "deleted": bool(deleted),
+
+            "bookmark_count":
+                bookmark_count,
 
         })
 

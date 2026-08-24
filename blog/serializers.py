@@ -76,6 +76,14 @@ class PostSerializer(
         serializers.SerializerMethodField()
     )
 
+    bookmark_count = (
+        serializers.SerializerMethodField()
+    )
+
+    is_bookmarked = (
+        serializers.SerializerMethodField()
+    )
+
 
     class Meta:
 
@@ -109,6 +117,9 @@ class PostSerializer(
             "like_count",
             "is_liked",
 
+            "bookmark_count",
+            "is_bookmarked",
+
             "published_at",
 
             "created_at",
@@ -125,8 +136,10 @@ class PostSerializer(
             "views",
 
             "like_count",
-
             "is_liked",
+
+            "bookmark_count",
+            "is_bookmarked",
 
             "published_at",
 
@@ -198,5 +211,48 @@ class PostSerializer(
 
 
         return obj.likes.filter(
+            user=request.user
+        ).exists()
+
+
+    # =========================================
+    # BOOKMARK COUNT
+    # =========================================
+
+    def get_bookmark_count(
+        self,
+        obj
+    ):
+
+        return obj.bookmarks.count()
+
+
+    # =========================================
+    # CURRENT USER BOOKMARK STATUS
+    # =========================================
+
+    def get_is_bookmarked(
+        self,
+        obj
+    ):
+
+        request = (
+            self.context.get(
+                "request"
+            )
+        )
+
+
+        if not request:
+
+            return False
+
+
+        if not request.user.is_authenticated:
+
+            return False
+
+
+        return obj.bookmarks.filter(
             user=request.user
         ).exists()

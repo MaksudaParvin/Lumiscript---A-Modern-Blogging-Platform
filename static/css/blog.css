@@ -1280,3 +1280,146 @@
     color:
         var(--color-accent);
 }
+
+
+
+/* =========================================
+   POST CARD IMAGE WRAPPER
+========================================= */
+
+.post-card-image-wrapper {
+
+    position: relative;
+
+    width: 100%;
+
+    overflow: hidden;
+
+}
+
+
+/* =========================================
+   BOOKMARK BUTTON
+========================================= */
+
+.post-bookmark {
+
+    position: absolute;
+
+    top: 14px;
+
+    right: 14px;
+
+    z-index: 5;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 38px;
+
+    height: 38px;
+
+    padding: 0;
+
+    border: 1px solid
+        rgba(255, 255, 255, 0.75);
+
+    border-radius: 50%;
+
+    background:
+        rgba(255, 255, 255, 0.94);
+
+    color:
+        var(--color-text);
+
+    box-shadow:
+        0 4px 14px
+        rgba(24, 24, 24, 0.10);
+
+    backdrop-filter:
+        blur(6px);
+
+    cursor: pointer;
+
+    transition:
+        background var(--transition),
+        color var(--transition),
+        border-color var(--transition),
+        transform var(--transition),
+        box-shadow var(--transition);
+}
+
+
+.post-bookmark i {
+
+    font-size: 19px;
+
+    line-height: 1;
+}
+
+
+.post-bookmark:hover {
+
+    background:
+        var(--color-text);
+
+    border-color:
+        var(--color-text);
+
+    color:
+        white;
+
+    transform:
+        translateY(-1px);
+
+    box-shadow:
+        0 6px 18px
+        rgba(24, 24, 24, 0.16);
+}
+
+
+/* =========================================
+   BOOKMARKED STATE
+========================================= */
+
+.post-bookmark.bookmarked {
+
+    background:
+        var(--color-text);
+
+    border-color:
+        var(--color-text);
+
+    color:
+        white;
+}
+
+
+.post-bookmark.bookmarked:hover {
+
+    background:
+        var(--color-accent);
+
+    border-color:
+        var(--color-accent);
+
+    color:
+        white;
+}
+
+
+/* =========================================
+   DISABLED
+========================================= */
+
+.post-bookmark:disabled {
+
+    opacity: 0.65;
+
+    cursor: wait;
+
+    transform: none;
+}

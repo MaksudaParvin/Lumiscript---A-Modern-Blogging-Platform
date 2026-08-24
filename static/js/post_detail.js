@@ -11,65 +11,90 @@ document.addEventListener(
                 "detailLoading"
             );
 
+
         const errorBox =
             document.getElementById(
                 "detailError"
             );
+
 
         const article =
             document.getElementById(
                 "blogDetail"
             );
 
+
         const category =
             document.getElementById(
                 "articleCategory"
             );
+
 
         const title =
             document.getElementById(
                 "articleTitle"
             );
 
+
         const excerpt =
             document.getElementById(
                 "articleExcerpt"
             );
+
 
         const author =
             document.getElementById(
                 "articleAuthor"
             );
 
+
         const date =
             document.getElementById(
                 "articleDate"
             );
+
 
         const views =
             document.getElementById(
                 "articleViews"
             );
 
+
         const likeButton =
             document.getElementById(
                 "likeButton"
             );
+
 
         const likeCount =
             document.getElementById(
                 "likeCount"
             );
 
+
+        const bookmarkButton =
+            document.getElementById(
+                "bookmarkButton"
+            );
+
+
+        const bookmarkText =
+            document.getElementById(
+                "bookmarkText"
+            );
+
+
         const imageWrapper =
             document.getElementById(
                 "articleImageWrapper"
             );
 
+
         const content =
             document.getElementById(
                 "articleContent"
             );
+
 
         const tags =
             document.getElementById(
@@ -88,7 +113,9 @@ document.addEventListener(
 
 
         const slug =
-            pathParts[pathParts.length - 1];
+            pathParts[
+                pathParts.length - 1
+            ];
 
 
         console.log(
@@ -173,42 +200,42 @@ document.addEventListener(
             post
         ) {
 
-            /* -------------------------------------
+            /* -----------------------------------------
                CATEGORY
-            ------------------------------------- */
+            ----------------------------------------- */
 
             category.textContent =
                 post.category_name || "";
 
 
-            /* -------------------------------------
+            /* -----------------------------------------
                TITLE
-            ------------------------------------- */
+            ----------------------------------------- */
 
             title.textContent =
                 post.title || "";
 
 
-            /* -------------------------------------
+            /* -----------------------------------------
                EXCERPT
-            ------------------------------------- */
+            ----------------------------------------- */
 
             excerpt.textContent =
                 post.excerpt || "";
 
 
-            /* -------------------------------------
+            /* -----------------------------------------
                AUTHOR
-            ------------------------------------- */
+            ----------------------------------------- */
 
             author.textContent =
                 post.author_name ||
                 "Anonymous";
 
 
-            /* -------------------------------------
+            /* -----------------------------------------
                DATE
-            ------------------------------------- */
+            ----------------------------------------- */
 
             date.textContent =
                 post.published_at
@@ -218,34 +245,43 @@ document.addEventListener(
                     : "";
 
 
-            /* -------------------------------------
+            /* -----------------------------------------
                VIEWS
-            ------------------------------------- */
+            ----------------------------------------- */
 
             views.textContent =
                 post.views || 0;
 
 
-            /* -------------------------------------
+            /* -----------------------------------------
                LIKE COUNT
-            ------------------------------------- */
+            ----------------------------------------- */
 
             likeCount.textContent =
                 post.like_count || 0;
 
 
-            /* -------------------------------------
+            /* -----------------------------------------
                LIKE STATUS
-            ------------------------------------- */
+            ----------------------------------------- */
 
             updateLikeButton(
                 post.is_liked
             );
 
 
-            /* =====================================
+            /* -----------------------------------------
+               BOOKMARK STATUS
+            ----------------------------------------- */
+
+            updateBookmarkButton(
+                post.is_bookmarked
+            );
+
+
+            /* =========================================
                FEATURED IMAGE
-            ===================================== */
+            ========================================= */
 
             if (
                 post.featured_image
@@ -282,26 +318,26 @@ document.addEventListener(
             }
 
 
-            /* =====================================
+            /* =========================================
                ARTICLE CONTENT
-            ===================================== */
+            ========================================= */
 
             content.innerHTML =
                 post.content || "";
 
 
-            /* =====================================
+            /* =========================================
                TAGS
-            ===================================== */
+            ========================================= */
 
             renderTags(
                 post.tags_data
             );
 
 
-            /* =====================================
+            /* =========================================
                SHOW ARTICLE
-            ===================================== */
+            ========================================= */
 
             loading.style.display =
                 "none";
@@ -343,6 +379,7 @@ document.addEventListener(
                 <span class="tags-label">
                     Tags
                 </span>
+
 
                 <div class="tag-list">
 
@@ -389,7 +426,9 @@ document.addEventListener(
 
                 likeButton.innerHTML = `
 
-                    <i class='bx bxs-heart'></i>
+                    <i
+                        class='bx bxs-heart'
+                    ></i>
 
                     <span id="likeCount">
                         ${likeCount.textContent}
@@ -406,10 +445,63 @@ document.addEventListener(
 
                 likeButton.innerHTML = `
 
-                    <i class='bx bx-heart'></i>
+                    <i
+                        class='bx bx-heart'
+                    ></i>
 
                     <span id="likeCount">
                         ${likeCount.textContent}
+                    </span>
+
+                `;
+
+            }
+
+        }
+
+
+        /* =========================================
+           UPDATE BOOKMARK BUTTON
+        ========================================= */
+
+        function updateBookmarkButton(
+            bookmarked
+        ) {
+
+            if (bookmarked) {
+
+                bookmarkButton.classList.add(
+                    "bookmarked"
+                );
+
+
+                bookmarkButton.innerHTML = `
+
+                    <i
+                        class='bx bxs-bookmark'
+                    ></i>
+
+                    <span id="bookmarkText">
+                        Saved
+                    </span>
+
+                `;
+
+            } else {
+
+                bookmarkButton.classList.remove(
+                    "bookmarked"
+                );
+
+
+                bookmarkButton.innerHTML = `
+
+                    <i
+                        class='bx bx-bookmark'
+                    ></i>
+
+                    <span id="bookmarkText">
+                        Save
                     </span>
 
                 `;
@@ -445,10 +537,6 @@ document.addEventListener(
                         : `/api/posts/${slug}/like/`;
 
 
-                /* -------------------------------
-                   Disable button
-                -------------------------------- */
-
                 likeButton.disabled =
                     true;
 
@@ -459,7 +547,8 @@ document.addEventListener(
                         await fetch(
                             endpoint,
                             {
-                                method: method,
+                                method:
+                                    method,
 
                                 headers: {
 
@@ -478,19 +567,16 @@ document.addEventListener(
                         );
 
 
-                    /* -------------------------------
-                       Authentication
-                    -------------------------------- */
+                    /* ---------------------------------
+                       AUTHENTICATION
+                    --------------------------------- */
 
                     if (
                         response.status === 401 ||
                         response.status === 403
                     ) {
 
-                        window.location.href =
-                            `/login/?next=${encodeURIComponent(
-                                window.location.pathname
-                            )}`;
+                        redirectToLogin();
 
                         return;
 
@@ -510,17 +596,17 @@ document.addEventListener(
                         await response.json();
 
 
-                    /* -------------------------------
-                       Update count
-                    -------------------------------- */
+                    /* ---------------------------------
+                       UPDATE LIKE COUNT
+                    --------------------------------- */
 
                     likeCount.textContent =
                         data.like_count || 0;
 
 
-                    /* -------------------------------
-                       Update button
-                    -------------------------------- */
+                    /* ---------------------------------
+                       UPDATE LIKE STATE
+                    --------------------------------- */
 
                     updateLikeButton(
                         data.liked
@@ -543,6 +629,132 @@ document.addEventListener(
 
             }
         );
+
+
+        /* =========================================
+           BOOKMARK / REMOVE BOOKMARK
+        ========================================= */
+
+        bookmarkButton.addEventListener(
+            "click",
+            async () => {
+
+                const isBookmarked =
+                    bookmarkButton.classList.contains(
+                        "bookmarked"
+                    );
+
+
+                const method =
+                    isBookmarked
+                        ? "DELETE"
+                        : "POST";
+
+
+                const endpoint =
+                    isBookmarked
+                        ? `/api/posts/${slug}/remove_bookmark/`
+                        : `/api/posts/${slug}/bookmark/`;
+
+
+                bookmarkButton.disabled =
+                    true;
+
+
+                try {
+
+                    const response =
+                        await fetch(
+                            endpoint,
+                            {
+                                method:
+                                    method,
+
+                                headers: {
+
+                                    "X-CSRFToken":
+                                        getCSRFToken(),
+
+                                    "Content-Type":
+                                        "application/json"
+
+                                },
+
+                                credentials:
+                                    "same-origin"
+
+                            }
+                        );
+
+
+                    /* ---------------------------------
+                       AUTHENTICATION
+                    --------------------------------- */
+
+                    if (
+                        response.status === 401 ||
+                        response.status === 403
+                    ) {
+
+                        redirectToLogin();
+
+                        return;
+
+                    }
+
+
+                    if (!response.ok) {
+
+                        throw new Error(
+                            `Bookmark API Error: ${response.status}`
+                        );
+
+                    }
+
+
+                    const data =
+                        await response.json();
+
+
+                    /* ---------------------------------
+                       UPDATE BOOKMARK STATE
+                    --------------------------------- */
+
+                    updateBookmarkButton(
+                        data.bookmarked
+                    );
+
+
+                } catch (error) {
+
+                    console.error(
+                        "Bookmark Error:",
+                        error
+                    );
+
+                } finally {
+
+                    bookmarkButton.disabled =
+                        false;
+
+                }
+
+            }
+        );
+
+
+        /* =========================================
+           REDIRECT TO LOGIN
+        ========================================= */
+
+        function redirectToLogin() {
+
+            window.location.href =
+                `/login/?next=${encodeURIComponent(
+                    window.location.pathname
+                )}`;
+
+        }
 
 
         /* =========================================
@@ -628,9 +840,14 @@ document.addEventListener(
             ).toLocaleDateString(
                 "en-US",
                 {
-                    month: "long",
-                    day: "numeric",
-                    year: "numeric"
+                    month:
+                        "long",
+
+                    day:
+                        "numeric",
+
+                    year:
+                        "numeric"
                 }
             );
 

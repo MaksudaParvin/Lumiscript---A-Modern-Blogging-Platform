@@ -20,35 +20,42 @@ document.addEventListener(
                 "postGrid"
             );
 
+
         const loading =
             document.getElementById(
                 "blogLoading"
             );
+
 
         const empty =
             document.getElementById(
                 "blogEmpty"
             );
 
+
         const searchForm =
             document.getElementById(
                 "searchForm"
             );
+
 
         const searchInput =
             document.getElementById(
                 "searchInput"
             );
 
+
         const clearSearch =
             document.getElementById(
                 "clearSearch"
             );
 
+
         const categoryFilters =
             document.getElementById(
                 "categoryFilters"
             );
+
 
         const tagFilters =
             document.getElementById(
@@ -87,6 +94,7 @@ document.addEventListener(
             searchInput.value =
                 currentSearch;
 
+
             clearSearch.style.display =
                 "inline-flex";
 
@@ -103,6 +111,7 @@ document.addEventListener(
 
             loading.style.display =
                 "block";
+
 
             empty.style.display =
                 "none";
@@ -222,7 +231,9 @@ document.addEventListener(
 
                     <div class="blog-error">
 
-                        <i class='bx bx-error-circle'></i>
+                        <i
+                            class='bx bx-error-circle'
+                        ></i>
 
                         <p>
                             Unable to load stories.
@@ -258,8 +269,10 @@ document.addEventListener(
                 postGrid.innerHTML =
                     "";
 
+
                 empty.style.display =
                     "flex";
+
 
                 return;
 
@@ -279,6 +292,15 @@ document.addEventListener(
                             )
                     )
                     .join("");
+
+
+            /*
+            IMPORTANT:
+            New cards were created,
+            so attach bookmark events.
+            */
+
+            setupBookmarkButtons();
 
         }
 
@@ -330,6 +352,10 @@ document.addEventListener(
                 "blog-pagination";
 
 
+            /*
+            DRF page size is 6
+            */
+
             const totalPages =
                 Math.ceil(
                     data.count / 6
@@ -345,7 +371,9 @@ document.addEventListener(
                     ${!data.previous ? "disabled" : ""}
                 >
 
-                    <i class='bx bx-left-arrow-alt'></i>
+                    <i
+                        class='bx bx-left-arrow-alt'
+                    ></i>
 
                     Previous
 
@@ -370,7 +398,9 @@ document.addEventListener(
 
                     Next
 
-                    <i class='bx bx-right-arrow-alt'></i>
+                    <i
+                        class='bx bx-right-arrow-alt'
+                    ></i>
 
                 </button>
 
@@ -483,14 +513,22 @@ document.addEventListener(
             post
         ) {
 
+            /* -----------------------------------------
+               FEATURED IMAGE
+            ----------------------------------------- */
+
             const image =
                 post.featured_image
 
                     ? `
 
                         <img
-                            src="${post.featured_image}"
-                            alt="${post.title}"
+                            src="${escapeHTML(
+                                post.featured_image
+                            )}"
+                            alt="${escapeHTML(
+                                post.title
+                            )}"
                             class="post-card-image"
                         >
 
@@ -511,6 +549,10 @@ document.addEventListener(
                     `;
 
 
+            /* -----------------------------------------
+               CATEGORY
+            ----------------------------------------- */
+
             const category =
                 post.category_name
 
@@ -520,7 +562,9 @@ document.addEventListener(
                             class="post-category"
                         >
 
-                            ${post.category_name}
+                            ${escapeHTML(
+                                post.category_name
+                            )}
 
                         </span>
 
@@ -529,10 +573,18 @@ document.addEventListener(
                     : "";
 
 
+            /* -----------------------------------------
+               AUTHOR
+            ----------------------------------------- */
+
             const author =
                 post.author_name ||
                 "Anonymous";
 
+
+            /* -----------------------------------------
+               DATE
+            ----------------------------------------- */
 
             const date =
                 post.published_at
@@ -544,25 +596,86 @@ document.addEventListener(
                     : "";
 
 
+            /* -----------------------------------------
+               BOOKMARK STATE
+            ----------------------------------------- */
+
+            const bookmarkClass =
+                post.is_bookmarked
+                    ? "post-bookmark bookmarked"
+                    : "post-bookmark";
+
+
+            const bookmarkIcon =
+                post.is_bookmarked
+                    ? "bxs-bookmark"
+                    : "bx-bookmark";
+
+
+            /* -----------------------------------------
+               POST CARD
+            ----------------------------------------- */
+
             return `
 
                 <article
                     class="post-card"
                 >
 
-                    <a
-                        href="/blog/${post.slug}/"
-                        class="post-card-image-link"
+                    <!-- IMAGE AREA -->
+
+                    <div
+                        class="post-card-image-wrapper"
                     >
 
-                        ${image}
+                        <a
+                            href="/blog/${encodeURIComponent(
+                                post.slug
+                            )}/"
+                            class="post-card-image-link"
+                        >
 
-                    </a>
+                            ${image}
 
+                        </a>
+
+
+                        <!-- BOOKMARK -->
+
+                        <button
+                            type="button"
+                            class="${bookmarkClass}"
+                            data-slug="${escapeHTML(
+                                post.slug
+                            )}"
+                            aria-label="${
+                                post.is_bookmarked
+                                    ? "Remove bookmark"
+                                    : "Save post"
+                            }"
+                            title="${
+                                post.is_bookmarked
+                                    ? "Remove bookmark"
+                                    : "Save post"
+                            }"
+                        >
+
+                            <i
+                                class='bx ${bookmarkIcon}'
+                            ></i>
+
+                        </button>
+
+                    </div>
+
+
+                    <!-- CARD BODY -->
 
                     <div
                         class="post-card-body"
                     >
+
+                        <!-- META -->
 
                         <div
                             class="post-card-meta"
@@ -570,70 +683,109 @@ document.addEventListener(
 
                             ${category}
 
-                            <span>
-                                ${date}
-                            </span>
+
+                            ${
+                                date
+                                    ? `
+                                        <span>
+                                            ${date}
+                                        </span>
+                                    `
+                                    : ""
+                            }
 
                         </div>
 
+
+                        <!-- TITLE -->
 
                         <h2
                             class="post-card-title"
                         >
 
                             <a
-                                href="/blog/${post.slug}/"
+                                href="/blog/${encodeURIComponent(
+                                    post.slug
+                                )}/"
                             >
 
-                                ${post.title}
+                                ${escapeHTML(
+                                    post.title
+                            )}
 
                             </a>
 
                         </h2>
 
 
+                        <!-- EXCERPT -->
+
                         <p
                             class="post-card-excerpt"
                         >
 
-                            ${post.excerpt || ""}
+                            ${escapeHTML(
+                                post.excerpt || ""
+                            )}
 
                         </p>
 
 
-                        <div class="post-card-footer">
+                        <!-- FOOTER -->
 
-                            <span class="post-author">
-                                ${author}
+                        <div
+                            class="post-card-footer"
+                        >
+
+                            <span
+                                class="post-author"
+                            >
+
+                                ${escapeHTML(
+                                    author
+                                )}
+
                             </span>
 
 
-                            <div class="post-card-stats">
+                            <div
+                                class="post-card-stats"
+                            >
 
-                                <span class="post-stat">
+                                <!-- VIEWS -->
 
-                                    <i class='bx bx-show'></i>
+                                <span
+                                    class="post-stat"
+                                >
+
+                                    <i
+                                        class='bx bx-show'
+                                    ></i>
 
                                     ${post.views || 0}
 
                                 </span>
 
 
+                                <!-- LIKES -->
+
                                 <span
                                     class="
                                         post-stat
-                                        ${post.is_liked ? "liked" : ""}
+                                        ${
+                                            post.is_liked
+                                                ? "liked"
+                                                : ""
+                                        }
                                     "
                                 >
 
                                     <i
-                                        class='
-                                            ${
-                                                post.is_liked
-                                                    ? "bx bxs-heart"
-                                                    : "bx bx-heart"
-                                            }
-                                        '
+                                        class='${
+                                            post.is_liked
+                                                ? "bx bxs-heart"
+                                                : "bx bx-heart"
+                                        }'
                                     ></i>
 
                                     ${post.like_count || 0}
@@ -649,6 +801,330 @@ document.addEventListener(
                 </article>
 
             `;
+
+        }
+
+
+        /* =========================================
+           BOOKMARK BUTTONS
+        ========================================= */
+
+        function setupBookmarkButtons() {
+
+            const bookmarkButtons =
+                document.querySelectorAll(
+                    ".post-bookmark"
+                );
+
+
+            bookmarkButtons.forEach(
+                button => {
+
+                    button.addEventListener(
+                        "click",
+                        async event => {
+
+                            /*
+                            Prevent the click from
+                            opening the post.
+                            */
+
+                            event.preventDefault();
+
+                            event.stopPropagation();
+
+
+                            const slug =
+                                button.dataset.slug;
+
+
+                            if (!slug) {
+
+                                return;
+
+                            }
+
+
+                            /*
+                            Current state
+                            */
+
+                            const isBookmarked =
+                                button.classList.contains(
+                                    "bookmarked"
+                                );
+
+
+                            /*
+                            POST = save
+
+                            DELETE = unsave
+                            */
+
+                            const method =
+                                isBookmarked
+                                    ? "DELETE"
+                                    : "POST";
+
+
+                            const endpoint =
+                                isBookmarked
+
+                                    ? `/api/posts/${encodeURIComponent(
+                                        slug
+                                    )}/remove_bookmark/`
+
+                                    : `/api/posts/${encodeURIComponent(
+                                        slug
+                                    )}/bookmark/`;
+
+
+                            /*
+                            Disable while request
+                            is running.
+                            */
+
+                            button.disabled =
+                                true;
+
+
+                            try {
+
+                                const response =
+                                    await fetch(
+                                        endpoint,
+                                        {
+                                            method:
+                                                method,
+
+                                            headers: {
+
+                                                "X-CSRFToken":
+                                                    getCSRFToken(),
+
+                                                "Content-Type":
+                                                    "application/json"
+
+                                            },
+
+                                            credentials:
+                                                "same-origin"
+
+                                        }
+                                    );
+
+
+                                /*
+                                ---------------------------------
+                                LOGIN REQUIRED
+                                ---------------------------------
+                                */
+
+                                if (
+                                    response.status === 401 ||
+                                    response.status === 403
+                                ) {
+
+                                    window.location.href =
+                                        `/login/?next=${encodeURIComponent(
+                                            window.location.pathname +
+                                            window.location.search
+                                        )}`;
+
+                                    return;
+
+                                }
+
+
+                                if (
+                                    !response.ok
+                                ) {
+
+                                    throw new Error(
+                                        `Bookmark API Error: ${response.status}`
+                                    );
+
+                                }
+
+
+                                const data =
+                                    await response.json();
+
+
+                                /*
+                                ---------------------------------
+                                UPDATE BUTTON
+                                ---------------------------------
+                                */
+
+                                updateBookmarkButton(
+                                    button,
+                                    data.bookmarked
+                                );
+
+
+                            } catch (
+                                error
+                            ) {
+
+                                console.error(
+                                    "Bookmark Error:",
+                                    error
+                                );
+
+                            } finally {
+
+                                button.disabled =
+                                    false;
+
+                            }
+
+                        }
+                    );
+
+                }
+            );
+
+        }
+
+
+        /* =========================================
+           UPDATE BOOKMARK BUTTON
+        ========================================= */
+
+        function updateBookmarkButton(
+            button,
+            bookmarked
+        ) {
+
+            if (
+                bookmarked
+            ) {
+
+                button.classList.add(
+                    "bookmarked"
+                );
+
+
+                button.innerHTML = `
+
+                    <i
+                        class='bx bxs-bookmark'
+                    ></i>
+
+                `;
+
+
+                button.setAttribute(
+                    "aria-label",
+                    "Remove bookmark"
+                );
+
+
+                button.setAttribute(
+                    "title",
+                    "Remove bookmark"
+                );
+
+            } else {
+
+                button.classList.remove(
+                    "bookmarked"
+                );
+
+
+                button.innerHTML = `
+
+                    <i
+                        class='bx bx-bookmark'
+                    ></i>
+
+                `;
+
+
+                button.setAttribute(
+                    "aria-label",
+                    "Save post"
+                );
+
+
+                button.setAttribute(
+                    "title",
+                    "Save post"
+                );
+
+            }
+
+        }
+
+
+        /* =========================================
+           CSRF TOKEN
+        ========================================= */
+
+        function getCSRFToken() {
+
+            const cookies =
+                document.cookie.split(
+                    ";"
+                );
+
+
+            for (
+                const cookie of cookies
+            ) {
+
+                const parts =
+                    cookie.trim().split(
+                        "="
+                    );
+
+
+                const name =
+                    parts.shift();
+
+
+                const value =
+                    parts.join("=");
+
+
+                if (
+                    name === "csrftoken"
+                ) {
+
+                    return decodeURIComponent(
+                        value
+                    );
+
+                }
+
+            }
+
+
+            return "";
+
+        }
+
+
+        /* =========================================
+           ESCAPE HTML
+        ========================================= */
+
+        function escapeHTML(
+            value
+        ) {
+
+            const div =
+                document.createElement(
+                    "div"
+                );
+
+
+            div.textContent =
+                value || "";
+
+
+            return div.innerHTML;
 
         }
 
@@ -673,9 +1149,14 @@ document.addEventListener(
             ).toLocaleDateString(
                 "en-US",
                 {
-                    month: "short",
-                    day: "numeric",
-                    year: "numeric"
+                    month:
+                        "short",
+
+                    day:
+                        "numeric",
+
+                    year:
+                        "numeric"
                 }
             );
 
@@ -726,8 +1207,10 @@ document.addEventListener(
                 searchInput.value =
                     "";
 
+
                 currentSearch =
                     "";
+
 
                 currentPage =
                     1;
@@ -777,7 +1260,9 @@ document.addEventListener(
                 );
 
 
-            } catch (error) {
+            } catch (
+                error
+            ) {
 
                 console.error(
                     "Category API Error:",
@@ -835,10 +1320,14 @@ document.addEventListener(
                                         : ""
                                 }
                             "
-                            data-category="${category.slug}"
+                            data-category="${escapeHTML(
+                                category.slug
+                            )}"
                         >
 
-                            ${category.name}
+                            ${escapeHTML(
+                                category.name
+                            )}
 
                         </button>
 
@@ -919,7 +1408,9 @@ document.addEventListener(
                 );
 
 
-            } catch (error) {
+            } catch (
+                error
+            ) {
 
                 console.error(
                     "Tag API Error:",
@@ -977,10 +1468,14 @@ document.addEventListener(
                                         : ""
                                 }
                             "
-                            data-tag="${tag.slug}"
+                            data-tag="${escapeHTML(
+                                tag.slug
+                            )}"
                         >
 
-                            #${tag.name}
+                            #${escapeHTML(
+                                tag.name
+                            )}
 
                         </button>
 
