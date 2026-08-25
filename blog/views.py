@@ -1,4 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import  (
+    get_object_or_404,
+    redirect,
+    render,
+)
 from django.db.models import Q, F
 
 from rest_framework import viewsets
@@ -30,6 +34,10 @@ from .serializers import (
 from .permissions import IsAuthorOrReadOnly
 from .pagination import PostPagination
 
+
+from django.utils import timezone
+from .forms import PostForm
+from django.contrib.auth.decorators import login_required
 
 # =========================================
 # POST VIEW TRACKING
@@ -740,4 +748,109 @@ def about_view(request):
     return render(
         request,
         "blog/about.html"
+    )
+
+
+
+
+# =========================================
+# CREATE POST
+# =========================================
+
+@login_required
+def create_post_view(request):
+
+    if request.method == "POST":
+
+        form = PostForm(
+            request.POST,
+            request.FILES
+        )
+
+        if form.is_valid():
+
+            post = form.save(
+                commit=False
+            )
+
+            # -------------------------------
+            # AUTHOR
+            # -------------------------------
+
+            post.author = request.user
+
+
+            # -------------------------------
+            # STATUS
+            # -------------------------------
+
+            action = (
+                request.POST
+                .get(
+                    "action",
+                    "draft"
+                )
+            )
+
+
+            if action == "publish":
+
+                post.status = (
+                    Post.Status.PUBLISHED
+                )
+
+                post.published_at = (
+                    timezone.now()
+                )
+
+            else:
+
+                post.status = (
+                    Post.Status.DRAFT
+                )
+
+                post.published_at = None
+
+
+            post.save()
+
+
+            # -------------------------------
+            # TAGS
+            # -------------------------------
+
+            form.save_m2m()
+
+
+            # -------------------------------
+            # REDIRECT
+            # -------------------------------
+
+            if (
+                post.status
+                == Post.Status.PUBLISHED
+            ):
+
+                return redirect(
+                    "blog_detail",
+                    slug=post.slug
+                )
+
+
+            return redirect(
+                "profile"
+            )
+
+
+    else:
+
+        form = PostForm()
+
+
+    return render(
+        request,
+        "blog/create_post.html",
+        {
+            "form": form,
+        }
     )

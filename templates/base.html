@@ -99,6 +99,7 @@
 
                     <a
                         href="{% url 'home' %}"
+                        class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}"
                     >
                         Home
                     </a>
@@ -106,6 +107,7 @@
 
                     <a
                         href="{% url 'blog' %}"
+                        class="{% if request.resolver_match.url_name == 'blog' or request.resolver_match.url_name == 'blog_detail' %}active{% endif %}"
                     >
                         Explore
                     </a>
@@ -113,6 +115,7 @@
 
                     <a
                         href="{% url 'topics' %}"
+                        class="{% if request.resolver_match.url_name == 'topics' %}active{% endif %}"
                     >
                         Topics
                     </a>
@@ -120,6 +123,7 @@
 
                     <a
                         href="{% url 'about' %}"
+                        class="{% if request.resolver_match.url_name == 'about' %}active{% endif %}"
                     >
                         About
                     </a>

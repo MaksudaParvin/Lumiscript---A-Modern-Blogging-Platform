@@ -1,0 +1,292 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block title %}
+    Write an Article — Lumiscript
+{% endblock %}
+
+
+{% block extra_css %}
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/create_post.css' %}"
+>
+
+{% endblock %}
+
+
+{% block content %}
+
+<main class="create-post-page">
+
+    <div class="create-post-container">
+
+
+        <!-- =====================================
+             HEADER
+        ====================================== -->
+
+        <header class="create-post-header">
+
+            <div>
+
+                <span class="eyebrow">
+                    WRITE
+                </span>
+
+                <h1>
+                    Create a new article
+                </h1>
+
+                <p>
+                    Share your ideas, knowledge, and
+                    perspective with the Lumiscript community.
+                </p>
+
+            </div>
+
+        </header>
+
+
+
+        <!-- =====================================
+             FORM
+        ====================================== -->
+
+        <form
+            method="POST"
+            enctype="multipart/form-data"
+            class="create-post-form"
+        >
+
+            {% csrf_token %}
+
+
+            {{ form.non_field_errors }}
+
+
+            <!-- =================================
+                 TITLE
+            ================================== -->
+
+            <div class="create-form-group">
+
+                <label
+                    for="{{ form.title.id_for_label }}"
+                >
+                    Title
+                </label>
+
+                {{ form.title }}
+
+                {{ form.title.errors }}
+
+            </div>
+
+
+
+            <!-- =================================
+                 EXCERPT
+            ================================== -->
+
+            <div class="create-form-group">
+
+                <label
+                    for="{{ form.excerpt.id_for_label }}"
+                >
+                    Excerpt
+                </label>
+
+                <span class="field-help">
+                    A short description that appears
+                    before readers open your article.
+                </span>
+
+                {{ form.excerpt }}
+
+                {{ form.excerpt.errors }}
+
+            </div>
+
+
+
+            <!-- =================================
+                 FEATURED IMAGE
+            ================================== -->
+
+            <div class="create-form-group">
+
+                <label
+                    for="{{ form.featured_image.id_for_label }}"
+                >
+                    Featured image
+                </label>
+
+                <span class="field-help">
+                    Add an image to represent your article.
+                </span>
+
+
+                <div class="featured-upload">
+
+                    {{ form.featured_image }}
+
+                    <label
+                        for="{{ form.featured_image.id_for_label }}"
+                        class="featured-upload-label"
+                    >
+
+                        <i class='bx bx-image-add'></i>
+
+                        <span>
+                            Choose an image
+                        </span>
+
+                        <small>
+                            JPG, PNG or WebP
+                        </small>
+
+                    </label>
+
+                </div>
+
+
+                {{ form.featured_image.errors }}
+
+            </div>
+
+
+
+            <!-- =================================
+                 CATEGORY + TAGS
+            ================================== -->
+
+            <div class="create-form-row">
+
+
+                <!-- CATEGORY -->
+
+                <div class="create-form-group">
+
+                    <label
+                        for="{{ form.category.id_for_label }}"
+                    >
+                        Category
+                    </label>
+
+                    {{ form.category }}
+
+                    {{ form.category.errors }}
+
+                </div>
+
+
+
+                <!-- TAGS -->
+
+                <div class="create-form-group">
+
+                    <label
+                        for="{{ form.tags.id_for_label }}"
+                    >
+                        Tags
+                    </label>
+
+                    <span class="field-help">
+                        Select one or more tags.
+                    </span>
+
+                    {{ form.tags }}
+
+                    {{ form.tags.errors }}
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- =================================
+                 CONTENT
+            ================================== -->
+
+            <div class="create-form-group content-group">
+
+                <label
+                    for="{{ form.content.id_for_label }}"
+                >
+                    Article content
+                </label>
+
+                <span class="field-help">
+                    Write the main content of your article.
+                </span>
+
+                {{ form.content }}
+
+                {{ form.content.errors }}
+
+            </div>
+
+
+
+            <!-- =================================
+                 ACTIONS
+            ================================== -->
+
+            <div class="create-post-actions">
+
+
+                <a
+                    href="{% url 'profile' %}"
+                    class="create-cancel-button"
+                >
+                    Cancel
+                </a>
+
+
+                <div class="create-primary-actions">
+
+                    <button
+                        type="submit"
+                        name="action"
+                        value="draft"
+                        class="draft-button"
+                    >
+
+                        <i class='bx bx-save'></i>
+
+                        Save draft
+
+                    </button>
+
+
+                    <button
+                        type="submit"
+                        name="action"
+                        value="publish"
+                        class="publish-button"
+                    >
+
+                        <i class='bx bx-send'></i>
+
+                        Publish
+
+                    </button>
+
+                </div>
+
+
+            </div>
+
+
+        </form>
+
+    </div>
+
+</main>
+
+{% endblock %}

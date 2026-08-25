@@ -318,56 +318,67 @@
 
 
             <!-- TABS -->
+            <div class="articles-toolbar">
+                <div class="article-tabs">
 
-            <div class="article-tabs">
+                    <button
+                        type="button"
+                        class="article-tab active"
+                        data-tab="all"
+                    >
 
-                <button
-                    type="button"
-                    class="article-tab active"
-                    data-tab="all"
+                        All
+
+                        <span>
+                            {{ published_count|add:draft_count }}
+                        </span>
+
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="article-tab"
+                        data-tab="published"
+                    >
+
+                        Published
+
+                        <span>
+                            {{ published_count }}
+                        </span>
+
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="article-tab"
+                        data-tab="drafts"
+                    >
+
+                        Drafts
+
+                        <span>
+                            {{ draft_count }}
+                        </span>
+
+                    </button>
+
+                </div>
+
+                <a
+                    href="{% url 'create_post' %}"
+                    class="create-post-button"
                 >
 
-                    All
+                    <i class='bx bx-plus'></i>
 
-                    <span>
-                        {{ published_count|add:draft_count }}
-                    </span>
+                    Create post
 
-                </button>
-
-
-                <button
-                    type="button"
-                    class="article-tab"
-                    data-tab="published"
-                >
-
-                    Published
-
-                    <span>
-                        {{ published_count }}
-                    </span>
-
-                </button>
-
-
-                <button
-                    type="button"
-                    class="article-tab"
-                    data-tab="drafts"
-                >
-
-                    Drafts
-
-                    <span>
-                        {{ draft_count }}
-                    </span>
-
-                </button>
+                </a>
 
             </div>
-
-
 
             <!-- =================================
                  ALL ARTICLES
@@ -531,7 +542,7 @@
                                 </div>
 
 
-                                <div class="profile-article-actions">
+                                {% comment %} <div class="profile-article-actions">
 
                                     <a
                                         href="{% url 'edit_post' post.slug %}"
@@ -542,7 +553,7 @@
 
                                     </a>
 
-                                </div>
+                                </div> {% endcomment %}
 
                             </article>
 
@@ -776,7 +787,7 @@
                                 </div>
 
 
-                                <div class="profile-article-actions">
+                                {% comment %} <div class="profile-article-actions">
 
                                     <a
                                         href="{% url 'edit_post' post.slug %}"
@@ -787,7 +798,7 @@
 
                                     </a>
 
-                                </div>
+                                </div> {% endcomment %}
 
                             </article>
 

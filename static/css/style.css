@@ -71,6 +71,8 @@ body {
     background:
         var(--color-bg);
 
+    padding-top: 76px;
+
     color:
         var(--color-text);
 
@@ -408,7 +410,22 @@ button {
 .nav-links a:hover::after {
 
     width:
-        18px;
+        40px;
+}
+
+.nav-links a.active {
+
+    color:
+        var(--color-text);
+
+}
+
+
+.nav-links a.active::after {
+
+    width:
+        40px;
+
 }
 
 

@@ -1,0 +1,712 @@
+/* =========================================
+   CREATE POST PAGE
+========================================= */
+
+.create-post-page {
+
+    padding:
+        65px 0 100px;
+
+}
+
+
+.create-post-container {
+
+    width: 100%;
+
+    max-width: 850px;
+
+    margin: 0 auto;
+
+}
+
+
+/* =========================================
+   HEADER
+========================================= */
+
+.create-post-header {
+
+    margin-bottom: 35px;
+
+}
+
+
+.create-post-header .eyebrow {
+
+    display: block;
+
+    margin-bottom: 9px;
+
+}
+
+
+.create-post-header h1 {
+
+    margin: 0;
+
+    color:
+        var(--color-text);
+
+    font-size: 38px;
+
+    line-height: 1.15;
+
+    letter-spacing: -0.035em;
+
+}
+
+
+.create-post-header p {
+
+    max-width: 600px;
+
+    margin:
+        10px 0 0;
+
+    color:
+        var(--color-muted);
+
+    font-size: 13px;
+
+    line-height: 1.7;
+
+}
+
+
+/* =========================================
+   FORM
+========================================= */
+
+.create-post-form {
+
+    padding: 32px;
+
+    border:
+        1px solid
+        var(--color-border);
+
+    border-radius: 14px;
+
+    background:
+        var(--color-surface);
+
+}
+
+
+.create-form-group {
+
+    display: flex;
+
+    flex-direction: column;
+
+    margin-bottom: 24px;
+
+}
+
+
+.create-form-group > label {
+
+    margin-bottom: 7px;
+
+    color:
+        var(--color-text);
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+}
+
+
+.field-help {
+
+    margin:
+        -2px 0 8px;
+
+    color:
+        var(--color-muted);
+
+    font-size: 10px;
+
+    line-height: 1.5;
+
+}
+
+
+/* =========================================
+   INPUTS
+========================================= */
+
+.create-post-form input[type="text"],
+.create-post-form textarea,
+.create-post-form select {
+
+    width: 100%;
+
+    box-sizing: border-box;
+
+    border:
+        1px solid
+        var(--color-border);
+
+    border-radius: 8px;
+
+    outline: none;
+
+    background:
+        var(--color-background);
+
+    color:
+        var(--color-text);
+
+    font-family: inherit;
+
+    font-size: 13px;
+
+    transition:
+        border-color var(--transition),
+        box-shadow var(--transition),
+        background var(--transition);
+
+}
+
+
+.create-post-form input[type="text"] {
+
+    min-height: 48px;
+
+    padding:
+        0 14px;
+
+    font-size: 15px;
+
+    font-weight: 500;
+
+}
+
+
+.create-post-form textarea {
+
+    min-height: 125px;
+
+    padding:
+        13px 14px;
+
+    resize: vertical;
+
+    line-height: 1.7;
+
+}
+
+
+.create-post-form textarea[name="content"] {
+
+    min-height: 420px;
+
+    line-height: 1.8;
+
+}
+
+
+.create-post-form select {
+
+    min-height: 44px;
+
+    padding:
+        0 12px;
+
+}
+
+
+.create-post-form select[name="tags"] {
+
+    min-height: 110px;
+
+    padding: 8px 10px;
+
+}
+
+
+.create-post-form input:focus,
+.create-post-form textarea:focus,
+.create-post-form select:focus {
+
+    border-color:
+        var(--color-accent);
+
+    box-shadow:
+        0 0 0 3px
+        var(--color-accent-soft);
+
+    background:
+        var(--color-surface);
+
+}
+
+
+.create-post-form input::placeholder,
+.create-post-form textarea::placeholder {
+
+    color:
+        var(--color-muted);
+
+}
+
+
+/* =========================================
+   CATEGORY + TAGS
+========================================= */
+
+.create-form-row {
+
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap: 18px;
+
+}
+
+
+.create-form-row .create-form-group {
+
+    min-width: 0;
+
+}
+
+
+/* =========================================
+   FEATURED IMAGE
+========================================= */
+
+.featured-upload {
+
+    position: relative;
+
+    min-height: 145px;
+
+    border:
+        1px dashed
+        var(--color-border);
+
+    border-radius: 10px;
+
+    background:
+        var(--color-background);
+
+    overflow: hidden;
+
+}
+
+
+.featured-upload input[type="file"] {
+
+    position: absolute;
+
+    width: 1px;
+
+    height: 1px;
+
+    padding: 0;
+
+    margin: -1px;
+
+    overflow: hidden;
+
+    clip: rect(0, 0, 0, 0);
+
+    white-space: nowrap;
+
+    border: 0;
+
+}
+
+
+.featured-upload-label {
+
+    position: absolute;
+
+    inset: 0;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 7px;
+
+    color:
+        var(--color-muted);
+
+    cursor: pointer;
+
+    transition:
+        background var(--transition),
+        color var(--transition);
+
+}
+
+
+.featured-upload-label i {
+
+    font-size: 28px;
+
+    color:
+        var(--color-accent);
+
+}
+
+
+.featured-upload-label span {
+
+    color:
+        var(--color-text);
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+}
+
+
+.featured-upload-label small {
+
+    font-size: 9px;
+
+}
+
+
+.featured-upload:hover {
+
+    border-color:
+        var(--color-accent);
+
+}
+
+
+.featured-upload:hover
+.featured-upload-label {
+
+    background:
+        var(--color-accent-soft);
+
+}
+
+
+/* =========================================
+   ERRORS
+========================================= */
+
+.create-post-form .errorlist {
+
+    list-style: none;
+
+    margin:
+        6px 0 0;
+
+    padding: 0;
+
+    color:
+        #c94b38;
+
+    font-size: 10px;
+
+}
+
+
+.create-post-form > .errorlist {
+
+    margin-bottom: 20px;
+
+    padding:
+        11px 13px;
+
+    border:
+        1px solid
+        rgba(201, 75, 56, 0.25);
+
+    border-radius: 8px;
+
+    background:
+        rgba(201, 75, 56, 0.06);
+
+}
+
+
+/* =========================================
+   ACTIONS
+========================================= */
+
+.create-post-actions {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    padding-top: 25px;
+
+    margin-top: 5px;
+
+    border-top:
+        1px solid
+        var(--color-border);
+
+}
+
+
+.create-primary-actions {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+}
+
+
+.create-cancel-button,
+.draft-button,
+.publish-button {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 7px;
+
+    min-height: 40px;
+
+    padding:
+        0 15px;
+
+    border-radius: 7px;
+
+    font-family: inherit;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    text-decoration: none;
+
+    cursor: pointer;
+
+    transition:
+        background var(--transition),
+        border-color var(--transition),
+        color var(--transition),
+        transform var(--transition);
+
+}
+
+
+.create-cancel-button {
+
+    border:
+        1px solid
+        var(--color-border);
+
+    background:
+        transparent;
+
+    color:
+        var(--color-text);
+
+}
+
+
+.create-cancel-button:hover {
+
+    border-color:
+        var(--color-text);
+
+    background:
+        var(--color-background);
+
+}
+
+
+.draft-button {
+
+    border:
+        1px solid
+        var(--color-border);
+
+    background:
+        transparent;
+
+    color:
+        var(--color-text);
+
+}
+
+
+.draft-button:hover {
+
+    border-color:
+        var(--color-text);
+
+    background:
+        var(--color-text);
+
+    color: white;
+
+}
+
+
+.publish-button {
+
+    border: none;
+
+    background:
+        var(--color-text);
+
+    color: white;
+
+}
+
+
+.publish-button:hover {
+
+    background:
+        var(--color-accent);
+
+    transform:
+        translateY(-1px);
+
+}
+
+
+.create-cancel-button i,
+.draft-button i,
+.publish-button i {
+
+    font-size: 16px;
+
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 700px) {
+
+    .create-post-page {
+
+        padding:
+            45px 0 70px;
+
+    }
+
+
+    .create-post-container {
+
+        padding:
+            0 20px;
+
+    }
+
+
+    .create-post-form {
+
+        padding: 24px;
+
+    }
+
+
+    .create-post-header h1 {
+
+        font-size: 31px;
+
+    }
+
+
+    .create-form-row {
+
+        grid-template-columns: 1fr;
+
+        gap: 0;
+
+    }
+
+
+    .create-post-actions {
+
+        align-items: stretch;
+
+        flex-direction: column;
+
+    }
+
+
+    .create-primary-actions {
+
+        display: grid;
+
+        grid-template-columns:
+            1fr 1fr;
+
+    }
+
+
+    .create-cancel-button {
+
+        width: 100%;
+
+    }
+
+
+    .draft-button,
+    .publish-button {
+
+        width: 100%;
+
+    }
+
+}
+
+
+@media (max-width: 450px) {
+
+    .create-post-container {
+
+        padding:
+            0 15px;
+
+    }
+
+
+    .create-post-form {
+
+        padding: 19px;
+
+    }
+
+
+    .create-post-header h1 {
+
+        font-size: 27px;
+
+    }
+
+
+    .create-primary-actions {
+
+        grid-template-columns: 1fr;
+
+    }
+
+}
