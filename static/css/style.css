@@ -173,6 +173,12 @@ button {
 
 .site-header {
 
+    position: fixed;
+
+    top: 0;
+
+    left: 0;
+
     width: 100%;
 
     border-bottom:
@@ -181,6 +187,14 @@ button {
 
     background:
         rgba(247, 245, 240, 0.94);
+
+    backdrop-filter:
+        blur(12px);
+
+    -webkit-backdrop-filter:
+        blur(12px);
+
+    z-index: 1000;
 }
 
 
@@ -1091,6 +1105,359 @@ button {
 
         height:
             35px;
+    }
+
+}
+
+
+/* =========================================
+   FOOTER
+========================================= */
+
+.site-footer {
+
+    margin-top: 80px;
+
+    border-top:
+        1px solid
+        var(--color-border);
+
+    background:
+        var(--color-surface);
+
+}
+
+
+.footer-container {
+
+    width: 100%;
+
+    max-width: 1100px;
+
+    margin: 0 auto;
+
+    padding:
+        55px 24px 25px;
+
+}
+
+
+/* =========================================
+   FOOTER MAIN
+========================================= */
+
+.footer-main {
+
+    display: grid;
+
+    grid-template-columns:
+        2fr 1fr 1fr 1fr;
+
+    gap: 55px;
+
+    padding-bottom: 45px;
+
+}
+
+
+/* =========================================
+   FOOTER BRAND
+========================================= */
+
+.footer-brand {
+
+    max-width: 300px;
+
+}
+
+
+.footer-logo {
+
+    display: inline-block;
+
+    color:
+        var(--color-text);
+
+    font-size: 20px;
+
+    font-weight: 800;
+
+    letter-spacing: -0.03em;
+
+    text-decoration: none;
+
+}
+
+
+.footer-logo span {
+
+    color:
+        var(--color-accent);
+
+}
+
+
+.footer-brand > p {
+
+    max-width: 260px;
+
+    margin:
+        12px 0 20px;
+
+    color:
+        var(--color-muted);
+
+    font-size: 12px;
+
+    line-height: 1.7;
+
+}
+
+
+/* =========================================
+   SOCIAL LINKS
+========================================= */
+
+.footer-socials {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+}
+
+
+.footer-social {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 34px;
+
+    height: 34px;
+
+    border:
+        1px solid
+        var(--color-border);
+
+    border-radius: 8px;
+
+    background:
+        transparent;
+
+    color:
+        var(--color-muted);
+
+    text-decoration: none;
+
+    transition:
+        color var(--transition),
+        background var(--transition),
+        border-color var(--transition);
+
+}
+
+
+.footer-social i {
+
+    font-size: 17px;
+
+}
+
+
+.footer-social:hover {
+
+    border-color:
+        var(--color-text);
+
+    background:
+        var(--color-text);
+
+    color: white;
+
+}
+
+
+/* =========================================
+   FOOTER COLUMNS
+========================================= */
+
+.footer-column {
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: flex-start;
+
+}
+
+
+.footer-column h3 {
+
+    margin:
+        2px 0 16px;
+
+    color:
+        var(--color-text);
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+    letter-spacing: 0.07em;
+
+    text-transform: uppercase;
+
+}
+
+
+.footer-column a {
+
+    margin-bottom: 10px;
+
+    color:
+        var(--color-muted);
+
+    font-size: 12px;
+
+    text-decoration: none;
+
+    transition:
+        color var(--transition);
+
+}
+
+
+.footer-column a:hover {
+
+    color:
+        var(--color-text);
+
+}
+
+
+/* =========================================
+   FOOTER BOTTOM
+========================================= */
+
+.footer-bottom {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding-top: 22px;
+
+    border-top:
+        1px solid
+        var(--color-border);
+
+}
+
+
+.footer-bottom p {
+
+    margin: 0;
+
+    color:
+        var(--color-muted);
+
+    font-size: 11px;
+
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 800px) {
+
+    .footer-main {
+
+        grid-template-columns:
+            1.5fr 1fr 1fr;
+
+        gap: 35px;
+
+    }
+
+
+    .footer-brand {
+
+        grid-column:
+            1 / -1;
+
+        max-width: 420px;
+
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .site-footer {
+
+        margin-top: 60px;
+
+    }
+
+
+    .footer-container {
+
+        padding:
+            42px 20px 22px;
+
+    }
+
+
+    .footer-main {
+
+        grid-template-columns:
+            1fr 1fr;
+
+        gap:
+            35px 25px;
+
+        padding-bottom: 35px;
+
+    }
+
+
+    .footer-brand {
+
+        grid-column:
+            1 / -1;
+
+    }
+
+}
+
+
+@media (max-width: 400px) {
+
+    .footer-main {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+
+    .footer-brand {
+
+        grid-column:
+            auto;
+
     }
 
 }
