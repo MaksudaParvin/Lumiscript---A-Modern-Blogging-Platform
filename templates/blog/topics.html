@@ -1,0 +1,201 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block title %}
+    Topics — Lumiscript
+{% endblock %}
+
+
+{% block extra_css %}
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/topics.css' %}"
+>
+
+{% endblock %}
+
+
+{% block content %}
+
+<main class="topics-page">
+
+    <div class="topics-container">
+
+
+        <!-- =====================================
+             HEADER
+        ====================================== -->
+
+        <header class="topics-header">
+
+            <span class="eyebrow">
+                TOPICS
+            </span>
+
+            <h1>
+                Explore by topic.
+            </h1>
+
+            <p>
+                Find stories, ideas and perspectives
+                across the topics that interest you.
+            </p>
+
+        </header>
+
+
+
+        <!-- =====================================
+             TOPIC GRID
+        ====================================== -->
+
+        {% if categories %}
+
+            <section class="topics-grid">
+
+                {% for category in categories %}
+
+                    <a
+                        href="{% url 'blog' %}?category={{ category.slug }}"
+                        class="topic-card"
+                    >
+
+                        <div class="topic-card-top">
+
+                            <span class="topic-number">
+
+                                {% if forloop.counter < 10 %}
+                                    0{{ forloop.counter }}
+                                {% else %}
+                                    {{ forloop.counter }}
+                                {% endif %}
+
+                            </span>
+
+
+                            <span class="topic-arrow">
+
+                                <i class='bx bx-right-arrow-alt'></i>
+
+                            </span>
+
+                        </div>
+
+
+                        <div class="topic-card-content">
+
+                            <h2>
+                                {{ category.name }}
+                            </h2>
+
+
+                            {% if category.description %}
+
+                                <p>
+                                    {{ category.description|truncatechars:120 }}
+                                </p>
+
+                            {% else %}
+
+                                <p>
+                                    Explore stories and ideas
+                                    about {{ category.name }}.
+                                </p>
+
+                            {% endif %}
+
+                        </div>
+
+
+                        <div class="topic-card-footer">
+
+                            <span>
+
+                                {{ category.posts.count }}
+
+                                {% if category.posts.count == 1 %}
+                                    story
+                                {% else %}
+                                    stories
+                                {% endif %}
+
+                            </span>
+
+                        </div>
+
+                    </a>
+
+                {% endfor %}
+
+            </section>
+
+        {% else %}
+
+
+            <!-- =================================
+                 EMPTY STATE
+            ================================== -->
+
+            <section class="topics-empty">
+
+                <div class="topics-empty-icon">
+
+                    <i class='bx bx-category'></i>
+
+                </div>
+
+                <h2>
+                    No topics yet.
+                </h2>
+
+                <p>
+                    Topics will appear here once they
+                    are added to Lumiscript.
+                </p>
+
+            </section>
+
+        {% endif %}
+
+
+
+        <!-- =====================================
+             BOTTOM CTA
+        ====================================== -->
+
+        <section class="topics-cta">
+
+            <div>
+
+                <span class="eyebrow">
+                    DISCOVER MORE
+                </span>
+
+                <h2>
+                    Find something worth reading.
+                </h2>
+
+            </div>
+
+
+            <a
+                href="{% url 'blog' %}"
+                class="topics-cta-button"
+            >
+
+                Explore stories
+
+                <i class='bx bx-right-arrow-alt'></i>
+
+            </a>
+
+        </section>
+
+
+    </div>
+
+</main>
+
+{% endblock %}

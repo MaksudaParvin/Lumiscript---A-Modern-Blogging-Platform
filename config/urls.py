@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 
 from accounts.views import (register_view, login_view, logout_view, profile_view, edit_profile_view)
+from blog.views import topics_view
 
 from django.conf import settings
 from django.conf.urls.static import static
@@ -36,6 +37,8 @@ urlpatterns = [
     path("profile/", profile_view, name="profile"),
 
     path("profile/edit/", edit_profile_view, name="edit_profile"),
+
+    path("topics/", topics_view, name="topics"),
 
     path("api/", include("blog.urls")),
 

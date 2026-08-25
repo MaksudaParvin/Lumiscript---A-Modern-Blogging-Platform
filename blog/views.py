@@ -1,3 +1,4 @@
+from django.shortcuts import render
 from django.db.models import Q, F
 
 from rest_framework import viewsets
@@ -714,3 +715,21 @@ class CommentViewSet(
             *args,
             **kwargs
         )
+
+
+
+
+def topics_view(request):
+
+    categories = (
+        Category.objects
+        .order_by("name")
+    )
+
+    return render(
+        request,
+        "blog/topics.html",
+        {
+            "categories": categories,
+        }
+    )
