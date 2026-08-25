@@ -2,43 +2,61 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
     <meta charset="UTF-8">
+
 
     <meta
         name="viewport"
         content="width=device-width, initial-scale=1.0"
     >
 
+
     <meta
         name="description"
         content="Lumiscript — A modern space for ideas, stories and perspectives."
     >
 
+
     <title>
+
         {% block title %}
+
             Lumiscript — A Modern Blogging Platform
+
         {% endblock %}
+
     </title>
 
 
-    <!-- Boxicons -->
+    <!-- =========================================
+         BOXICONS
+    ========================================== -->
+
     <link
         href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
         rel="stylesheet"
     >
 
 
-    <!-- Global CSS -->
+    <!-- =========================================
+         GLOBAL CSS
+    ========================================== -->
+
     <link
         rel="stylesheet"
         href="{% static 'css/style.css' %}"
     >
 
 
-    <!-- Page Specific CSS -->
+    <!-- =========================================
+         PAGE SPECIFIC CSS
+    ========================================== -->
+
     {% block extra_css %}
+
     {% endblock %}
 
 </head>
@@ -47,9 +65,9 @@
 <body>
 
 
-    <!-- ==============================
+    <!-- =========================================
          NAVBAR
-    =============================== -->
+    ========================================== -->
 
     <header class="site-header">
 
@@ -58,52 +76,76 @@
             <div class="navbar-container">
 
 
-                <!-- Logo -->
+                <!-- =================================
+                     LOGO
+                ================================== -->
 
                 <a
                     href="{% url 'home' %}"
                     class="logo"
                 >
+
                     Lumi<span>Script</span>
+
                 </a>
 
 
-                <!-- Navigation -->
+
+                <!-- =================================
+                     NAVIGATION
+                ================================== -->
 
                 <div class="nav-links">
 
-                    <a href="{% url 'home' %}">
+                    <a
+                        href="{% url 'home' %}"
+                    >
                         Home
                     </a>
 
-                    <a href="{% url 'blog' %}">
+
+                    <a
+                        href="{% url 'blog' %}"
+                    >
                         Explore
                     </a>
 
-                    <a href="#">
+
+                    <a
+                        href="{% url 'topics' %}"
+                    >
                         Topics
                     </a>
 
-                    <a href="#">
+
+                    <a
+                        href="{% url 'about' %}"
+                    >
                         About
                     </a>
 
                 </div>
 
 
-                <!-- Right Side -->
+
+                <!-- =================================
+                     RIGHT SIDE
+                ================================== -->
 
                 <div class="nav-actions">
+
 
                     {% if user.is_authenticated %}
 
 
-                        <!-- Profile Dropdown -->
+                        <!-- =============================
+                             PROFILE DROPDOWN
+                        ============================== -->
 
                         <div class="profile-dropdown">
 
 
-                            <!-- Avatar -->
+                            <!-- PROFILE TRIGGER -->
 
                             <button
                                 type="button"
@@ -112,6 +154,7 @@
                                 aria-label="Open profile menu"
                                 aria-expanded="false"
                             >
+
 
                                 {% if user.profile_image %}
 
@@ -124,18 +167,32 @@
                                 {% else %}
 
                                     <span class="nav-avatar">
-                                        {{ user.first_name|first|upper }}
+
+                                        {% if user.first_name %}
+
+                                            {{ user.first_name|first|upper }}
+
+                                        {% else %}
+
+                                            {{ user.email|first|upper }}
+
+                                        {% endif %}
+
                                     </span>
 
                                 {% endif %}
 
 
-                                <i class='bx bx-chevron-down profile-chevron'></i>
+                                <i
+                                    class='bx bx-chevron-down profile-chevron'
+                                ></i>
+
 
                             </button>
 
 
-                            <!-- Dropdown -->
+
+                            <!-- PROFILE MENU -->
 
                             <div
                                 class="profile-menu"
@@ -143,9 +200,10 @@
                             >
 
 
-                                <!-- User Information -->
+                                <!-- USER INFORMATION -->
 
                                 <div class="profile-menu-header">
+
 
                                     {% if user.profile_image %}
 
@@ -158,32 +216,53 @@
                                     {% else %}
 
                                         <span class="menu-avatar-placeholder">
-                                            {{ user.first_name|first|upper }}
+
+                                            {% if user.first_name %}
+
+                                                {{ user.first_name|first|upper }}
+
+                                            {% else %}
+
+                                                {{ user.email|first|upper }}
+
+                                            {% endif %}
+
                                         </span>
 
                                     {% endif %}
 
 
+
                                     <div class="profile-menu-user">
 
                                         <strong>
+
                                             {{ user.first_name }}
                                             {{ user.last_name }}
+
                                         </strong>
 
+
                                         <span>
+
                                             {{ user.email }}
+
                                         </span>
 
                                     </div>
 
+
                                 </div>
 
 
-                                <div class="profile-menu-divider"></div>
+
+                                <div
+                                    class="profile-menu-divider"
+                                ></div>
 
 
-                                <!-- Profile -->
+
+                                <!-- PROFILE -->
 
                                 <a
                                     href="{% url 'profile' %}"
@@ -199,11 +278,15 @@
                                 </a>
 
 
-                                <!-- Logout -->
+
+                                <!-- LOGOUT -->
 
                                 <a
                                     href="{% url 'logout' %}"
-                                    class="profile-menu-item logout-item"
+                                    class="
+                                        profile-menu-item
+                                        logout-item
+                                    "
                                 >
 
                                     <i class='bx bx-log-out'></i>
@@ -214,6 +297,7 @@
 
                                 </a>
 
+
                             </div>
 
                         </div>
@@ -222,13 +306,17 @@
                     {% else %}
 
 
-                        <!-- Logged Out -->
+                        <!-- =============================
+                             LOGGED OUT
+                        ============================== -->
 
                         <a
                             href="{% url 'login' %}"
                             class="nav-login"
                         >
+
                             Sign in
+
                         </a>
 
 
@@ -236,11 +324,14 @@
                             href="{% url 'register' %}"
                             class="nav-button primary"
                         >
+
                             Get started
+
                         </a>
 
 
                     {% endif %}
+
 
                 </div>
 
@@ -251,21 +342,273 @@
     </header>
 
 
-    <!-- Page Content -->
+
+    <!-- =========================================
+         PAGE CONTENT
+    ========================================== -->
 
     {% block content %}
+
     {% endblock %}
 
 
-    <!-- JavaScript -->
+
+    <!-- =========================================
+         FOOTER
+    ========================================== -->
+
+    <footer class="site-footer">
+
+
+        <div class="footer-container">
+
+
+            <!-- =================================
+                 FOOTER MAIN
+            ================================== -->
+
+            <div class="footer-main">
+
+
+                <!-- BRAND -->
+
+                <div class="footer-brand">
+
+                    <a
+                        href="{% url 'home' %}"
+                        class="footer-logo"
+                    >
+
+                        Lumi<span>Script</span>
+
+                    </a>
+
+
+                    <p>
+
+                        A modern space for ideas,
+                        stories and perspectives.
+
+                    </p>
+
+
+                    <!-- SOCIAL LINKS -->
+
+                    <div class="footer-socials">
+
+
+                        <a
+                            href="#"
+                            class="footer-social"
+                            aria-label="Facebook"
+                            title="Facebook"
+                        >
+
+                            <i class='bx bxl-facebook'></i>
+
+                        </a>
+
+
+                        <a
+                            href="#"
+                            class="footer-social"
+                            aria-label="X"
+                            title="X"
+                        >
+
+                            <i class='bx bxl-twitter'></i>
+
+                        </a>
+
+
+                        <a
+                            href="#"
+                            class="footer-social"
+                            aria-label="LinkedIn"
+                            title="LinkedIn"
+                        >
+
+                            <i class='bx bxl-linkedin'></i>
+
+                        </a>
+
+
+                        <a
+                            href="#"
+                            class="footer-social"
+                            aria-label="GitHub"
+                            title="GitHub"
+                        >
+
+                            <i class='bx bxl-github'></i>
+
+                        </a>
+
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- QUICK LINKS -->
+
+                <div class="footer-column">
+
+                    <h3>
+                        Explore
+                    </h3>
+
+
+                    <a
+                        href="{% url 'home' %}"
+                    >
+                        Home
+                    </a>
+
+
+                    <a
+                        href="{% url 'blog' %}"
+                    >
+                        Explore
+                    </a>
+
+
+                    <a
+                        href="{% url 'topics' %}"
+                    >
+                        Topics
+                    </a>
+
+
+                    <a
+                        href="{% url 'about' %}"
+                    >
+                        About
+                    </a>
+
+                </div>
+
+
+
+                <!-- ACCOUNT LINKS -->
+
+                <div class="footer-column">
+
+                    <h3>
+                        Account
+                    </h3>
+
+
+                    {% if user.is_authenticated %}
+
+                        <a
+                            href="{% url 'profile' %}"
+                        >
+                            Profile
+                        </a>
+
+
+                        <a
+                            href="{% url 'logout' %}"
+                        >
+                            Logout
+                        </a>
+
+                    {% else %}
+
+                        <a
+                            href="{% url 'login' %}"
+                        >
+                            Sign in
+                        </a>
+
+
+                        <a
+                            href="{% url 'register' %}"
+                        >
+                            Get started
+                        </a>
+
+                    {% endif %}
+
+                </div>
+
+
+
+                <!-- COMMUNITY -->
+
+                <div class="footer-column">
+
+                    <h3>
+                        Community
+                    </h3>
+
+
+                    <a
+                        href="{% url 'blog' %}"
+                    >
+                        Read stories
+                    </a>
+
+
+                    <a
+                        href="{% url 'topics' %}"
+                    >
+                        Browse topics
+                    </a>
+
+
+                    <a
+                        href="{% url 'about' %}"
+                    >
+                        About Lumiscript
+                    </a>
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- =================================
+                 FOOTER BOTTOM
+            ================================== -->
+
+            <div class="footer-bottom">
+
+                <p>
+                    © 2026 Lumiscript
+                </p>
+
+            </div>
+
+
+        </div>
+
+    </footer>
+
+
+
+    <!-- =========================================
+         GLOBAL JAVASCRIPT
+    ========================================== -->
 
     <script
         src="{% static 'js/main.js' %}"
     ></script>
 
 
+    <!-- =========================================
+         PAGE SPECIFIC JAVASCRIPT
+    ========================================== -->
+
     {% block extra_js %}
+
     {% endblock %}
 
+
 </body>
+
 </html>

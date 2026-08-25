@@ -733,3 +733,11 @@ def topics_view(request):
             "categories": categories,
         }
     )
+
+
+def about_view(request):
+
+    return render(
+        request,
+        "blog/about.html"
+    )

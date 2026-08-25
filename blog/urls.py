@@ -29,6 +29,4 @@ router.register(
     basename="comment"
 )
 
-
-
 urlpatterns = router.urls
