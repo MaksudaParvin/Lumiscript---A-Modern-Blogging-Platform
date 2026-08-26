@@ -178,9 +178,22 @@ class Post(models.Model):
 
         if not self.slug:
 
-            self.slug = slugify(
-                self.title
-            )
+            base_slug = slugify(self.title)
+
+            slug = base_slug
+            counter = 1
+
+            while Post.objects.filter(
+                slug=slug
+            ).exclude(
+                pk=self.pk
+            ).exists():
+
+                counter += 1
+
+                slug = f"{base_slug}-{counter}"
+
+            self.slug = slug
 
         super().save(*args, **kwargs)
 

@@ -295,10 +295,15 @@
 
 
         <!-- =====================================
-             MY ARTICLES
+            MY ARTICLES
         ====================================== -->
 
         <section class="profile-content my-articles-section">
+
+
+            <!-- =================================
+                SECTION HEADING
+            ================================== -->
 
             <div class="profile-section-heading">
 
@@ -317,8 +322,15 @@
             </div>
 
 
-            <!-- TABS -->
+            <!-- =================================
+                ARTICLES TOOLBAR
+            ================================== -->
+
             <div class="articles-toolbar">
+
+
+                <!-- Tabs -->
+
                 <div class="article-tabs">
 
                     <button
@@ -327,9 +339,11 @@
                         data-tab="all"
                     >
 
-                        All
-
                         <span>
+                            All
+                        </span>
+
+                        <span class="tab-count">
                             {{ published_count|add:draft_count }}
                         </span>
 
@@ -342,9 +356,11 @@
                         data-tab="published"
                     >
 
-                        Published
-
                         <span>
+                            Published
+                        </span>
+
+                        <span class="tab-count">
                             {{ published_count }}
                         </span>
 
@@ -357,15 +373,20 @@
                         data-tab="drafts"
                     >
 
-                        Drafts
-
                         <span>
+                            Drafts
+                        </span>
+
+                        <span class="tab-count">
                             {{ draft_count }}
                         </span>
 
                     </button>
 
                 </div>
+
+
+                <!-- Create Post -->
 
                 <a
                     href="{% url 'create_post' %}"
@@ -374,14 +395,18 @@
 
                     <i class='bx bx-plus'></i>
 
-                    Create post
+                    <span>
+                        Create post
+                    </span>
 
                 </a>
 
             </div>
 
+
+
             <!-- =================================
-                 ALL ARTICLES
+                ALL ARTICLES
             ================================== -->
 
             <div
@@ -393,11 +418,20 @@
 
                     <div class="profile-article-list">
 
+
+                        <!-- =========================
+                            PUBLISHED ARTICLES
+                        ========================== -->
+
                         {% for post in published_posts %}
 
                             <article class="profile-article-card">
 
+
+                                <!-- ARTICLE CONTENT -->
+
                                 <div class="profile-article-card-main">
+
 
                                     {% if post.featured_image %}
 
@@ -413,25 +447,19 @@
                                     <div class="profile-article-body">
 
                                         <span class="article-status published">
-
                                             Published
-
                                         </span>
 
 
                                         <h3>
-
                                             {{ post.title }}
-
                                         </h3>
 
 
                                         {% if post.excerpt %}
 
                                             <p>
-
                                                 {{ post.excerpt|truncatechars:140 }}
-
                                             </p>
 
                                         {% endif %}
@@ -440,15 +468,11 @@
                                         <div class="profile-article-meta">
 
                                             <span>
-
                                                 {{ post.published_at|date:"M d, Y" }}
-
                                             </span>
 
                                             <span>
-
                                                 {{ post.views }} views
-
                                             </span>
 
                                         </div>
@@ -458,16 +482,84 @@
                                 </div>
 
 
-                                <div class="profile-article-actions">
+                                <!-- ARTICLE FOOTER -->
 
-                                    <a
-                                        href="{% url 'blog_detail' post.slug %}"
-                                        class="article-view-button"
-                                    >
+                                <div class="profile-article-footer">
 
-                                        View
 
-                                    </a>
+                                    <!-- Left -->
+
+                                    <div class="profile-article-meta">
+
+                                        <span>
+                                            {{ post.published_at|date:"M d, Y" }}
+                                        </span>
+
+                                        <span>
+                                            {{ post.views }} views
+                                        </span>
+
+                                    </div>
+
+
+                                    <!-- Right -->
+
+                                    <div class="profile-article-actions">
+
+
+                                        <a
+                                            href="{% url 'blog_detail' post.slug %}"
+                                            class="article-action view"
+                                        >
+
+                                            <i class='bx bx-show'></i>
+
+                                            <span>
+                                                View
+                                            </span>
+
+                                        </a>
+
+
+                                        <a
+                                            href="{% url 'edit_post' post.id %}"
+                                            class="article-action edit"
+                                        >
+
+                                            <i class='bx bx-edit-alt'></i>
+
+                                            <span>
+                                                Edit
+                                            </span>
+
+                                        </a>
+
+
+                                        <form
+                                            method="POST"
+                                            action="{% url 'delete_post' post.id %}"
+                                            class="delete-post-form"
+                                            onsubmit="return confirm('Are you sure you want to delete this article?');"
+                                        >
+
+                                            {% csrf_token %}
+
+                                            <button
+                                                type="submit"
+                                                class="article-action delete"
+                                            >
+
+                                                <i class='bx bx-trash'></i>
+
+                                                <span>
+                                                    Delete
+                                                </span>
+
+                                            </button>
+
+                                        </form>
+
+                                    </div>
 
                                 </div>
 
@@ -477,16 +569,19 @@
 
 
 
+                        <!-- =========================
+                            DRAFT ARTICLES
+                        ========================== -->
+
                         {% for post in draft_posts %}
 
-                            <article
-                                class="
-                                    profile-article-card
-                                    draft-card
-                                "
-                            >
+                            <article class="profile-article-card draft-card">
+
+
+                                <!-- ARTICLE CONTENT -->
 
                                 <div class="profile-article-card-main">
+
 
                                     {% if post.featured_image %}
 
@@ -502,64 +597,94 @@
                                     <div class="profile-article-body">
 
                                         <span class="article-status draft">
-
                                             Draft
-
                                         </span>
 
 
                                         <h3>
-
                                             {{ post.title }}
-
                                         </h3>
 
 
                                         {% if post.excerpt %}
 
                                             <p>
-
                                                 {{ post.excerpt|truncatechars:140 }}
-
                                             </p>
 
                                         {% endif %}
-
-
-                                        <div class="profile-article-meta">
-
-                                            <span>
-
-                                                Updated
-                                                {{ post.updated_at|date:"M d, Y" }}
-
-                                            </span>
-
-                                        </div>
 
                                     </div>
 
                                 </div>
 
 
-                                {% comment %} <div class="profile-article-actions">
+                                <!-- ARTICLE FOOTER -->
 
-                                    <a
-                                        href="{% url 'edit_post' post.slug %}"
-                                        class="article-edit-button"
-                                    >
+                                <div class="profile-article-footer">
 
-                                        Continue editing
 
-                                    </a>
+                                    <div class="profile-article-meta">
 
-                                </div> {% endcomment %}
+                                        <span>
+                                            Updated
+                                            {{ post.updated_at|date:"M d, Y" }}
+                                        </span>
+
+                                    </div>
+
+
+                                    <div class="profile-article-actions">
+
+
+                                        <a
+                                            href="{% url 'edit_post' post.id %}"
+                                            class="article-action edit"
+                                        >
+
+                                            <i class='bx bx-edit-alt'></i>
+
+                                            <span>
+                                                Edit
+                                            </span>
+
+                                        </a>
+
+
+                                        <form
+                                            method="POST"
+                                            action="{% url 'delete_post' post.id %}"
+                                            class="delete-post-form"
+                                            onsubmit="return confirm('Are you sure you want to delete this draft?');"
+                                        >
+
+                                            {% csrf_token %}
+
+                                            <button
+                                                type="submit"
+                                                class="article-action delete"
+                                            >
+
+                                                <i class='bx bx-trash'></i>
+
+                                                <span>
+                                                    Delete
+                                                </span>
+
+                                            </button>
+
+                                        </form>
+
+                                    </div>
+
+                                </div>
 
                             </article>
 
                         {% endfor %}
 
                     </div>
+
 
                 {% else %}
 
@@ -588,7 +713,7 @@
 
 
             <!-- =================================
-                 PUBLISHED ARTICLES
+                PUBLISHED ARTICLES TAB
             ================================== -->
 
             <div
@@ -604,7 +729,9 @@
 
                             <article class="profile-article-card">
 
+
                                 <div class="profile-article-card-main">
+
 
                                     {% if post.featured_image %}
 
@@ -620,9 +747,7 @@
                                     <div class="profile-article-body">
 
                                         <span class="article-status published">
-
                                             Published
-
                                         </span>
 
 
@@ -634,46 +759,88 @@
                                         {% if post.excerpt %}
 
                                             <p>
-
                                                 {{ post.excerpt|truncatechars:140 }}
-
                                             </p>
 
                                         {% endif %}
-
-
-                                        <div class="profile-article-meta">
-
-                                            <span>
-
-                                                {{ post.published_at|date:"M d, Y" }}
-
-                                            </span>
-
-
-                                            <span>
-
-                                                {{ post.views }} views
-
-                                            </span>
-
-                                        </div>
 
                                     </div>
 
                                 </div>
 
 
-                                <div class="profile-article-actions">
+                                <div class="profile-article-footer">
 
-                                    <a
-                                        href="{% url 'blog_detail' post.slug %}"
-                                        class="article-view-button"
-                                    >
 
-                                        View
+                                    <div class="profile-article-meta">
 
-                                    </a>
+                                        <span>
+                                            {{ post.published_at|date:"M d, Y" }}
+                                        </span>
+
+                                        <span>
+                                            {{ post.views }} views
+                                        </span>
+
+                                    </div>
+
+
+                                    <div class="profile-article-actions">
+
+
+                                        <a
+                                            href="{% url 'blog_detail' post.slug %}"
+                                            class="article-action view"
+                                        >
+
+                                            <i class='bx bx-show'></i>
+
+                                            <span>
+                                                View
+                                            </span>
+
+                                        </a>
+
+
+                                        <a
+                                            href="{% url 'edit_post' post.id %}"
+                                            class="article-action edit"
+                                        >
+
+                                            <i class='bx bx-edit-alt'></i>
+
+                                            <span>
+                                                Edit
+                                            </span>
+
+                                        </a>
+
+
+                                        <form
+                                            method="POST"
+                                            action="{% url 'delete_post' post.id %}"
+                                            class="delete-post-form"
+                                            onsubmit="return confirm('Are you sure you want to delete this article?');"
+                                        >
+
+                                            {% csrf_token %}
+
+                                            <button
+                                                type="submit"
+                                                class="article-action delete"
+                                            >
+
+                                                <i class='bx bx-trash'></i>
+
+                                                <span>
+                                                    Delete
+                                                </span>
+
+                                            </button>
+
+                                        </form>
+
+                                    </div>
 
                                 </div>
 
@@ -682,6 +849,7 @@
                         {% endfor %}
 
                     </div>
+
 
                 {% else %}
 
@@ -710,7 +878,7 @@
 
 
             <!-- =================================
-                 DRAFT ARTICLES
+                DRAFT ARTICLES TAB
             ================================== -->
 
             <div
@@ -724,14 +892,11 @@
 
                         {% for post in draft_posts %}
 
-                            <article
-                                class="
-                                    profile-article-card
-                                    draft-card
-                                "
-                            >
+                            <article class="profile-article-card draft-card">
+
 
                                 <div class="profile-article-card-main">
+
 
                                     {% if post.featured_image %}
 
@@ -747,64 +912,92 @@
                                     <div class="profile-article-body">
 
                                         <span class="article-status draft">
-
                                             Draft
-
                                         </span>
 
 
                                         <h3>
-
                                             {{ post.title }}
-
                                         </h3>
 
 
                                         {% if post.excerpt %}
 
                                             <p>
-
                                                 {{ post.excerpt|truncatechars:140 }}
-
                                             </p>
 
                                         {% endif %}
-
-
-                                        <div class="profile-article-meta">
-
-                                            <span>
-
-                                                Updated
-                                                {{ post.updated_at|date:"M d, Y" }}
-
-                                            </span>
-
-                                        </div>
 
                                     </div>
 
                                 </div>
 
 
-                                {% comment %} <div class="profile-article-actions">
+                                <div class="profile-article-footer">
 
-                                    <a
-                                        href="{% url 'edit_post' post.slug %}"
-                                        class="article-edit-button"
-                                    >
 
-                                        Continue editing
+                                    <div class="profile-article-meta">
 
-                                    </a>
+                                        <span>
+                                            Updated
+                                            {{ post.updated_at|date:"M d, Y" }}
+                                        </span>
 
-                                </div> {% endcomment %}
+                                    </div>
+
+
+                                    <div class="profile-article-actions">
+
+
+                                        <a
+                                            href="{% url 'edit_post' post.id %}"
+                                            class="article-action edit"
+                                        >
+
+                                            <i class='bx bx-edit-alt'></i>
+
+                                            <span>
+                                                Edit
+                                            </span>
+
+                                        </a>
+
+
+                                        <form
+                                            method="POST"
+                                            action="{% url 'delete_post' post.id %}"
+                                            class="delete-post-form"
+                                            onsubmit="return confirm('Are you sure you want to delete this draft?');"
+                                        >
+
+                                            {% csrf_token %}
+
+                                            <button
+                                                type="submit"
+                                                class="article-action delete"
+                                            >
+
+                                                <i class='bx bx-trash'></i>
+
+                                                <span>
+                                                    Delete
+                                                </span>
+
+                                            </button>
+
+                                        </form>
+
+                                    </div>
+
+                                </div>
 
                             </article>
 
                         {% endfor %}
 
                     </div>
+
 
                 {% else %}
 
@@ -829,6 +1022,7 @@
                 {% endif %}
 
             </div>
+
 
         </section>
 

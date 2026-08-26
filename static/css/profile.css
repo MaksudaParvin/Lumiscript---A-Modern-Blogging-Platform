@@ -2015,3 +2015,701 @@
 
 }
 
+
+
+/* =========================================
+   MY ARTICLES
+========================================= */
+
+.my-articles-section {
+    width: 100%;
+}
+
+
+/* =========================================
+   SECTION HEADING
+========================================= */
+
+.profile-section-heading {
+    margin-bottom: 28px;
+}
+
+.profile-section-heading .eyebrow {
+    display: block;
+    margin-bottom: 8px;
+
+    color: #c95f35;
+
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.profile-section-heading h2 {
+    margin: 0 0 8px;
+
+    color: #171717;
+
+    font-size: 30px;
+    line-height: 1.15;
+    font-weight: 700;
+}
+
+.profile-section-heading p {
+    margin: 0;
+
+    color: #756f68;
+
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+
+/* =========================================
+   ARTICLES TOOLBAR
+========================================= */
+
+.articles-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    margin-bottom: 26px;
+}
+
+
+/* =========================================
+   ARTICLE TABS
+========================================= */
+
+.article-tabs {
+    display: inline-flex;
+    align-items: center;
+
+    padding: 4px;
+
+    background: #ffffff;
+
+    border: 1px solid #e4ded7;
+    border-radius: 10px;
+}
+
+.article-tab {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    min-height: 38px;
+
+    padding: 0 14px;
+
+    border: 0;
+    border-radius: 7px;
+
+    background: transparent;
+
+    color: #635d56;
+
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease;
+}
+
+.article-tab:hover {
+    color: #171717;
+}
+
+.article-tab.active {
+    background: #171717;
+    color: #ffffff;
+}
+
+.tab-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 20px;
+    height: 20px;
+
+    padding: 0 5px;
+
+    border-radius: 10px;
+
+    background: #eee9e3;
+
+    color: #635d56;
+
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.article-tab.active .tab-count {
+    background: rgba(255, 255, 255, 0.15);
+    color: #ffffff;
+}
+
+
+/* =========================================
+   CREATE POST
+========================================= */
+
+.create-post-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+
+    min-height: 42px;
+
+    padding: 0 17px;
+
+    border-radius: 8px;
+
+    background: #171717;
+    color: #ffffff;
+
+    text-decoration: none;
+
+    font-size: 13px;
+    font-weight: 700;
+
+    transition:
+        background-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.create-post-button i {
+    font-size: 18px;
+}
+
+.create-post-button:hover {
+    background: #c95f35;
+    color: #ffffff;
+    transform: translateY(-1px);
+}
+
+
+/* =========================================
+   TAB CONTENT
+========================================= */
+
+.article-tab-content {
+    display: none;
+}
+
+.article-tab-content.active {
+    display: block;
+}
+
+
+/* =========================================
+   ARTICLE LIST
+========================================= */
+
+.profile-article-list {
+    display: flex;
+    flex-direction: column;
+
+    gap: 14px;
+}
+
+
+/* =========================================
+   ARTICLE CARD
+========================================= */
+
+.profile-article-card {
+    display: flex;
+    flex-direction: column;
+
+    width: 100%;
+
+    padding: 18px;
+
+    background: #ffffff;
+
+    border: 1px solid #e2dcd5;
+    border-radius: 14px;
+
+    box-sizing: border-box;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.2s ease;
+}
+
+.profile-article-card:hover {
+    border-color: #d5cec6;
+
+    box-shadow:
+        0 8px 24px rgba(30, 25, 20, 0.06);
+
+    transform: translateY(-1px);
+}
+
+
+/* =========================================
+   CARD MAIN
+========================================= */
+
+.profile-article-card-main {
+    display: flex;
+    align-items: flex-start;
+
+    gap: 20px;
+
+    min-width: 0;
+}
+
+
+/* =========================================
+   ARTICLE IMAGE
+========================================= */
+
+.profile-article-image {
+    flex: 0 0 150px;
+
+    width: 150px;
+    height: 105px;
+
+    object-fit: cover;
+
+    border-radius: 10px;
+
+    background: #f1eee9;
+}
+
+
+/* =========================================
+   ARTICLE BODY
+========================================= */
+
+.profile-article-body {
+    flex: 1;
+
+    min-width: 0;
+}
+
+.profile-article-body h3 {
+    margin: 9px 0 7px;
+
+    color: #171717;
+
+    font-size: 18px;
+    line-height: 1.35;
+    font-weight: 700;
+}
+
+.profile-article-body p {
+    margin: 0;
+
+    max-width: 700px;
+
+    color: #68625c;
+
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+
+/* =========================================
+   STATUS
+========================================= */
+
+.article-status {
+    display: inline-flex;
+    align-items: center;
+
+    min-height: 24px;
+
+    padding: 0 9px;
+
+    border-radius: 20px;
+
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.7px;
+    text-transform: uppercase;
+}
+
+.article-status.published {
+    background: #f8e1d8;
+    color: #c95f35;
+}
+
+.article-status.draft {
+    background: #eeeae5;
+    color: #716b64;
+}
+
+
+/* =========================================
+   ARTICLE FOOTER
+========================================= */
+
+.profile-article-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    margin-top: 17px;
+    padding-top: 14px;
+
+    border-top: 1px solid #e8e2dc;
+}
+
+
+/* =========================================
+   META
+========================================= */
+
+.profile-article-meta {
+    display: flex;
+    align-items: center;
+
+    gap: 14px;
+
+    color: #777069;
+
+    font-size: 12px;
+    line-height: 1.4;
+}
+
+.profile-article-meta span {
+    white-space: nowrap;
+}
+
+
+/* =========================================
+   ACTIONS
+========================================= */
+
+.profile-article-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    gap: 8px;
+
+    margin-left: auto;
+}
+
+
+/* Delete form must not add spacing */
+.delete-post-form {
+    display: flex;
+    margin: 0;
+    padding: 0;
+}
+
+
+/* =========================================
+   ACTION BUTTON
+========================================= */
+
+.article-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 6px;
+
+    height: 34px;
+
+    padding: 0 12px;
+
+    box-sizing: border-box;
+
+    border: 1px solid #ded8d1;
+    border-radius: 7px;
+
+    background: #ffffff;
+    color: #292929;
+
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 600;
+
+    text-decoration: none;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.article-action i {
+    font-size: 15px;
+}
+
+.article-action:hover {
+    transform: translateY(-1px);
+}
+
+
+/* =========================================
+   VIEW
+========================================= */
+
+.article-action.view:hover {
+    background: #171717;
+    border-color: #171717;
+    color: #ffffff;
+}
+
+
+/* =========================================
+   EDIT
+========================================= */
+
+.article-action.edit {
+    color: #c95f35;
+    background: #fffaf7;
+    border-color: #ead2c7;
+}
+
+.article-action.edit:hover {
+    background: #c95f35;
+    border-color: #c95f35;
+    color: #ffffff;
+}
+
+
+/* =========================================
+   DELETE
+========================================= */
+
+.article-action.delete {
+    color: #b84235;
+    background: #ffffff;
+    border: 1px solid #e4c8c3;
+
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+.article-action.delete:hover {
+    background: #b84235;
+    border-color: #b84235;
+    color: #ffffff;
+}
+
+
+/* =========================================
+   DRAFT CARD
+========================================= */
+
+.profile-article-card.draft-card {
+    background: #fdfcfb;
+}
+
+.profile-article-card.draft-card:hover {
+    background: #ffffff;
+}
+
+
+/* =========================================
+   EMPTY STATE
+========================================= */
+
+.profile-empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 240px;
+
+    padding: 40px;
+
+    text-align: center;
+
+    background: #ffffff;
+
+    border: 1px solid #e2dcd5;
+    border-radius: 14px;
+}
+
+.profile-empty-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 48px;
+    height: 48px;
+
+    margin-bottom: 14px;
+
+    border-radius: 50%;
+
+    background: #f8e1d8;
+    color: #c95f35;
+}
+
+.profile-empty-icon i {
+    font-size: 22px;
+}
+
+.profile-empty-state h3 {
+    margin: 0 0 6px;
+
+    color: #171717;
+
+    font-size: 18px;
+}
+
+.profile-empty-state p {
+    margin: 0;
+
+    color: #777069;
+
+    font-size: 13px;
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 768px) {
+
+    .articles-toolbar {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .article-tabs {
+        width: fit-content;
+    }
+
+    .create-post-button {
+        width: fit-content;
+    }
+
+
+    .profile-article-card-main {
+        gap: 14px;
+    }
+
+
+    .profile-article-image {
+        flex-basis: 120px;
+        width: 120px;
+        height: 90px;
+    }
+
+
+    .profile-article-footer {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+
+    .profile-article-actions {
+        width: 100%;
+        margin-left: 0;
+
+        justify-content: flex-end;
+    }
+
+}
+
+
+@media (max-width: 560px) {
+
+    .article-tabs {
+        width: 100%;
+    }
+
+    .article-tab {
+        flex: 1;
+
+        padding: 0 8px;
+    }
+
+
+    .create-post-button {
+        width: 100%;
+    }
+
+
+    .profile-article-card {
+        padding: 14px;
+    }
+
+
+    .profile-article-card-main {
+        flex-direction: column;
+    }
+
+
+    .profile-article-image {
+        flex: none;
+
+        width: 100%;
+        height: 170px;
+    }
+
+
+    .profile-article-body {
+        width: 100%;
+    }
+
+
+    .profile-article-footer {
+        gap: 13px;
+    }
+
+
+    .profile-article-meta {
+        flex-wrap: wrap;
+    }
+
+
+    .profile-article-actions {
+        justify-content: flex-start;
+
+        flex-wrap: wrap;
+    }
+
+
+    .article-action {
+        flex: 0 0 auto;
+    }
+
+}
+
+
+@media (max-width: 380px) {
+
+    .article-action {
+        flex: 1;
+
+        padding: 0 9px;
+    }
+
+    .article-action span {
+        display: inline;
+    }
+
+}
+

@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block title %}
+    Edit Article — Lumiscript
+{% endblock %}
+
+
+{% block extra_css %}
+
+<link
+    rel="stylesheet"
+    href="{% static 'css/create_post.css' %}"
+>
+
+{% endblock %}
+
+
+
+{% block content %}
+
+<main class="create-post-page">
+
+    <div class="create-post-container">
+
+
+        <header class="create-post-header">
+
+            <span class="eyebrow">
+                YOUR ARTICLE
+            </span>
+
+            <h1>
+                Edit article
+            </h1>
+
+            <p>
+                Update your story and save your changes.
+            </p>
+
+        </header>
+
+
+
+        <form
+            method="POST"
+            enctype="multipart/form-data"
+            class="create-post-form"
+        >
+
+            {% csrf_token %}
+
+
+            {{ form.non_field_errors }}
+
+
+            {% for field in form %}
+
+                <div class="form-group">
+
+                    {{ field.label_tag }}
+
+                    {{ field }}
+
+                    {% if field.help_text %}
+
+                        <small>
+                            {{ field.help_text }}
+                        </small>
+
+                    {% endif %}
+
+
+                    {% for error in field.errors %}
+
+                        <div class="form-error">
+                            {{ error }}
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+            {% endfor %}
+
+
+
+            <div class="create-post-actions">
+
+                <a
+                    href="{% url 'profile' %}"
+                    class="secondary-button"
+                >
+                    Cancel
+                </a>
+
+
+                <button
+                    type="submit"
+                    class="primary-button"
+                >
+                    <i class='bx bx-save'></i>
+                    Save changes
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</main>
+
+{% endblock %}

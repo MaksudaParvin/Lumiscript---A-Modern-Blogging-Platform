@@ -38,6 +38,7 @@ from .pagination import PostPagination
 from django.utils import timezone
 from .forms import PostForm
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 
 # =========================================
 # POST VIEW TRACKING
@@ -854,3 +855,87 @@ def create_post_view(request):
             "form": form,
         }
     )
+
+
+
+
+@login_required
+def edit_post_view(request, post_id):
+
+    post = get_object_or_404(
+        Post,
+        id=post_id,
+        author=request.user
+    )
+
+
+    if request.method == "POST":
+
+        form = PostForm(
+            request.POST,
+            request.FILES,
+            instance=post
+        )
+
+        if form.is_valid():
+
+            updated_post = form.save(
+                commit=False
+            )
+
+            updated_post.author = request.user
+
+            updated_post.save()
+
+            form.save_m2m()
+
+            messages.success(
+                request,
+                "Article updated successfully."
+            )
+
+            return redirect("profile")
+
+
+    else:
+
+        form = PostForm(
+            instance=post
+        )
+
+
+    return render(
+        request,
+        "blog/edit_post.html",
+        {
+            "form": form,
+            "post": post,
+        }
+    )
+
+
+
+
+@login_required
+def delete_post_view(request, post_id):
+
+    post = get_object_or_404(
+        Post,
+        id=post_id,
+        author=request.user
+    )
+
+
+    if request.method == "POST":
+
+        post.delete()
+
+        messages.success(
+            request,
+            "Article deleted successfully."
+        )
+
+        return redirect("profile")
+
+
+    return redirect("profile")

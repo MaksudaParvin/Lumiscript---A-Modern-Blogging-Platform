@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 
 from accounts.views import (register_view, login_view, logout_view, profile_view, edit_profile_view)
-from blog.views import topics_view, about_view, create_post_view
+from blog.views import topics_view, about_view, create_post_view, edit_post_view, delete_post_view
 
 from django.conf import settings
 from django.conf.urls.static import static
@@ -43,6 +43,10 @@ urlpatterns = [
     path("about/", about_view, name="about"),
 
     path("create-post/", create_post_view, name="create_post"),
+
+    path("edit-post/<int:post_id>/", edit_post_view, name="edit_post"),
+
+    path("delete-post/<int:post_id>/", delete_post_view, name="delete_post"),
 
     path("api/", include("blog.urls")),
 
