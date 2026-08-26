@@ -868,48 +868,104 @@ def edit_post_view(request, post_id):
         author=request.user
     )
 
-
     if request.method == "POST":
 
-        form = PostForm(
-            request.POST,
-            request.FILES,
-            instance=post
+        action = request.POST.get(
+            "action",
+            "save"
         )
 
-        if form.is_valid():
+        post.title = request.POST.get(
+            "title",
+            ""
+        ).strip()
 
-            updated_post = form.save(
-                commit=False
-            )
+        post.excerpt = request.POST.get(
+            "excerpt",
+            ""
+        ).strip()
 
-            updated_post.author = request.user
-
-            updated_post.save()
-
-            form.save_m2m()
-
-            messages.success(
-                request,
-                "Article updated successfully."
-            )
-
-            return redirect("profile")
-
-
-    else:
-
-        form = PostForm(
-            instance=post
+        post.content = request.POST.get(
+            "content",
+            ""
         )
+
+        post.category_id = request.POST.get(
+            "category"
+        )
+
+
+        # Featured image
+
+        if request.FILES.get(
+            "featured_image"
+        ):
+
+            post.featured_image = (
+                request.FILES[
+                    "featured_image"
+                ]
+            )
+
+
+        # Tags
+
+        tag_ids = request.POST.getlist(
+            "tags"
+        )
+
+
+        # ===============================
+        # PUBLISH
+        # ===============================
+
+        if action == "publish":
+
+            post.is_published = True
+
+            if not post.published_at:
+                from django.utils import timezone
+
+                post.published_at = (
+                    timezone.now()
+                )
+
+
+        # ===============================
+        # SAVE / DRAFT
+        # ===============================
+
+        else:
+
+            post.is_published = False
+
+
+        post.save()
+
+
+        # Update tags
+
+        post.tags.set(
+            tag_ids
+        )
+
+
+        return redirect(
+            "profile"
+        )
+
+
+    categories = Category.objects.all()
+    tags = Tag.objects.all()
 
 
     return render(
         request,
         "blog/edit_post.html",
         {
-            "form": form,
             "post": post,
+            "categories": categories,
+            "tags": tags,
         }
     )
 

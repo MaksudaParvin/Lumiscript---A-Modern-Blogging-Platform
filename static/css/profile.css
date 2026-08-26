@@ -2713,3 +2713,276 @@
 
 }
 
+
+/* =========================================
+   DELETE CONFIRMATION MODAL
+========================================= */
+
+.delete-modal {
+    position: fixed;
+    inset: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 24px;
+
+    z-index: 99999;
+
+    opacity: 0;
+    visibility: hidden;
+
+    pointer-events: none;
+
+    transition:
+        opacity 0.2s ease,
+        visibility 0.2s ease;
+}
+
+
+.delete-modal.show {
+    opacity: 1;
+    visibility: visible;
+
+    pointer-events: auto;
+}
+
+
+/* =========================================
+   OVERLAY
+========================================= */
+
+.delete-modal-overlay {
+    position: absolute;
+    inset: 0;
+
+    background: rgba(0, 0, 0, 0.45);
+
+    backdrop-filter: blur(3px);
+}
+
+
+/* =========================================
+   MODAL BOX
+========================================= */
+
+.delete-modal-box {
+    position: relative;
+
+    width: min(
+        420px,
+        calc(100vw - 40px)
+    );
+
+    background: #ffffff;
+
+    border: 1px solid #e7e2dc;
+
+    border-radius: 18px;
+
+    padding: 32px;
+
+    text-align: center;
+
+    box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.18);
+
+    transform: translateY(12px) scale(0.98);
+
+    transition:
+        transform 0.2s ease;
+}
+
+
+.delete-modal.show
+.delete-modal-box {
+    transform:
+        translateY(0)
+        scale(1);
+}
+
+
+/* =========================================
+   ICON
+========================================= */
+
+.delete-modal-icon {
+    width: 52px;
+    height: 52px;
+
+    margin: 0 auto 18px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #fff1ed;
+
+    color: #d45b35;
+
+    font-size: 24px;
+}
+
+
+/* =========================================
+   TITLE
+========================================= */
+
+.delete-modal-box h3 {
+    margin: 0 0 10px;
+
+    color: #171717;
+
+    font-size: 22px;
+
+    font-weight: 700;
+}
+
+
+/* =========================================
+   TEXT
+========================================= */
+
+.delete-modal-box p {
+    margin: 0 auto;
+
+    max-width: 340px;
+
+    color: #666;
+
+    font-size: 14px;
+
+    line-height: 1.6;
+}
+
+
+/* =========================================
+   ACTIONS
+========================================= */
+
+.delete-modal-actions {
+    display: flex;
+
+    justify-content: center;
+
+    gap: 12px;
+
+    margin-top: 26px;
+}
+
+
+/* =========================================
+   CANCEL
+========================================= */
+
+.delete-modal-cancel {
+    min-width: 100px;
+
+    padding: 10px 18px;
+
+    border: 1px solid #ddd7d0;
+
+    border-radius: 8px;
+
+    background: #ffffff;
+
+    color: #333;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease;
+}
+
+
+.delete-modal-cancel:hover {
+    background: #f7f5f2;
+
+    border-color: #cfc8c0;
+}
+
+
+/* =========================================
+   CONFIRM DELETE
+========================================= */
+
+.delete-modal-confirm {
+    min-width: 110px;
+
+    padding: 10px 18px;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 7px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    background: #d45b35;
+
+    color: #ffffff;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+.delete-modal-confirm:hover {
+    background: #bd4d2b;
+
+    transform: translateY(-1px);
+}
+
+
+/* =========================================
+   PREVENT BACKGROUND SCROLL
+========================================= */
+
+body.delete-modal-open {
+    overflow: hidden;
+}
+
+
+/* =========================================
+   DELETE BUTTON
+========================================= */
+
+.article-action.delete {
+    border: 1px solid #e2d9d4;
+
+    background: #ffffff;
+
+    color: #c94f2f;
+
+    cursor: pointer;
+}
+
+
+.article-action.delete:hover {
+    border-color: #c94f2f;
+
+    background: #fff4f0;
+
+    color: #b94325;
+}
+

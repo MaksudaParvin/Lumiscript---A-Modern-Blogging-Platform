@@ -86,23 +86,48 @@
 
 
 
-            <div class="create-post-actions">
+            <div class="form-actions">
 
                 <a
                     href="{% url 'profile' %}"
-                    class="secondary-button"
+                    class="edit-cancel-button"
                 >
                     Cancel
                 </a>
 
 
-                <button
-                    type="submit"
-                    class="primary-button"
-                >
-                    <i class='bx bx-save'></i>
-                    Save changes
-                </button>
+                <div class="edit-form-actions">
+
+                    <!-- Save as Draft / Save Changes -->
+
+                    <button
+                        type="submit"
+                        name="action"
+                        value="save"
+                        class="edit-save-button"
+                    >
+                        <i class='bx bx-save'></i>
+                        Save changes
+                    </button>
+
+
+                    <!-- Publish -->
+
+                    {% if not post.is_published %}
+
+                        <button
+                            type="submit"
+                            name="action"
+                            value="publish"
+                            class="edit-publish-button"
+                        >
+                            <i class='bx bx-send'></i>
+                            Publish
+                        </button>
+
+                    {% endif %}
+
+                </div>
 
             </div>
 
