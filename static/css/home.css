@@ -134,7 +134,7 @@
 
 .featured-section,
 .latest-section {
-    padding: 100px 0;
+    padding: 90px 0;
 }
 
 
@@ -764,9 +764,21 @@ span.liked i {
     display: grid;
 
     grid-template-columns:
-        repeat(3, 1fr);
+        repeat(3, minmax(0, 1fr));
 
-    gap: 24px;
+    /*
+     * Cardগুলোর মাঝের gap কম
+     */
+    gap: 22px;
+
+    /*
+     * পুরো grid একটু compact
+     */
+    width: 92%;
+
+    max-width: 1050px;
+
+    margin: 0 auto;
 }
 
 
@@ -777,11 +789,13 @@ span.liked i {
 .home-post-card {
     overflow: hidden;
 
+    width: 100%;
+
     border:
         1px solid
         var(--color-border);
 
-    border-radius: 14px;
+    border-radius: 12px;
 
     background:
         var(--color-surface);
@@ -794,10 +808,10 @@ span.liked i {
 
 .home-post-card:hover {
     transform:
-        translateY(-4px);
+        translateY(-3px);
 
     box-shadow:
-        0 16px 40px
+        0 10px 28px
         rgba(24, 24, 24, 0.06);
 }
 
@@ -818,6 +832,8 @@ span.liked i {
 .home-post-image {
     display: block;
 
+    width: 100%;
+
     overflow: hidden;
 }
 
@@ -827,8 +843,11 @@ span.liked i {
 
     width: 100%;
 
+    /*
+     * আগের 16/10 থেকে একটু ছোট
+     */
     aspect-ratio:
-        16 / 10;
+        16 / 8.5;
 
     object-fit: cover;
 
@@ -840,7 +859,7 @@ span.liked i {
 .home-post-card:hover
 .home-post-image img {
     transform:
-        scale(1.035);
+        scale(1.025);
 }
 
 
@@ -851,21 +870,18 @@ span.liked i {
 .home-post-image-wrapper .post-bookmark {
     position: absolute;
 
-    top: 16px;
-
-    right: 16px;
+    top: 11px;
+    right: 11px;
 
     z-index: 20;
 
     display: flex;
 
     align-items: center;
-
     justify-content: center;
 
-    width: 42px;
-
-    height: 42px;
+    width: 34px;
+    height: 34px;
 
     padding: 0;
 
@@ -879,7 +895,7 @@ span.liked i {
     cursor: pointer;
 
     box-shadow:
-        0 4px 14px
+        0 3px 10px
         rgba(0, 0, 0, 0.10);
 
     transition:
@@ -895,14 +911,18 @@ span.liked i {
         translateY(-2px);
 
     box-shadow:
-        0 7px 18px
-        rgba(0, 0, 0, 0.14);
+        0 5px 14px
+        rgba(0, 0, 0, 0.13);
 }
 
 
 .home-post-image-wrapper
 .post-bookmark i {
-    font-size: 21px;
+    font-size:
+        18px;
+
+    line-height:
+        1;
 
     color:
         #171717;
@@ -937,7 +957,7 @@ span.liked i {
     width: 100%;
 
     aspect-ratio:
-        16 / 10;
+        16 / 8.5;
 
     background:
         var(--color-surface-soft);
@@ -945,7 +965,8 @@ span.liked i {
     color:
         var(--color-muted);
 
-    font-size: 30px;
+    font-size:
+        26px;
 }
 
 
@@ -954,19 +975,36 @@ span.liked i {
 ========================================= */
 
 .home-post-body {
-    padding: 20px;
+    padding:
+        16px 17px 15px;
 }
 
 
+/* =========================================
+   CARD TITLE
+========================================= */
+
 .home-post-body h3 {
     margin:
-        0 0 9px;
+        0 0 7px;
 
-    font-size: 18px;
+    font-size:
+        15px;
 
-    line-height: 1.15;
+    line-height:
+        1.18;
 
-    letter-spacing: -0.035em;
+    letter-spacing:
+        -0.03em;
+}
+
+
+.home-post-body h3 a {
+    color:
+        var(--color-text);
+
+    text-decoration:
+        none;
 }
 
 
@@ -976,24 +1014,37 @@ span.liked i {
 }
 
 
+/* =========================================
+   CARD DESCRIPTION
+========================================= */
+
 .home-post-body > p {
     display:
         -webkit-box;
 
-    overflow: hidden;
+    overflow:
+        hidden;
 
     margin:
-        0 0 18px;
+        0 0 14px;
 
     color:
         var(--color-text-soft);
 
-    font-size: 12px;
+    font-size:
+        11px;
 
-    line-height: 1.7;
+    line-height:
+        1.55;
 
     -webkit-box-orient:
         vertical;
+
+    /*
+     * Description বেশি বড় হতে দেবে না
+     */
+    -webkit-line-clamp:
+        2;
 }
 
 
@@ -1010,7 +1061,8 @@ span.liked i {
 
     width: 100%;
 
-    padding-top: 13px;
+    padding-top:
+        10px;
 
     border-top:
         1px solid
@@ -1019,9 +1071,30 @@ span.liked i {
     color:
         var(--color-muted);
 
-    font-size: 10px;
+    font-size:
+        9px;
 
-    font-weight: 600;
+    font-weight:
+        600;
+}
+
+
+/* =========================================
+   FOOTER AUTHOR
+========================================= */
+
+.home-post-footer > :first-child {
+    min-width:
+        0;
+
+    overflow:
+        hidden;
+
+    text-overflow:
+        ellipsis;
+
+    white-space:
+        nowrap;
 }
 
 
@@ -1038,11 +1111,14 @@ span.liked i {
 
     justify-content: flex-end;
 
-    gap: 12px;
+    gap:
+        9px;
 
-    flex-shrink: 0;
+    flex-shrink:
+        0;
 
-    white-space: nowrap;
+    white-space:
+        nowrap;
 }
 
 
@@ -1055,24 +1131,32 @@ span.liked i {
 
     justify-content: center;
 
-    gap: 4px;
+    gap:
+        3px;
 
-    margin: 0;
+    margin:
+        0;
 
-    white-space: nowrap;
+    white-space:
+        nowrap;
 }
 
 
 .home-post-footer > :last-child i {
-    display: inline-block;
+    display:
+        inline-block;
 
-    font-size: 15px;
+    font-size:
+        13px;
 
-    line-height: 1;
+    line-height:
+        1;
 }
 
 
-/* Support common engagement class names */
+/* =========================================
+   SUPPORT COMMON ENGAGEMENT CLASS NAMES
+========================================= */
 
 .home-post-footer .post-engagement,
 .home-post-footer .engagement,
@@ -1086,9 +1170,11 @@ span.liked i {
 
     justify-content: flex-end;
 
-    gap: 12px;
+    gap:
+        9px;
 
-    white-space: nowrap;
+    white-space:
+        nowrap;
 }
 
 
@@ -1102,11 +1188,14 @@ span.liked i {
 
     align-items: center;
 
-    gap: 4px;
+    gap:
+        3px;
 
-    margin: 0;
+    margin:
+        0;
 
-    white-space: nowrap;
+    white-space:
+        nowrap;
 }
 
 
@@ -1114,9 +1203,11 @@ span.liked i {
 .home-post-footer .engagement i,
 .home-post-footer .post-stats i,
 .home-post-footer .stats i {
-    font-size: 15px;
+    font-size:
+        13px;
 
-    line-height: 1;
+    line-height:
+        1;
 }
 
 
@@ -1135,6 +1226,7 @@ span {
 .home-post-footer
 .post-engagement
 span.liked,
+
 .home-post-footer
 .post-engagement
 span.liked i {
@@ -1149,14 +1241,16 @@ span.liked i {
 
 .home-loading {
     padding:
-        50px 0;
+        40px 0;
 
     color:
         var(--color-muted);
 
-    text-align: center;
+    text-align:
+        center;
 
-    font-size: 12px;
+    font-size:
+        11px;
 }
 
 
@@ -1166,14 +1260,88 @@ span.liked i {
         1 / -1;
 
     padding:
-        50px;
+        40px;
 
     color:
         var(--color-muted);
 
-    text-align: center;
+    text-align:
+        center;
 }
 
+
+/* =========================================
+   TABLET
+========================================= */
+
+@media (max-width: 1000px) {
+
+    .latest-grid {
+        width:
+            94%;
+
+        gap:
+            16px;
+    }
+
+
+    .home-post-body {
+        padding:
+            15px;
+    }
+
+
+    .home-post-body h3 {
+        font-size:
+            14px;
+    }
+
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 700px) {
+
+    .latest-grid {
+        width:
+            100%;
+
+        grid-template-columns:
+            1fr;
+
+        gap:
+            18px;
+    }
+
+
+    .home-post-image img,
+    .home-card-placeholder {
+        aspect-ratio:
+            16 / 9;
+    }
+
+
+    .home-post-body {
+        padding:
+            17px;
+    }
+
+
+    .home-post-body h3 {
+        font-size:
+            16px;
+    }
+
+
+    .home-post-body > p {
+        font-size:
+            12px;
+    }
+
+}
 
 /* =========================================
    RESPONSIVE — TABLET

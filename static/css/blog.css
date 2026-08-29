@@ -7,7 +7,7 @@
     min-height: 100vh;
 
     padding:
-        72px 24px 90px;
+        52px 4px 70px;
 }
 
 
@@ -60,7 +60,7 @@
         clamp(
             48px,
             7vw,
-            76px
+            40px
         );
 
     line-height:
@@ -80,7 +80,7 @@
         var(--color-muted);
 
     font-size:
-        14px;
+        13px;
 
     line-height:
         1.8;
@@ -208,7 +208,7 @@
         var(--color-muted);
 
     font-size:
-        34px;
+        24px;
 }
 
 
@@ -291,7 +291,7 @@
         0 0 10px;
 
     font-size:
-        23px;
+        18px;
 
     line-height:
         1.15;
@@ -327,13 +327,13 @@
         var(--color-text-soft);
 
     font-size:
-        13px;
+        12px;
 
     line-height:
         1.7;
 
-    -webkit-line-clamp:
-        3;
+    /* -webkit-line-clamp:
+        3; */
 
     -webkit-box-orient:
         vertical;

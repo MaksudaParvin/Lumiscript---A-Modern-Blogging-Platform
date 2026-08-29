@@ -5,7 +5,7 @@
 .topics-page {
 
     padding:
-        75px 0 100px;
+        45px 0 50px;
 
 }
 
@@ -50,7 +50,7 @@
     color:
         var(--color-text);
 
-    font-size: 54px;
+    font-size: 38px;
 
     line-height: 1.05;
 
@@ -245,7 +245,7 @@
     color:
         var(--color-text);
 
-    font-size: 23px;
+    font-size: 18px;
 
     line-height: 1.2;
 
@@ -275,7 +275,7 @@
 
 .topic-card-footer {
 
-    padding-top: 17px;
+    padding-top: 15px;
 
     border-top:
         1px solid
@@ -415,7 +415,7 @@
     color:
         var(--color-text);
 
-    font-size: 22px;
+    font-size: 18px;
 
     letter-spacing: -0.02em;
 
