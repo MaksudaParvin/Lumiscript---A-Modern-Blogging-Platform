@@ -25,6 +25,10 @@
     <div class="create-post-container">
 
 
+        <!-- =========================================
+             HEADER
+        ========================================== -->
+
         <header class="create-post-header">
 
             <span class="eyebrow">
@@ -43,6 +47,10 @@
 
 
 
+        <!-- =========================================
+             FORM
+        ========================================== -->
+
         <form
             method="POST"
             enctype="multipart/form-data"
@@ -52,53 +60,332 @@
             {% csrf_token %}
 
 
-            {{ form.non_field_errors }}
+
+            <!-- =====================================
+                 TITLE
+            ====================================== -->
+
+            <div class="form-group">
+
+                <label for="id_title">
+                    Title
+                </label>
+
+                <input
+                    type="text"
+                    name="title"
+                    id="id_title"
+                    value="{{ post.title }}"
+                    maxlength="200"
+                    required
+                >
+
+            </div>
 
 
-            {% for field in form %}
 
-                <div class="form-group">
+            <!-- =====================================
+                 EXCERPT
+            ====================================== -->
 
-                    {{ field.label_tag }}
+            <div class="form-group">
 
-                    {{ field }}
+                <label for="id_excerpt">
+                    Excerpt
+                </label>
 
-                    {% if field.help_text %}
+                <textarea
+                    name="excerpt"
+                    id="id_excerpt"
+                    rows="4"
+                    maxlength="500"
+                >{{ post.excerpt }}</textarea>
 
-                        <small>
-                            {{ field.help_text }}
-                        </small>
+                <small>
+                    A short summary of your article.
+                </small>
+
+            </div>
+
+
+
+            <!-- =====================================
+                 CONTENT
+            ====================================== -->
+
+            <div class="form-group">
+
+                <label for="id_content">
+                    Content
+                </label>
+
+                <textarea
+                    name="content"
+                    id="id_content"
+                    rows="14"
+                    required
+                >{{ post.content }}</textarea>
+
+            </div>
+
+
+
+            <!-- =====================================
+                 FEATURED IMAGE
+            ====================================== -->
+
+            <div class="form-group featured-image-group">
+
+                <label for="id_featured_image">
+                    Featured image
+                </label>
+
+
+
+                <!-- Current Image / Preview -->
+
+                <div
+                    class="featured-image-preview"
+                    id="featuredImagePreview"
+                >
+
+                    {% if post.featured_image %}
+
+                        <img
+                            src="{{ post.featured_image.url }}"
+                            alt="{{ post.title }}"
+                            id="featuredImagePreviewImg"
+                        >
+
+                        <div class="featured-image-status">
+
+                            <i class='bx bx-check-circle'></i>
+
+                            <span>
+                                Current featured image
+                            </span>
+
+                        </div>
+
+                    {% else %}
+
+                        <div
+                            class="featured-image-empty"
+                            id="featuredImageEmpty"
+                        >
+
+                            <i class='bx bx-image'></i>
+
+                            <span>
+                                No featured image
+                            </span>
+
+                        </div>
 
                     {% endif %}
 
+                </div>
 
-                    {% for error in field.errors %}
 
-                        <div class="form-error">
-                            {{ error }}
-                        </div>
 
-                    {% endfor %}
+                <!-- File Input -->
+
+                <div class="featured-image-upload">
+
+                    <input
+                        type="file"
+                        name="featured_image"
+                        id="id_featured_image"
+                        accept="image/*"
+                    >
+
+                    <label
+                        for="id_featured_image"
+                        class="featured-image-upload-label"
+                    >
+
+                        <i class='bx bx-cloud-upload'></i>
+
+                        <span>
+                            Choose a new image
+                        </span>
+
+                    </label>
 
                 </div>
 
-            {% endfor %}
 
 
+                <!-- Selected Image Information -->
+
+                <div
+                    class="selected-image-name"
+                    id="selectedImageName"
+                >
+
+                    <i class='bx bx-image-alt'></i>
+
+                    <span>
+
+                        {% if post.featured_image %}
+
+                            Current image will be kept
+                            unless you choose a new one.
+
+                        {% else %}
+
+                            No image selected.
+
+                        {% endif %}
+
+                    </span>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =====================================
+                 CATEGORY
+            ====================================== -->
+
+            <div class="form-group">
+
+                <label for="id_category">
+                    Category
+                </label>
+
+                <select
+                    name="category"
+                    id="id_category"
+                >
+
+                    <option value="">
+                        Select a category
+                    </option>
+
+
+                    {% for category in categories %}
+
+                        <option
+                            value="{{ category.id }}"
+                            {% if post.category_id == category.id %}
+                                selected
+                            {% endif %}
+                        >
+
+                            {{ category.name }}
+
+                        </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </div>
+
+
+
+            <!-- =====================================
+                 TAGS
+            ====================================== -->
+
+            <div class="form-group">
+
+                <label for="id_tags">
+                    Tags
+                </label>
+
+                <select
+                    name="tags"
+                    id="id_tags"
+                    multiple
+                >
+
+                    {% for tag in tags %}
+
+                        <option
+                            value="{{ tag.id }}"
+                            {% if tag in post.tags.all %}
+                                selected
+                            {% endif %}
+                        >
+
+                            {{ tag.name }}
+
+                        </option>
+
+                    {% endfor %}
+
+                </select>
+
+                <small>
+                    Hold Ctrl (Windows) or Command (Mac)
+                    to select multiple tags.
+                </small>
+
+            </div>
+
+
+
+            <!-- =====================================
+                 CURRENT STATUS
+            ====================================== -->
+
+            <div class="edit-current-status">
+
+                <span class="edit-status-label">
+                    Current status
+                </span>
+
+
+                {% if post.status == "published" %}
+
+                    <span class="edit-status published">
+                        <i class='bx bx-check-circle'></i>
+                        Published
+                    </span>
+
+                {% else %}
+
+                    <span class="edit-status draft">
+                        <i class='bx bx-file'></i>
+                        Draft
+                    </span>
+
+                {% endif %}
+
+            </div>
+
+
+
+            <!-- =====================================
+                 ACTIONS
+            ====================================== -->
 
             <div class="form-actions">
+
+
+                <!-- Cancel -->
 
                 <a
                     href="{% url 'profile' %}"
                     class="edit-cancel-button"
                 >
+
+                    <i class='bx bx-x'></i>
+
                     Cancel
+
                 </a>
+
 
 
                 <div class="edit-form-actions">
 
-                    <!-- Save as Draft / Save Changes -->
+
+                    <!-- Save Changes -->
 
                     <button
                         type="submit"
@@ -106,14 +393,20 @@
                         value="save"
                         class="edit-save-button"
                     >
+
                         <i class='bx bx-save'></i>
+
                         Save changes
+
                     </button>
 
 
-                    <!-- Publish -->
 
-                    {% if not post.is_published %}
+                    <!-- =================================
+                         PUBLISH ONLY FOR DRAFT
+                    ================================== -->
+
+                    {% if post.status == "draft" %}
 
                         <button
                             type="submit"
@@ -121,20 +414,170 @@
                             value="publish"
                             class="edit-publish-button"
                         >
+
                             <i class='bx bx-send'></i>
+
                             Publish
+
                         </button>
 
                     {% endif %}
 
+
                 </div>
 
             </div>
+
 
         </form>
 
     </div>
 
 </main>
+
+
+
+<!-- =============================================
+     IMAGE PREVIEW
+================================================ -->
+
+<script>
+
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+
+        const imageInput =
+            document.getElementById(
+                "id_featured_image"
+            );
+
+
+        const preview =
+            document.getElementById(
+                "featuredImagePreview"
+            );
+
+
+        const selectedImageName =
+            document.getElementById(
+                "selectedImageName"
+            );
+
+
+        if (
+            !imageInput ||
+            !preview ||
+            !selectedImageName
+        ) {
+
+            return;
+
+        }
+
+
+
+        imageInput.addEventListener(
+            "change",
+            function () {
+
+
+                const file =
+                    this.files &&
+                    this.files[0];
+
+
+                /*
+                 * No new image
+                 */
+
+                if (!file) {
+
+                    selectedImageName.innerHTML = `
+
+                        <i class='bx bx-image-alt'></i>
+
+                        <span>
+
+                            {% if post.featured_image %}
+                                Current image will be kept unless you choose a new one.
+                            {% else %}
+                                No image selected.
+                            {% endif %}
+
+                        </span>
+
+                    `;
+
+                    return;
+
+                }
+
+
+
+                /*
+                 * Show filename
+                 */
+
+                selectedImageName.innerHTML = `
+
+                    <i class='bx bx-check-circle'></i>
+
+                    <span>
+                        Selected: ${file.name}
+                    </span>
+
+                `;
+
+
+
+                /*
+                 * Preview new image
+                 */
+
+                const reader =
+                    new FileReader();
+
+
+                reader.onload =
+                    function (event) {
+
+                        preview.innerHTML = `
+
+                            <img
+                                src="${event.target.result}"
+                                alt="Selected featured image"
+                                id="featuredImagePreviewImg"
+                            >
+
+                            <div class="featured-image-status">
+
+                                <i class='bx bx-check-circle'></i>
+
+                                <span>
+                                    New image selected
+                                </span>
+
+                            </div>
+
+                        `;
+
+                    };
+
+
+                reader.readAsDataURL(
+                    file
+                );
+
+
+            }
+        );
+
+
+    }
+);
+
+</script>
 
 {% endblock %}

@@ -17,6 +17,7 @@
 {% endblock %}
 
 
+
 {% block content %}
 
 <main class="create-post-page">
@@ -59,12 +60,14 @@
             method="POST"
             enctype="multipart/form-data"
             class="create-post-form"
+            id="createPostForm"
         >
 
             {% csrf_token %}
 
 
             {{ form.non_field_errors }}
+
 
 
             <!-- =================================
@@ -81,7 +84,13 @@
 
                 {{ form.title }}
 
-                {{ form.title.errors }}
+                {% for error in form.title.errors %}
+
+                    <div class="form-error">
+                        {{ error }}
+                    </div>
+
+                {% endfor %}
 
             </div>
 
@@ -106,7 +115,13 @@
 
                 {{ form.excerpt }}
 
-                {{ form.excerpt.errors }}
+                {% for error in form.excerpt.errors %}
+
+                    <div class="form-error">
+                        {{ error }}
+                    </div>
+
+                {% endfor %}
 
             </div>
 
@@ -116,11 +131,9 @@
                  FEATURED IMAGE
             ================================== -->
 
-            <div class="create-form-group">
+            <div class="create-form-group featured-image-group">
 
-                <label
-                    for="{{ form.featured_image.id_for_label }}"
-                >
+                <label>
                     Featured image
                 </label>
 
@@ -129,9 +142,51 @@
                 </span>
 
 
+
+                <!-- =================================
+                     IMAGE PREVIEW
+                ================================== -->
+
+                <div
+                    class="create-featured-preview"
+                    id="createFeaturedPreview"
+                >
+
+                    <div
+                        class="create-featured-placeholder"
+                        id="createFeaturedPlaceholder"
+                    >
+
+                        <i class='bx bx-image'></i>
+
+                        <span>
+                            No image selected
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =================================
+                     UPLOAD AREA
+                ================================== -->
+
                 <div class="featured-upload">
 
-                    {{ form.featured_image }}
+
+                    <!-- Django file input -->
+
+                    <div class="featured-file-input">
+
+                        {{ form.featured_image }}
+
+                    </div>
+
+
+
+                    <!-- Custom button -->
 
                     <label
                         for="{{ form.featured_image.id_for_label }}"
@@ -150,10 +205,55 @@
 
                     </label>
 
+
                 </div>
 
 
-                {{ form.featured_image.errors }}
+
+                <!-- =================================
+                     SELECTED FILE
+                ================================== -->
+
+                <div
+                    class="create-selected-image"
+                    id="createSelectedImage"
+                    style="display: none;"
+                >
+
+                    <i class='bx bx-check-circle'></i>
+
+                    <span id="createSelectedImageName">
+                        Image selected
+                    </span>
+
+                </div>
+
+
+
+                <!-- Remove selected image -->
+
+                <button
+                    type="button"
+                    class="create-remove-image"
+                    id="createRemoveImage"
+                    style="display: none;"
+                >
+
+                    <i class='bx bx-x'></i>
+
+                    Remove selected image
+
+                </button>
+
+
+
+                {% for error in form.featured_image.errors %}
+
+                    <div class="form-error">
+                        {{ error }}
+                    </div>
+
+                {% endfor %}
 
             </div>
 
@@ -178,7 +278,14 @@
 
                     {{ form.category }}
 
-                    {{ form.category.errors }}
+
+                    {% for error in form.category.errors %}
+
+                        <div class="form-error">
+                            {{ error }}
+                        </div>
+
+                    {% endfor %}
 
                 </div>
 
@@ -200,7 +307,14 @@
 
                     {{ form.tags }}
 
-                    {{ form.tags.errors }}
+
+                    {% for error in form.tags.errors %}
+
+                        <div class="form-error">
+                            {{ error }}
+                        </div>
+
+                    {% endfor %}
 
                 </div>
 
@@ -227,7 +341,14 @@
 
                 {{ form.content }}
 
-                {{ form.content.errors }}
+
+                {% for error in form.content.errors %}
+
+                    <div class="form-error">
+                        {{ error }}
+                    </div>
+
+                {% endfor %}
 
             </div>
 
@@ -244,11 +365,19 @@
                     href="{% url 'profile' %}"
                     class="create-cancel-button"
                 >
+
+                    <i class='bx bx-x'></i>
+
                     Cancel
+
                 </a>
 
 
+
                 <div class="create-primary-actions">
+
+
+                    <!-- SAVE DRAFT -->
 
                     <button
                         type="submit"
@@ -264,6 +393,9 @@
                     </button>
 
 
+
+                    <!-- PUBLISH -->
+
                     <button
                         type="submit"
                         name="action"
@@ -277,6 +409,7 @@
 
                     </button>
 
+
                 </div>
 
 
@@ -288,5 +421,235 @@
     </div>
 
 </main>
+
+
+
+<!-- =============================================
+     FEATURED IMAGE PREVIEW
+================================================= -->
+
+<script>
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+
+        const fileInput =
+            document.getElementById(
+                "{{ form.featured_image.id_for_label }}"
+            );
+
+
+        const preview =
+            document.getElementById(
+                "createFeaturedPreview"
+            );
+
+
+        const selectedImage =
+            document.getElementById(
+                "createSelectedImage"
+            );
+
+
+        const selectedImageName =
+            document.getElementById(
+                "createSelectedImageName"
+            );
+
+
+        const removeButton =
+            document.getElementById(
+                "createRemoveImage"
+            );
+
+
+
+        if (!fileInput) {
+            return;
+        }
+
+
+
+        /*
+         * IMAGE SELECTED
+         */
+
+        fileInput.addEventListener(
+            "change",
+            function () {
+
+
+                const file =
+                    this.files &&
+                    this.files[0];
+
+
+                if (!file) {
+                    return;
+                }
+
+
+
+                /*
+                 * Allowed image types
+                 */
+
+                const allowedTypes = [
+
+                    "image/jpeg",
+                    "image/png",
+                    "image/webp"
+
+                ];
+
+
+
+                if (
+                    !allowedTypes.includes(
+                        file.type
+                    )
+                ) {
+
+                    alert(
+                        "Please select a JPG, PNG or WebP image."
+                    );
+
+
+                    this.value = "";
+
+
+                    return;
+
+                }
+
+
+
+                /*
+                 * Create preview URL
+                 */
+
+                const imageUrl =
+                    URL.createObjectURL(
+                        file
+                    );
+
+
+
+                /*
+                 * Show image preview
+                 */
+
+                preview.innerHTML = `
+
+                    <img
+                        src="${imageUrl}"
+                        alt="Selected featured image"
+                        class="create-featured-preview-image"
+                    >
+
+                    <div class="create-image-selected-badge">
+
+                        <i class='bx bx-check'></i>
+
+                        Selected
+
+                    </div>
+
+                `;
+
+
+
+                /*
+                 * Show filename
+                 */
+
+                selectedImage.style.display =
+                    "flex";
+
+
+                selectedImageName.textContent =
+                    file.name;
+
+
+
+                /*
+                 * Show remove button
+                 */
+
+                removeButton.style.display =
+                    "inline-flex";
+
+            }
+        );
+
+
+
+        /*
+         * REMOVE SELECTED IMAGE
+         */
+
+        removeButton.addEventListener(
+            "click",
+            function () {
+
+
+                /*
+                 * Clear file input
+                 */
+
+                fileInput.value = "";
+
+
+
+                /*
+                 * Restore empty preview
+                 */
+
+                preview.innerHTML = `
+
+                    <div
+                        class="create-featured-placeholder"
+                    >
+
+                        <i class='bx bx-image'></i>
+
+                        <span>
+                            No image selected
+                        </span>
+
+                    </div>
+
+                `;
+
+
+
+                /*
+                 * Hide filename
+                 */
+
+                selectedImage.style.display =
+                    "none";
+
+
+
+                /*
+                 * Hide remove button
+                 */
+
+                removeButton.style.display =
+                    "none";
+
+            }
+        );
+
+
+    }
+
+);
+
+</script>
+
 
 {% endblock %}

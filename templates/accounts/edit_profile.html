@@ -1,7 +1,9 @@
 {% extends "base.html" %}
 {% load static %}
 
+
 {% block title %}
+    Edit Profile — Lumiscript
 {% endblock %}
 
 
@@ -20,11 +22,17 @@
 {% endblock %}
 
 
+
 {% block content %}
 
 <main class="profile-edit-page">
 
     <div class="profile-edit-container">
+
+
+        <!-- =========================================
+             HEADER
+        ========================================== -->
 
         <header class="profile-edit-header">
 
@@ -43,10 +51,16 @@
         </header>
 
 
+
+        <!-- =========================================
+             FORM
+        ========================================== -->
+
         <form
             method="POST"
             enctype="multipart/form-data"
             class="profile-form"
+            id="profileEditForm"
         >
 
             {% csrf_token %}
@@ -55,48 +69,150 @@
             {{ form.non_field_errors }}
 
 
-            <div class="profile-upload">
 
-                {% if user.profile_image %}
+            <!-- =====================================
+                 PROFILE IMAGE
+            ====================================== -->
 
-                    <img
-                        src="{{ user.profile_image.url }}"
-                        alt="Current profile image"
-                        class="profile-edit-image"
+            <div class="profile-image-section">
+
+                <label class="profile-section-label">
+                    Profile image
+                </label>
+
+
+                <div class="profile-upload-area">
+
+
+                    <!-- =================================
+                         IMAGE PREVIEW
+                    ================================== -->
+
+                    <div
+                        class="profile-image-preview"
+                        id="profileImagePreview"
                     >
 
-                {% else %}
+                        {% if user.profile_image %}
 
-                    <div class="profile-edit-placeholder">
-                        {{ user.first_name|first|upper }}
+                            <img
+                                src="{{ user.profile_image.url }}"
+                                alt="Current profile image"
+                                class="profile-edit-image"
+                                id="profilePreviewImage"
+                            >
+
+                        {% else %}
+
+                            <div
+                                class="profile-edit-placeholder"
+                                id="profilePlaceholder"
+                            >
+                                {{ user.first_name|first|upper }}
+                            </div>
+
+                        {% endif %}
+
                     </div>
 
-                {% endif %}
 
 
-                <div>
+                    <!-- =================================
+                         UPLOAD CONTROLS
+                    ================================== -->
 
-                    <label
-                        for="{{ form.profile_image.id_for_label }}"
-                        class="upload-label"
-                    >
-                        Change profile image
-                    </label>
+                    <div class="profile-upload-controls">
 
-                    {{ form.profile_image }}
 
-                    {{ form.profile_image.errors }}
+                        <label
+                            for="{{ form.profile_image.id_for_label }}"
+                            class="upload-label"
+                        >
 
-                    <small>
-                        JPG, PNG or WebP recommended.
-                    </small>
+                            <i class='bx bx-image-add'></i>
+
+                            Choose new image
+
+                        </label>
+
+
+                        <!-- Actual Django file input -->
+
+                        <div class="profile-file-input">
+
+                            {{ form.profile_image }}
+
+                        </div>
+
+
+                        <!-- Selected file information -->
+
+                        <div
+                            class="selected-profile-image"
+                            id="selectedProfileImage"
+                            style="display: none;"
+                        >
+
+                            <i class='bx bx-check-circle'></i>
+
+                            <span id="selectedProfileImageName">
+                                New image selected
+                            </span>
+
+                        </div>
+
+
+                        <!-- Remove selected image -->
+
+                        <button
+                            type="button"
+                            class="remove-profile-image"
+                            id="removeProfileImage"
+                            style="display: none;"
+                        >
+
+                            <i class='bx bx-x'></i>
+
+                            Remove selected image
+
+                        </button>
+
+
+                        <small class="profile-image-help">
+
+                            JPG, PNG or WebP recommended.
+
+                        </small>
+
+
+                        {% for error in form.profile_image.errors %}
+
+                            <div class="form-error">
+
+                                {{ error }}
+
+                            </div>
+
+                        {% endfor %}
+
+
+                    </div>
 
                 </div>
+
 
             </div>
 
 
+
+            <!-- =========================================
+                 FIRST / LAST NAME
+            ========================================== -->
+
             <div class="form-row">
+
+
+                <!-- First name -->
 
                 <div class="form-group">
 
@@ -106,12 +222,23 @@
                         First name
                     </label>
 
+
                     {{ form.first_name }}
 
-                    {{ form.first_name.errors }}
+
+                    {% for error in form.first_name.errors %}
+
+                        <div class="form-error">
+                            {{ error }}
+                        </div>
+
+                    {% endfor %}
 
                 </div>
 
+
+
+                <!-- Last name -->
 
                 <div class="form-group">
 
@@ -121,14 +248,28 @@
                         Last name
                     </label>
 
+
                     {{ form.last_name }}
 
-                    {{ form.last_name.errors }}
+
+                    {% for error in form.last_name.errors %}
+
+                        <div class="form-error">
+                            {{ error }}
+                        </div>
+
+                    {% endfor %}
 
                 </div>
 
+
             </div>
 
+
+
+            <!-- =========================================
+                 BIO
+            ========================================== -->
 
             <div class="form-group">
 
@@ -138,12 +279,25 @@
                     Bio
                 </label>
 
+
                 {{ form.bio }}
 
-                {{ form.bio.errors }}
+
+                {% for error in form.bio.errors %}
+
+                    <div class="form-error">
+                        {{ error }}
+                    </div>
+
+                {% endfor %}
 
             </div>
 
+
+
+            <!-- =========================================
+                 WEBSITE
+            ========================================== -->
 
             <div class="form-group">
 
@@ -153,35 +307,275 @@
                     Website
                 </label>
 
+
                 {{ form.website }}
 
-                {{ form.website.errors }}
+
+                {% for error in form.website.errors %}
+
+                    <div class="form-error">
+                        {{ error }}
+                    </div>
+
+                {% endfor %}
 
             </div>
 
 
+
+            <!-- =========================================
+                 FORM ACTIONS
+            ========================================== -->
+
             <div class="profile-form-actions">
+
 
                 <a
                     href="{% url 'profile' %}"
                     class="secondary-button"
                 >
+
+                    <i class='bx bx-x'></i>
+
                     Cancel
+
                 </a>
+
 
                 <button
                     type="submit"
                     class="auth-button save-button"
                 >
+
+                    <i class='bx bx-save'></i>
+
                     Save changes
+
                 </button>
+
 
             </div>
 
+
         </form>
+
 
     </div>
 
 </main>
+
+
+
+<!-- =============================================
+     IMAGE PREVIEW JAVASCRIPT
+================================================= -->
+
+<script>
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        const fileInput =
+            document.getElementById(
+                "{{ form.profile_image.id_for_label }}"
+            );
+
+
+        const previewContainer =
+            document.getElementById(
+                "profileImagePreview"
+            );
+
+
+        const selectedImage =
+            document.getElementById(
+                "selectedProfileImage"
+            );
+
+
+        const selectedImageName =
+            document.getElementById(
+                "selectedProfileImageName"
+            );
+
+
+        const removeButton =
+            document.getElementById(
+                "removeProfileImage"
+            );
+
+
+        if (!fileInput) {
+            return;
+        }
+
+
+
+        /*
+         * When user selects a new image
+         */
+
+        fileInput.addEventListener(
+            "change",
+            function () {
+
+                const file =
+                    this.files &&
+                    this.files[0];
+
+
+                if (!file) {
+                    return;
+                }
+
+
+
+                /*
+                 * Check file type
+                 */
+
+                const allowedTypes = [
+                    "image/jpeg",
+                    "image/png",
+                    "image/webp"
+                ];
+
+
+                if (
+                    !allowedTypes.includes(
+                        file.type
+                    )
+                ) {
+
+                    alert(
+                        "Please select a JPG, PNG or WebP image."
+                    );
+
+
+                    this.value = "";
+
+                    return;
+
+                }
+
+
+
+                /*
+                 * Create temporary image URL
+                 */
+
+                const imageUrl =
+                    URL.createObjectURL(
+                        file
+                    );
+
+
+
+                /*
+                 * Replace preview with
+                 * selected image
+                 */
+
+                previewContainer.innerHTML = `
+
+                    <img
+                        src="${imageUrl}"
+                        alt="Selected profile image"
+                        class="profile-edit-image"
+                        id="profilePreviewImage"
+                    >
+
+                `;
+
+
+
+                /*
+                 * Show selected filename
+                 */
+
+                selectedImage.style.display =
+                    "flex";
+
+
+                selectedImageName.textContent =
+                    file.name;
+
+
+
+                /*
+                 * Show remove button
+                 */
+
+                removeButton.style.display =
+                    "inline-flex";
+
+            }
+        );
+
+
+
+        /*
+         * Remove selected image
+         */
+
+        removeButton.addEventListener(
+            "click",
+            function () {
+
+                fileInput.value = "";
+
+
+                /*
+                 * Restore original image
+                 */
+
+                {% if user.profile_image %}
+
+                    previewContainer.innerHTML = `
+
+                        <img
+                            src="{{ user.profile_image.url }}"
+                            alt="Current profile image"
+                            class="profile-edit-image"
+                        >
+
+                    `;
+
+                {% else %}
+
+                    previewContainer.innerHTML = `
+
+                        <div
+                            class="profile-edit-placeholder"
+                        >
+                            {{ user.first_name|first|upper }}
+                        </div>
+
+                    `;
+
+                {% endif %}
+
+
+                /*
+                 * Hide selected information
+                 */
+
+                selectedImage.style.display =
+                    "none";
+
+
+                removeButton.style.display =
+                    "none";
+
+            }
+        );
+
+    }
+
+);
+
+</script>
+
 
 {% endblock %}

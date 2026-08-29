@@ -858,7 +858,6 @@ def create_post_view(request):
 
 
 
-
 @login_required
 def edit_post_view(request, post_id):
 
@@ -875,6 +874,10 @@ def edit_post_view(request, post_id):
             "save"
         )
 
+        # ===============================
+        # BASIC INFORMATION
+        # ===============================
+
         post.title = request.POST.get(
             "title",
             ""
@@ -890,12 +893,24 @@ def edit_post_view(request, post_id):
             ""
         )
 
-        post.category_id = request.POST.get(
+
+        # ===============================
+        # CATEGORY
+        # ===============================
+
+        category_id = request.POST.get(
             "category"
         )
 
+        if category_id:
+            post.category_id = category_id
+        else:
+            post.category = None
 
-        # Featured image
+
+        # ===============================
+        # FEATURED IMAGE
+        # ===============================
 
         if request.FILES.get(
             "featured_image"
@@ -908,7 +923,9 @@ def edit_post_view(request, post_id):
             )
 
 
-        # Tags
+        # ===============================
+        # TAGS
+        # ===============================
 
         tag_ids = request.POST.getlist(
             "tags"
@@ -916,15 +933,14 @@ def edit_post_view(request, post_id):
 
 
         # ===============================
-        # PUBLISH
+        # PUBLISH DRAFT
         # ===============================
 
         if action == "publish":
 
-            post.is_published = True
+            post.status = Post.Status.PUBLISHED
 
             if not post.published_at:
-                from django.utils import timezone
 
                 post.published_at = (
                     timezone.now()
@@ -932,30 +948,51 @@ def edit_post_view(request, post_id):
 
 
         # ===============================
-        # SAVE / DRAFT
+        # SAVE CHANGES
         # ===============================
 
         else:
 
-            post.is_published = False
+            # IMPORTANT:
+            # এখানে status change করা হবে না.
+            #
+            # Published post হলে published-ই থাকবে.
+            # Draft post হলে draft-ই থাকবে.
 
+            pass
+
+
+        # ===============================
+        # SAVE POST
+        # ===============================
 
         post.save()
 
 
-        # Update tags
+        # ===============================
+        # UPDATE TAGS
+        # ===============================
 
         post.tags.set(
             tag_ids
         )
 
 
+        # ===============================
+        # REDIRECT
+        # ===============================
+
         return redirect(
             "profile"
         )
 
 
+    # ===============================
+    # GET REQUEST
+    # ===============================
+
     categories = Category.objects.all()
+
     tags = Tag.objects.all()
 
 

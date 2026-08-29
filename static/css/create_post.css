@@ -1,164 +1,139 @@
-/* =========================================
-   CREATE POST PAGE
-========================================= */
+/* =========================================================
+   CREATE / EDIT POST PAGE
+========================================================= */
 
 .create-post-page {
-
-    padding:
-        65px 0 100px;
-
+    width: 100%;
+    padding: 65px 0 100px;
+    box-sizing: border-box;
 }
 
 
 .create-post-container {
-
     width: 100%;
-
     max-width: 850px;
-
     margin: 0 auto;
-
 }
 
 
-/* =========================================
+/* =========================================================
    HEADER
-========================================= */
+========================================================= */
 
 .create-post-header {
-
     margin-bottom: 35px;
-
 }
 
 
 .create-post-header .eyebrow {
-
     display: block;
 
     margin-bottom: 9px;
 
+    color: var(--color-accent);
+
+    font-size: 11px;
+    font-weight: 800;
+
+    letter-spacing: 2px;
+    text-transform: uppercase;
 }
 
 
 .create-post-header h1 {
-
     margin: 0;
 
-    color:
-        var(--color-text);
+    color: var(--color-text);
 
     font-size: 38px;
-
     line-height: 1.15;
 
     letter-spacing: -0.035em;
-
 }
 
 
 .create-post-header p {
-
     max-width: 600px;
 
-    margin:
-        10px 0 0;
+    margin: 10px 0 0;
 
-    color:
-        var(--color-muted);
+    color: var(--color-muted);
 
     font-size: 13px;
-
     line-height: 1.7;
-
 }
 
 
-/* =========================================
+/* =========================================================
    FORM
-========================================= */
+========================================================= */
 
 .create-post-form {
+    width: 100%;
 
     padding: 32px;
 
-    border:
-        1px solid
-        var(--color-border);
+    box-sizing: border-box;
+
+    border: 1px solid var(--color-border);
 
     border-radius: 14px;
 
-    background:
-        var(--color-surface);
-
+    background: var(--color-surface);
 }
 
 
 .create-form-group {
-
     display: flex;
 
     flex-direction: column;
 
     margin-bottom: 24px;
-
 }
 
 
 .create-form-group > label {
-
     margin-bottom: 7px;
 
-    color:
-        var(--color-text);
+    color: var(--color-text);
 
     font-size: 11px;
-
     font-weight: 700;
-
 }
 
 
 .field-help {
+    margin: -2px 0 8px;
 
-    margin:
-        -2px 0 8px;
-
-    color:
-        var(--color-muted);
+    color: var(--color-muted);
 
     font-size: 10px;
-
     line-height: 1.5;
-
 }
 
 
-/* =========================================
+/* =========================================================
    INPUTS
-========================================= */
+========================================================= */
 
 .create-post-form input[type="text"],
+.create-post-form input[type="url"],
+.create-post-form input[type="email"],
 .create-post-form textarea,
 .create-post-form select {
-
     width: 100%;
 
     box-sizing: border-box;
 
-    border:
-        1px solid
-        var(--color-border);
+    border: 1px solid var(--color-border);
 
     border-radius: 8px;
 
     outline: none;
 
-    background:
-        var(--color-background);
+    background: var(--color-background);
 
-    color:
-        var(--color-text);
+    color: var(--color-text);
 
     font-family: inherit;
 
@@ -168,149 +143,115 @@
         border-color var(--transition),
         box-shadow var(--transition),
         background var(--transition);
-
 }
 
 
-.create-post-form input[type="text"] {
-
+.create-post-form input[type="text"],
+.create-post-form input[type="url"],
+.create-post-form input[type="email"] {
     min-height: 48px;
 
-    padding:
-        0 14px;
+    padding: 0 14px;
 
     font-size: 15px;
-
     font-weight: 500;
-
 }
 
 
 .create-post-form textarea {
-
     min-height: 125px;
 
-    padding:
-        13px 14px;
+    padding: 13px 14px;
 
     resize: vertical;
 
     line-height: 1.7;
-
 }
 
 
 .create-post-form textarea[name="content"] {
-
     min-height: 420px;
 
     line-height: 1.8;
-
 }
 
 
 .create-post-form select {
-
     min-height: 44px;
 
-    padding:
-        0 12px;
-
+    padding: 0 12px;
 }
 
 
 .create-post-form select[name="tags"] {
-
     min-height: 110px;
 
     padding: 8px 10px;
-
 }
 
 
 .create-post-form input:focus,
 .create-post-form textarea:focus,
 .create-post-form select:focus {
-
-    border-color:
-        var(--color-accent);
+    border-color: var(--color-accent);
 
     box-shadow:
-        0 0 0 3px
-        var(--color-accent-soft);
+        0 0 0 3px var(--color-accent-soft);
 
-    background:
-        var(--color-surface);
-
+    background: var(--color-surface);
 }
 
 
 .create-post-form input::placeholder,
 .create-post-form textarea::placeholder {
-
-    color:
-        var(--color-muted);
-
+    color: var(--color-muted);
 }
 
 
-/* =========================================
+/* =========================================================
    CATEGORY + TAGS
-========================================= */
+========================================================= */
 
 .create-form-row {
-
     display: grid;
 
-    grid-template-columns:
-        1fr 1fr;
+    grid-template-columns: 1fr 1fr;
 
     gap: 18px;
-
 }
 
 
 .create-form-row .create-form-group {
-
     min-width: 0;
-
 }
 
 
-/* =========================================
+/* =========================================================
    FEATURED IMAGE
-========================================= */
+========================================================= */
 
 .featured-upload {
-
     position: relative;
 
     min-height: 145px;
 
-    border:
-        1px dashed
-        var(--color-border);
+    border: 1px dashed var(--color-border);
 
     border-radius: 10px;
 
-    background:
-        var(--color-background);
+    background: var(--color-background);
 
     overflow: hidden;
-
 }
 
 
 .featured-upload input[type="file"] {
-
     position: absolute;
 
     width: 1px;
-
     height: 1px;
 
     padding: 0;
-
     margin: -1px;
 
     overflow: hidden;
@@ -320,12 +261,10 @@
     white-space: nowrap;
 
     border: 0;
-
 }
 
 
 .featured-upload-label {
-
     position: absolute;
 
     inset: 0;
@@ -340,91 +279,289 @@
 
     gap: 7px;
 
-    color:
-        var(--color-muted);
+    color: var(--color-muted);
 
     cursor: pointer;
 
     transition:
         background var(--transition),
         color var(--transition);
-
 }
 
 
 .featured-upload-label i {
-
     font-size: 28px;
 
-    color:
-        var(--color-accent);
-
+    color: var(--color-accent);
 }
 
 
 .featured-upload-label span {
-
-    color:
-        var(--color-text);
+    color: var(--color-text);
 
     font-size: 11px;
-
     font-weight: 700;
-
 }
 
 
 .featured-upload-label small {
-
     font-size: 9px;
-
 }
 
 
 .featured-upload:hover {
-
-    border-color:
-        var(--color-accent);
-
+    border-color: var(--color-accent);
 }
 
 
-.featured-upload:hover
-.featured-upload-label {
-
-    background:
-        var(--color-accent-soft);
-
+.featured-upload:hover .featured-upload-label {
+    background: var(--color-accent-soft);
 }
 
 
-/* =========================================
-   ERRORS
-========================================= */
+/* =========================================================
+   CREATE POST — IMAGE PREVIEW
+========================================================= */
 
-.create-post-form .errorlist {
+.featured-image-group {
+    width: 100%;
+}
 
-    list-style: none;
 
-    margin:
-        6px 0 0;
+/*
+ * Preview box
+ */
 
-    padding: 0;
+.create-featured-preview {
+    position: relative;
 
-    color:
-        #c94b38;
+    width: 100%;
+
+    min-height: 230px;
+
+    margin-top: 8px;
+    margin-bottom: 12px;
+
+    box-sizing: border-box;
+
+    overflow: hidden;
+
+    border: 1px solid var(--color-border);
+
+    border-radius: 10px;
+
+    background: var(--color-background);
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+}
+
+
+/*
+ * Preview image
+ */
+
+.create-featured-preview-image {
+    display: block;
+
+    width: 100%;
+
+    height: 280px;
+
+    object-fit: cover;
+}
+
+
+/*
+ * Empty state
+ */
+
+.create-featured-placeholder {
+    min-height: 230px;
+
+    width: 100%;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    color: var(--color-muted);
+}
+
+
+.create-featured-placeholder i {
+    font-size: 38px;
+
+    color: var(--color-accent);
+}
+
+
+.create-featured-placeholder span {
+    font-size: 11px;
+    font-weight: 600;
+}
+
+
+/*
+ * Selected badge
+ */
+
+.create-image-selected-badge {
+    position: absolute;
+
+    left: 12px;
+    bottom: 12px;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 5px;
+
+    padding: 7px 10px;
+
+    border-radius: 6px;
+
+    background: rgba(20, 20, 20, 0.82);
+
+    color: #ffffff;
 
     font-size: 10px;
 
+    font-weight: 700;
+}
+
+
+.create-image-selected-badge i {
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   SELECTED FILE
+========================================================= */
+
+.create-selected-image {
+    width: 100%;
+
+    min-height: 38px;
+
+    box-sizing: border-box;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    margin-top: 8px;
+
+    padding: 8px 11px;
+
+    border: 1px solid rgba(70, 130, 90, 0.2);
+
+    border-radius: 7px;
+
+    background: rgba(70, 130, 90, 0.07);
+
+    color: #467052;
+
+    font-size: 11px;
+
+    font-weight: 600;
+}
+
+
+.create-selected-image i {
+    flex-shrink: 0;
+
+    font-size: 16px;
+}
+
+
+.create-selected-image span {
+    min-width: 0;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   REMOVE IMAGE
+========================================================= */
+
+.create-remove-image {
+    margin-top: 8px;
+
+    padding: 0;
+
+    border: none;
+
+    background: transparent;
+
+    color: #a84b35;
+
+    font-family: inherit;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 4px;
+}
+
+
+.create-remove-image:hover {
+    color: #7e3523;
+
+    text-decoration: underline;
+}
+
+
+.create-remove-image i {
+    font-size: 15px;
+}
+
+
+/* =========================================================
+   ERRORS
+========================================================= */
+
+.create-post-form .errorlist {
+    list-style: none;
+
+    margin: 6px 0 0;
+
+    padding: 0;
+
+    color: #c94b38;
+
+    font-size: 10px;
 }
 
 
 .create-post-form > .errorlist {
-
     margin-bottom: 20px;
 
-    padding:
-        11px 13px;
+    padding: 11px 13px;
 
     border:
         1px solid
@@ -434,16 +571,23 @@
 
     background:
         rgba(201, 75, 56, 0.06);
-
 }
 
 
-/* =========================================
-   ACTIONS
-========================================= */
+.form-error {
+    margin-top: 6px;
+
+    color: #c94b38;
+
+    font-size: 10px;
+}
+
+
+/* =========================================================
+   CREATE POST ACTIONS
+========================================================= */
 
 .create-post-actions {
-
     display: flex;
 
     align-items: center;
@@ -459,25 +603,21 @@
     border-top:
         1px solid
         var(--color-border);
-
 }
 
 
 .create-primary-actions {
-
     display: flex;
 
     align-items: center;
 
     gap: 9px;
-
 }
 
 
 .create-cancel-button,
 .draft-button,
 .publish-button {
-
     display: inline-flex;
 
     align-items: center;
@@ -488,8 +628,7 @@
 
     min-height: 40px;
 
-    padding:
-        0 15px;
+    padding: 0 15px;
 
     border-radius: 7px;
 
@@ -508,205 +647,738 @@
         border-color var(--transition),
         color var(--transition),
         transform var(--transition);
-
 }
 
 
 .create-cancel-button {
-
     border:
         1px solid
         var(--color-border);
 
-    background:
-        transparent;
+    background: transparent;
 
-    color:
-        var(--color-text);
-
+    color: var(--color-text);
 }
 
 
 .create-cancel-button:hover {
+    border-color: var(--color-text);
 
-    border-color:
-        var(--color-text);
-
-    background:
-        var(--color-background);
-
+    background: var(--color-background);
 }
 
 
 .draft-button {
-
     border:
         1px solid
         var(--color-border);
 
-    background:
-        transparent;
+    background: transparent;
 
-    color:
-        var(--color-text);
-
+    color: var(--color-text);
 }
 
 
 .draft-button:hover {
+    border-color: var(--color-text);
 
-    border-color:
-        var(--color-text);
-
-    background:
-        var(--color-text);
+    background: var(--color-text);
 
     color: white;
-
 }
 
 
 .publish-button {
-
     border: none;
 
-    background:
-        var(--color-text);
+    background: var(--color-text);
 
     color: white;
-
 }
 
 
 .publish-button:hover {
+    background: var(--color-accent);
 
-    background:
-        var(--color-accent);
-
-    transform:
-        translateY(-1px);
-
+    transform: translateY(-1px);
 }
 
 
 .create-cancel-button i,
 .draft-button i,
 .publish-button i {
-
     font-size: 16px;
-
 }
 
 
-/* =========================================
-   RESPONSIVE
-========================================= */
+/* =========================================================
+   EDIT POST STATUS
+========================================================= */
+
+.edit-current-status {
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    margin-top: 8px;
+
+    padding: 13px 15px;
+
+    border:
+        1px solid
+        var(--color-border);
+
+    border-radius: 9px;
+
+    background: var(--color-background);
+}
+
+
+.edit-status-label {
+    color: var(--color-muted);
+
+    font-size: 11px;
+
+    font-weight: 600;
+}
+
+
+.edit-status {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 5px;
+
+    padding: 5px 10px;
+
+    border-radius: 999px;
+
+    font-size: 10px;
+
+    font-weight: 700;
+}
+
+
+.edit-status i {
+    font-size: 14px;
+}
+
+
+.edit-status.published {
+    color: #b64d2d;
+
+    background: rgba(201, 84, 46, 0.10);
+}
+
+
+.edit-status.draft {
+    color: #6c6964;
+
+    background: rgba(100, 100, 100, 0.10);
+}
+
+
+/* =========================================================
+   EDIT POST — FEATURED IMAGE
+========================================================= */
+
+.featured-image-preview {
+    position: relative;
+
+    width: 100%;
+
+    min-height: 230px;
+
+    margin-top: 8px;
+    margin-bottom: 12px;
+
+    overflow: hidden;
+
+    box-sizing: border-box;
+
+    border:
+        1px solid
+        var(--color-border);
+
+    border-radius: 10px;
+
+    background:
+        var(--color-background);
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+}
+
+
+.featured-image-preview img {
+    display: block;
+
+    width: 100%;
+
+    height: 280px;
+
+    object-fit: cover;
+}
+
+
+.featured-image-status {
+    position: absolute;
+
+    left: 12px;
+    bottom: 12px;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    padding: 7px 10px;
+
+    border-radius: 6px;
+
+    background: rgba(20, 20, 20, 0.82);
+
+    color: #ffffff;
+
+    font-size: 10px;
+
+    font-weight: 700;
+}
+
+
+.featured-image-status i {
+    font-size: 14px;
+}
+
+
+.featured-image-empty {
+    width: 100%;
+
+    min-height: 230px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    color: var(--color-muted);
+}
+
+
+.featured-image-empty i {
+    font-size: 38px;
+
+    color: var(--color-accent);
+}
+
+
+.featured-image-empty span {
+    font-size: 11px;
+
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   EDIT IMAGE UPLOAD
+========================================================= */
+
+.featured-image-upload {
+    position: relative;
+
+    width: 100%;
+}
+
+
+.featured-image-upload input[type="file"] {
+    position: absolute;
+
+    width: 1px;
+    height: 1px;
+
+    padding: 0;
+    margin: -1px;
+
+    overflow: hidden;
+
+    opacity: 0;
+
+    pointer-events: none;
+}
+
+
+.featured-image-upload-label {
+    width: 100%;
+
+    min-height: 45px;
+
+    box-sizing: border-box;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    padding: 10px 16px;
+
+    border:
+        1px solid
+        var(--color-border);
+
+    border-radius: 8px;
+
+    background:
+        var(--color-background);
+
+    color:
+        var(--color-text);
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        background var(--transition),
+        border-color var(--transition);
+}
+
+
+.featured-image-upload-label:hover {
+    background:
+        var(--color-accent-soft);
+
+    border-color:
+        var(--color-accent);
+}
+
+
+.featured-image-upload-label i {
+    font-size: 18px;
+
+    color:
+        var(--color-accent);
+}
+
+
+/* =========================================================
+   EDIT SELECTED IMAGE NAME
+========================================================= */
+
+.selected-image-name {
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    margin-top: 9px;
+
+    min-height: 20px;
+
+    color:
+        var(--color-muted);
+
+    font-size: 10px;
+}
+
+
+.selected-image-name i {
+    flex-shrink: 0;
+
+    font-size: 15px;
+
+    color:
+        var(--color-accent);
+}
+
+
+.selected-image-name span {
+    min-width: 0;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   EDIT FORM ACTIONS
+========================================================= */
+
+.form-actions {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 16px;
+
+    margin-top: 30px;
+
+    padding-top: 22px;
+
+    border-top:
+        1px solid
+        var(--color-border);
+}
+
+
+.edit-form-actions {
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+}
+
+
+.edit-save-button,
+.edit-publish-button,
+.edit-cancel-button {
+    min-height: 40px;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 7px;
+
+    padding: 0 15px;
+
+    border-radius: 7px;
+
+    font-family: inherit;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    text-decoration: none;
+
+    cursor: pointer;
+
+    transition:
+        background var(--transition),
+        border-color var(--transition),
+        color var(--transition),
+        transform var(--transition);
+}
+
+
+.edit-cancel-button {
+    border:
+        1px solid
+        var(--color-border);
+
+    background:
+        transparent;
+
+    color:
+        var(--color-text);
+}
+
+
+.edit-cancel-button:hover {
+    border-color:
+        var(--color-text);
+
+    background:
+        var(--color-background);
+}
+
+
+.edit-save-button {
+    border:
+        1px solid
+        var(--color-text);
+
+    background:
+        var(--color-text);
+
+    color: #ffffff;
+}
+
+
+.edit-save-button:hover {
+    background:
+        var(--color-accent);
+
+    border-color:
+        var(--color-accent);
+}
+
+
+.edit-publish-button {
+    border:
+        1px solid
+        var(--color-accent);
+
+    background:
+        var(--color-accent);
+
+    color: #ffffff;
+}
+
+
+.edit-publish-button:hover {
+    filter: brightness(0.92);
+
+    transform:
+        translateY(-1px);
+}
+
+
+.edit-save-button i,
+.edit-publish-button i,
+.edit-cancel-button i {
+    font-size: 15px;
+}
+
+
+/* =========================================================
+   EDIT INPUTS
+========================================================= */
+
+.create-post-form input[type="text"],
+.create-post-form textarea,
+.create-post-form select {
+    box-sizing: border-box;
+}
+
+
+.create-post-form select[multiple] {
+    min-height: 110px;
+
+    padding: 7px;
+}
+
+
+.create-post-form select[multiple] option {
+    padding: 7px 9px;
+
+    border-radius: 5px;
+}
+
+
+/* =========================================================
+   BUTTON ACTIVE
+========================================================= */
+
+.create-cancel-button:active,
+.draft-button:active,
+.publish-button:active,
+.edit-cancel-button:active,
+.edit-save-button:active,
+.edit-publish-button:active {
+    transform:
+        translateY(1px);
+}
+
+
+/* =========================================================
+   RESPONSIVE — 700px
+========================================================= */
 
 @media (max-width: 700px) {
 
     .create-post-page {
-
         padding:
             45px 0 70px;
-
     }
 
 
     .create-post-container {
-
         padding:
             0 20px;
 
+        box-sizing: border-box;
     }
 
 
     .create-post-form {
-
         padding: 24px;
-
     }
 
 
     .create-post-header h1 {
-
         font-size: 31px;
-
     }
 
 
     .create-form-row {
-
         grid-template-columns: 1fr;
 
         gap: 0;
-
     }
 
 
-    .create-post-actions {
-
+    .create-post-actions,
+    .form-actions {
         align-items: stretch;
 
         flex-direction: column;
-
     }
 
 
     .create-primary-actions {
-
         display: grid;
 
         grid-template-columns:
             1fr 1fr;
 
+        width: 100%;
     }
 
 
     .create-cancel-button {
-
         width: 100%;
-
     }
 
 
     .draft-button,
     .publish-button {
-
         width: 100%;
+    }
 
+
+    .edit-form-actions {
+        width: 100%;
+    }
+
+
+    .edit-form-actions button {
+        flex: 1;
+    }
+
+
+    .edit-cancel-button {
+        width: 100%;
+    }
+
+
+    .featured-upload {
+        min-height: 130px;
+    }
+
+
+    .create-featured-preview,
+    .featured-image-preview {
+        min-height: 200px;
+    }
+
+
+    .create-featured-placeholder,
+    .featured-image-empty {
+        min-height: 200px;
+    }
+
+
+    .create-featured-preview-image,
+    .featured-image-preview img {
+        height: 220px;
     }
 
 }
 
 
-@media (max-width: 450px) {
+/* =========================================================
+   RESPONSIVE — 480px
+========================================================= */
+
+@media (max-width: 480px) {
 
     .create-post-container {
-
         padding:
             0 15px;
-
     }
 
 
     .create-post-form {
-
         padding: 19px;
-
     }
 
 
     .create-post-header h1 {
-
         font-size: 27px;
+    }
 
+
+    .create-post-header p {
+        font-size: 12px;
     }
 
 
     .create-primary-actions {
-
         grid-template-columns: 1fr;
+    }
 
+
+    .edit-form-actions {
+        flex-direction: column;
+
+        width: 100%;
+    }
+
+
+    .edit-save-button,
+    .edit-publish-button {
+        width: 100%;
+    }
+
+
+    .edit-current-status {
+        flex-wrap: wrap;
+    }
+
+
+    .create-featured-preview,
+    .featured-image-preview {
+        min-height: 180px;
+    }
+
+
+    .create-featured-placeholder,
+    .featured-image-empty {
+        min-height: 180px;
+    }
+
+
+    .create-featured-preview-image,
+    .featured-image-preview img {
+        height: 190px;
+    }
+
+
+    .create-image-selected-badge,
+    .featured-image-status {
+        left: 9px;
+
+        bottom: 9px;
+
+        padding:
+            6px 8px;
     }
 
 }
