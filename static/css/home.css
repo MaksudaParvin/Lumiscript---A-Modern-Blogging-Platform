@@ -1040,11 +1040,10 @@ span.liked i {
     -webkit-box-orient:
         vertical;
 
-    /*
-     * Description বেশি বড় হতে দেবে না
-     */
     -webkit-line-clamp:
         2;
+
+    line-clamp: 2;
 }
 
 

@@ -1154,7 +1154,7 @@ button {
     margin: 0 auto;
 
     padding:
-        55px 24px 25px;
+        45px 14px 15px;
 
 }
 
@@ -1172,7 +1172,7 @@ button {
 
     gap: 55px;
 
-    padding-bottom: 45px;
+    padding-bottom: 35px;
 
 }
 
@@ -1371,7 +1371,7 @@ button {
 
     justify-content: center;
 
-    padding-top: 22px;
+    padding-top: 18px;
 
     border-top:
         1px solid
