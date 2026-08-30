@@ -412,7 +412,19 @@ http://127.0.0.1:8000/admin/
 
 ---
 
-# Screenshots
+## Demo Video
+
+<p align="center">
+
+<a href="">
+  ▶ Watch Lumiscript Demo Video
+</a>
+
+</p>
+
+<p align="center">
+<b>Demo Video: Lumiscript - Modern Blogging Platform</b>
+</p>
 
 ---
 
