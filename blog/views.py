@@ -774,6 +774,7 @@ def create_post_view(request):
                 commit=False
             )
 
+
             # -------------------------------
             # AUTHOR
             # -------------------------------
@@ -785,12 +786,9 @@ def create_post_view(request):
             # STATUS
             # -------------------------------
 
-            action = (
-                request.POST
-                .get(
-                    "action",
-                    "draft"
-                )
+            action = request.POST.get(
+                "action",
+                "draft"
             )
 
 
@@ -804,6 +802,7 @@ def create_post_view(request):
                     timezone.now()
                 )
 
+
             else:
 
                 post.status = (
@@ -813,18 +812,22 @@ def create_post_view(request):
                 post.published_at = None
 
 
+            # -------------------------------
+            # SAVE POST
+            # -------------------------------
+
             post.save()
 
 
             # -------------------------------
-            # TAGS
+            # SAVE TAGS
             # -------------------------------
 
             form.save_m2m()
 
 
             # -------------------------------
-            # REDIRECT
+            # SUCCESS MESSAGE
             # -------------------------------
 
             if (
@@ -832,15 +835,29 @@ def create_post_view(request):
                 == Post.Status.PUBLISHED
             ):
 
+                messages.success(
+                    request,
+                    "Your article has been published successfully."
+                )
+
+
                 return redirect(
                     "blog_detail",
                     slug=post.slug
                 )
 
 
-            return redirect(
-                "profile"
-            )
+            else:
+
+                messages.success(
+                    request,
+                    "Your draft has been saved successfully."
+                )
+
+
+                return redirect(
+                    "profile"
+                )
 
 
     else:
@@ -867,6 +884,11 @@ def edit_post_view(request, post_id):
         author=request.user
     )
 
+
+    # =========================================
+    # POST REQUEST
+    # =========================================
+
     if request.method == "POST":
 
         action = request.POST.get(
@@ -874,9 +896,10 @@ def edit_post_view(request, post_id):
             "save"
         )
 
-        # ===============================
+
+        # =========================================
         # BASIC INFORMATION
-        # ===============================
+        # =========================================
 
         post.title = request.POST.get(
             "title",
@@ -894,51 +917,60 @@ def edit_post_view(request, post_id):
         )
 
 
-        # ===============================
+        # =========================================
         # CATEGORY
-        # ===============================
+        # =========================================
 
         category_id = request.POST.get(
             "category"
         )
 
         if category_id:
+
             post.category_id = category_id
+
         else:
+
             post.category = None
 
 
-        # ===============================
+        # =========================================
         # FEATURED IMAGE
-        # ===============================
+        # =========================================
 
-        if request.FILES.get(
+        uploaded_image = request.FILES.get(
             "featured_image"
-        ):
+        )
 
-            post.featured_image = (
-                request.FILES[
-                    "featured_image"
-                ]
-            )
+        if uploaded_image:
+
+            post.featured_image = uploaded_image
 
 
-        # ===============================
+        # =========================================
         # TAGS
-        # ===============================
+        # =========================================
 
         tag_ids = request.POST.getlist(
             "tags"
         )
 
 
-        # ===============================
-        # PUBLISH DRAFT
-        # ===============================
+        # =========================================
+        # PUBLISH / SAVE
+        # =========================================
 
         if action == "publish":
 
-            post.status = Post.Status.PUBLISHED
+            # Draft → Published
+
+            post.status = (
+                Post.Status.PUBLISHED
+            )
+
+
+            # Set published time only
+            # if it was never published before
 
             if not post.published_at:
 
@@ -947,54 +979,79 @@ def edit_post_view(request, post_id):
                 )
 
 
-        # ===============================
-        # SAVE CHANGES
-        # ===============================
-
         else:
 
-            # IMPORTANT:
-            # এখানে status change করা হবে না.
+            # -------------------------------------
+            # SAVE CHANGES
+            # -------------------------------------
             #
-            # Published post হলে published-ই থাকবে.
-            # Draft post হলে draft-ই থাকবে.
+            # IMPORTANT:
+            #
+            # Published post → remains Published
+            #
+            # Draft post → remains Draft
+            #
+            # তাই এখানে status change করা হবে না.
 
             pass
 
 
-        # ===============================
+        # =========================================
         # SAVE POST
-        # ===============================
+        # =========================================
 
         post.save()
 
 
-        # ===============================
+        # =========================================
         # UPDATE TAGS
-        # ===============================
+        # =========================================
 
         post.tags.set(
             tag_ids
         )
 
 
-        # ===============================
+        # =========================================
+        # SUCCESS MESSAGE
+        # =========================================
+
+        if action == "publish":
+
+            messages.success(
+                request,
+                "Your article has been published successfully."
+            )
+
+        else:
+
+            messages.success(
+                request,
+                "Your changes have been saved successfully."
+            )
+
+
+        # =========================================
         # REDIRECT
-        # ===============================
+        # =========================================
 
         return redirect(
             "profile"
         )
 
 
-    # ===============================
+    # =========================================
     # GET REQUEST
-    # ===============================
+    # =========================================
 
     categories = Category.objects.all()
 
     tags = Tag.objects.all()
 
+
+    # =========================================
+    # RENDER
+    # =========================================
 
     return render(
         request,

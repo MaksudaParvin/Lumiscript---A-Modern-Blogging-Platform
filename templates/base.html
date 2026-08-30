@@ -7,18 +7,15 @@
 
     <meta charset="UTF-8">
 
-
     <meta
         name="viewport"
         content="width=device-width, initial-scale=1.0"
     >
 
-
     <meta
         name="description"
         content="Lumiscript — A modern space for ideas, stories and perspectives."
     >
-
 
     <title>
 
@@ -48,6 +45,11 @@
     <link
         rel="stylesheet"
         href="{% static 'css/style.css' %}"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{% static 'css/toast.css' %}"
     >
 
 
@@ -348,12 +350,86 @@
 
 
     <!-- =========================================
+         TOAST NOTIFICATIONS
+         
+         IMPORTANT:
+         This MUST be outside the content block.
+    ========================================== -->
+
+    {% if messages %}
+
+        <div
+            class="toast-container"
+            id="toastContainer"
+        >
+
+            {% for message in messages %}
+
+                <div
+                    class="toast toast-{{ message.tags }}"
+                    role="alert"
+                    aria-live="polite"
+                >
+
+                    <div class="toast-icon">
+
+                        {% if message.tags == "success" %}
+
+                            <i class='bx bx-check-circle'></i>
+
+                        {% elif message.tags == "error" %}
+
+                            <i class='bx bx-error-circle'></i>
+
+                        {% elif message.tags == "warning" %}
+
+                            <i class='bx bx-error'></i>
+
+                        {% else %}
+
+                            <i class='bx bx-info-circle'></i>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <div class="toast-message">
+
+                        {{ message }}
+
+                    </div>
+
+
+                    <button
+                        type="button"
+                        class="toast-close"
+                        aria-label="Close notification"
+                    >
+                        <i class='bx bx-x'></i>
+                    </button>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    {% endif %}
+
+
+
+    <!-- =========================================
          PAGE CONTENT
     ========================================== -->
 
-    {% block content %}
+    <main>
 
-    {% endblock %}
+        {% block content %}
+
+        {% endblock %}
+
+    </main>
 
 
 
@@ -601,6 +677,19 @@
 
     <script
         src="{% static 'js/main.js' %}"
+    ></script>
+
+
+    <!-- =========================================
+         GLOBAL TOAST JAVASCRIPT
+         
+         IMPORTANT:
+         Load this globally so every page
+         can display and close toast messages.
+    ========================================== -->
+
+    <script
+        src="{% static 'js/toast.js' %}"
     ></script>
 
 

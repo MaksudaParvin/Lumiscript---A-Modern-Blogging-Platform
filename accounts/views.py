@@ -9,6 +9,8 @@ from blog.models import (
     Comment,
 )
 
+from django.contrib import messages
+
 
 def register_view(request):
     if request.user.is_authenticated:
@@ -21,6 +23,12 @@ def register_view(request):
         if form.is_valid():
 
             form.save()
+
+            messages.success(
+                request,
+                "Account created successfully."
+            )
+
 
             return redirect("login")
 
@@ -51,6 +59,11 @@ def login_view(request):
 
             login(request, user)
 
+            messages.success(
+                request,
+                "Logged in successfully. Welcome back!"
+            )
+
             return redirect("home")
 
         return render(request,"accounts/login.html",
@@ -65,6 +78,12 @@ def login_view(request):
 def logout_view(request):
 
     logout(request)
+
+    messages.success(
+        request,
+        "Logged out successfully."
+    )
+
     return redirect("login")
 
 
@@ -249,6 +268,11 @@ def edit_profile_view(request):
         if form.is_valid():
 
             form.save()
+
+            messages.success(
+                request,
+                "Profile updated successfully."
+            )
 
             return redirect("profile")
 
